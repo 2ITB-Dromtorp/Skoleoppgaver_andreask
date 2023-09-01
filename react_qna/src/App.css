@@ -1,7 +1,24 @@
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
 .App {
     text-align: left;
 }
-
 
 .App-header {
     background: linear-gradient(180deg, rgb(0, 0, 76), rgb(177, 0, 177));
@@ -11,7 +28,7 @@
     align-items: center;
     justify-content: center;
     font-size: calc(10px + 2vmin);
-    color: white;
+    color: rgb(255, 255, 255);
 }
 
 .App-link {

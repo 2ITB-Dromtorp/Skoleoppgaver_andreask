@@ -1,3 +1,5 @@
+import React from 'react';
+import ReactDom from 'react-dom';
 import './App.css';
 
 function getAnswer(a) {
@@ -131,7 +133,7 @@ const tasks = [
                 q: (<>Lag et program som regner ut arealet av en trekant. Formelen for en trekant er<br /><code>A = L * B / 2</code><br />Returner arealet i funksjonen.</>),
                 a: (<><code className="big_code">
                     {`function trekantAreal(l, b) {`}<br />
-                    <span>&nbsp;&nbsp;&nbsp;{`return l * b * 0.5;`}</span><br />
+                    &nbsp;&nbsp;&nbsp;{`return l * b * 0.5;`}<br />
                     {`}`}
                 </code></>),
             },
@@ -139,8 +141,8 @@ const tasks = [
                 q: (<>Lag et program som heter <code>areal(lengde, bredde)</code>. Denne har to input-parametre; lengde og bredde. Funksjonen skal regne ut både arealet av et rektangel og en trekant. Men du skal ikke skrive utregningen på nytt.<br />Returner arealet fra et rektangel og en trekant. Bruk valgfrie sider som lengde og bredde.</>),
                 a: (<><code className="big_code">
                     {`function areal(lengde, bredde) {`}<br />
-                    <span>&nbsp;&nbsp;&nbsp;{`    let areal = l * b;`}<br /></span>
-                    <span>&nbsp;&nbsp;&nbsp;{`    return [areal, areal * 0.5];`}</span><br />
+                    &nbsp;&nbsp;&nbsp;{`    let areal = l * b;`}<br />
+                    &nbsp;&nbsp;&nbsp;{`    return [areal, areal * 0.5];`}<br />
                     {`}`}
                 </code></>),
             },
@@ -152,15 +154,24 @@ const tasks = [
         subTasks: {
             a: {
                 q: (<>Sjekk ut eksempler på input-funksjonen for python, ved å søke på nettet. Prøv å forklare hvordan det fungerer.</>),
-                a: (<>Bing chilling</>),
+                a: (<><code>input()</code> funksjonen i Python stopper scopet til brukeren har gitt et svar i konsollen.</>),
             },
             b: {
                 q: (<>Bruk IF - ELIF - ELSE setninger til å bestemme om brukeren er norsk, svensk eller dansk. Dette skal være basert på input-verdien fra input(). Dersom brukeren ikke er noen alternativer skal det printes ut dette.</>),
-                a: (<>Bing chilling</>),
-            },
-            c: {
-                q: (<>Bruk IF - ELIF - ELSE setninger til å bestemme om brukeren er norsk, svensk eller dansk. Dette skal være basert på input-verdien fra input(). Dersom brukeren ikke er noen alternativer skal det printes ut dette.</>),
-                a: (<>Bing chilling</>),
+                a: (<><code className="big_code">
+                {`print('Er du norsk (n), svensk (s) eller dansk (d)?')`}<br/>
+                {`svar = input()`}<br/>
+                {`respons = None`}<br/>
+                {`if svar == 'n':`}<br/>
+                &nbsp;&nbsp;&nbsp;{`respons = 'Du er norsk'`}<br/>
+                {`elif svar == 's':`}<br/>
+                &nbsp;&nbsp;&nbsp;{`respons = 'Du er svensk'`}<br/>
+                {`elif svar == 'd':`}<br/>
+                &nbsp;&nbsp;&nbsp;{`respons == 'Du er dansk'`}<br/>
+                {`else:`}<br/>
+                &nbsp;&nbsp;&nbsp;{`respons == 'Feil svar'`}<br/>
+                {`print(respons)`}<br/>
+                </code></>),
             },
         },
     },
@@ -200,22 +211,24 @@ const tasks = [
                     e.preventDefault();
                 }
             `;
-            return (
-                <iframe>
-                    <html>
-                        <head>
+            const el = (<iframe></iframe>);
+            return (el);
+            /*
+            <iframe>
+                <html>
+                    <head>
 
-                        </head>
-                        <body>
-                            <input id="input_felt" type="number" placeholder="Gjett nummer" min="0" max="50"></input>
-                            <button id="gjett_knapp">Gjett</button>
-                            <button id="reset_knapp">Reset</button>
-                            <p id="melding"></p>
-                            <script type="text/javascript">{scriptSrc}</script>
-                        </body>
-                    </html>
-                </iframe>
-            );
+                    </head>
+                    <body>
+                        <input id="input_felt" type="number" placeholder="Gjett nummer" min="0" max="50"></input>
+                        <button id="gjett_knapp">Gjett</button>
+                        <button id="reset_knapp">Reset</button>
+                        <p id="melding"></p>
+                        <script type="text/javascript">{scriptSrc}</script>
+                    </body>
+                </html>
+            </iframe>
+            */
         },
     },
     {
