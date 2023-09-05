@@ -51,6 +51,7 @@ code.big_code {
     width: calc(100% - 40px);
     overflow-x: auto;
     padding: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
 }
 
 .SupTaskContainer {
