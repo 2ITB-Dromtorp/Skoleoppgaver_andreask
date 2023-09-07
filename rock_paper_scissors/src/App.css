@@ -1,0 +1,142 @@
+.App {
+    text-align: left;
+}
+
+.App-header {
+    background-color: rgb(40, 44, 52);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.App-link {
+    color: #61dafb;
+}
+
+#rps_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 40svh;
+}
+
+#plrs {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 20px;
+}
+
+#submit {
+    background-color: rgba(0, 255, 0, 0.1);
+    border: 2px solid rgba(0, 255, 0, 0.1);
+    border-radius: 10px;
+    user-select: none;
+}
+
+#submit:hover {
+    background-color: rgba(0, 255, 0, 0.2);
+    cursor: pointer;
+}
+
+#submit:active {
+    background-color: rgba(0, 255, 0, 0.3);
+}
+
+.plr {
+    position: relative;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.plr_main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.plr_name {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 20%;
+    text-align: center;
+    margin-bottom: 10px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+}
+
+.plr_choice {
+    width: 100%;
+    height: calc(80% - 10px);
+    display: flex;
+    flex-direction: column;
+}
+
+.plr_choice_name {
+    width: 100%;
+    height: 20%;
+    text-align: center;
+}
+
+.plr_choice_icon {
+    font-size: 4rem;
+    width: 100%;
+    height: 80%;
+    text-align: center;
+}
+
+.plr_choice_buttons {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.plr_choice_buttons > * {
+    pointer-events: all;
+}
+
+.plr_choice_dir {
+    position: absolute;
+    width: 15%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.plr_choice_dir:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.plr_choice_dir:active {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.plr_choice_right {
+    right: 0;
+}
+
+.plr_choice_left {
+    left: 0;
+}
