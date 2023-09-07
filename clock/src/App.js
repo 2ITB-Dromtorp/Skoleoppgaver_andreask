@@ -1,6 +1,5 @@
-import { getMouseEventOptions } from '@testing-library/user-event/dist/utils';
 import './App.css';
-import { React, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function Clock() {
     const [curHr, setHr] = useState(0);
@@ -17,12 +16,12 @@ function Clock() {
     function reqUpdate() {
         window.requestAnimationFrame(update);
     }
-
+    
     function update() {
         let sec;
         let min;
         let hr;
-        
+
         let allMin;
 
         [allMin, sec] = getMaxStep(((Date.now() * 0.001) - (new Date().getTimezoneOffset() * 60)) % (60 * 60 * 24), 60);
