@@ -22,6 +22,7 @@ function Clock() {
         let sec;
         let min;
         let hr;
+        
         let allMin;
 
         [allMin, sec] = getMaxStep(((Date.now() * 0.001) - (new Date().getTimezoneOffset() * 60)) % (60 * 60 * 24), 60);
