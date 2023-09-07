@@ -35,51 +35,70 @@ function getChoiceDataFromName(name) {
 }
 
 function Player(props) {
-    //const [curChoiceInd, setChoiceIndRaw] = useState(0);
-
     let curChoice = choiceData[props.choiceInd];
-
-    console.log(props)
 
     const setChoiceInd = (ind) => {
         props.setChoiceInd(ind);
         curChoice = choiceData[props.choiceInd];
     }
 
-    let plrContent;
-    if (props.isPlr === true) {
-        plrContent = (
-            <div className="plr_choice_buttons">
-                <div className="plr_choice_dir plr_choice_right" onClick={() => { cycleChoices(true) }}>
-                    {'>'}
+    let newContent;
+    let plrContent = '';
+    if (props.visible === true) {
+        if (props.isPlr === true) {
+            plrContent = (
+                <div className="plr_choice_buttons">
+                    <div className="plr_choice_dir plr_choice_right" onClick={() => { cycleChoices(true) }}>
+                        {'>'}
+                    </div>
+                    <div className="plr_choice_dir plr_choice_left" onClick={() => { cycleChoices(false) }}>
+                        {'<'}
+                    </div>
                 </div>
-                <div className="plr_choice_dir plr_choice_left" onClick={() => { cycleChoices(false) }}>
-                    {'<'}
-                </div>
-            </div>
-        );
+            );
 
-        const cycleChoices = (isRight) => {
-            let start;
-            let end;
-            let add;
-            if (isRight === true) {
-                start = 0;
-                end = choiceData.length - 1;
-                add = 1;
-            } else {
-                start = choiceData.length - 1;
-                end = 0;
-                add = -1;
-            }
-            if (props.choiceInd === end) {
-                setChoiceInd(start);
-            } else {
-                setChoiceInd(props.choiceInd + add);
+            const cycleChoices = (isRight) => {
+                let start;
+                let end;
+                let add;
+                if (isRight === true) {
+                    start = 0;
+                    end = choiceData.length - 1;
+                    add = 1;
+                } else {
+                    start = choiceData.length - 1;
+                    end = 0;
+                    add = -1;
+                }
+                if (props.choiceInd === end) {
+                    setChoiceInd(start);
+                } else {
+                    setChoiceInd(props.choiceInd + add);
+                }
             }
         }
+        newContent = (
+            <>
+                <div className="plr_choice_name">
+                    {curChoice.label}
+                </div>
+                <div className="plr_choice_icon">
+                    {curChoice.icon}
+                </div>
+            </>
+        );
     } else {
-        plrContent = '';
+        let newText;
+        if (props.hasChosen === true) {
+            newText = 'Ready';
+        } else {
+            newText = 'Not ready';
+        }
+        newContent = (
+            <div className="choice_status">
+                {newText}
+            </div>
+        );
     }
 
     return (
@@ -90,12 +109,7 @@ function Player(props) {
                     {props.name}
                 </div>
                 <div className="plr_choice">
-                    <div className="plr_choice_name">
-                        {curChoice.label}
-                    </div>
-                    <div className="plr_choice_icon">
-                        {curChoice.icon}
-                    </div>
+                    {newContent}
                 </div>
             </div>
         </div>
@@ -109,8 +123,10 @@ function RockPaperScissors() {
     const [plrVisible, setPlrVisible] = useState(true);
     const [botVisible, setBotVisible] = useState(false);
 
+    const [botHasChosen, setBotHasChosen] = useState(false);
+
     const youPlr = <Player name="You" isPlr={true} choiceInd={plrChoiceInd} setChoiceInd={setPlrChoiceInd} visible={plrVisible} setVisible={setPlrVisible} />;
-    const botPlr = <Player name="Bot" isPlr={false} choiceInd={botChoiceInd} setChoiceInd={setBotChoiceInd} visible={botVisible} setVisible={setBotVisible} />;
+    const botPlr = <Player name="Bot" isPlr={false} choiceInd={botChoiceInd} setChoiceInd={setBotChoiceInd} visible={botVisible} setVisible={setBotVisible} hasChosen={botHasChosen} />;
 
     const submitClicked = () => {
         setPlrChoiceInd(1);
