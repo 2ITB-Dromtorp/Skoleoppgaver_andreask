@@ -379,6 +379,8 @@ function CreatePlayer(name, isPlr = true, choiceInd = 0, visible = true, ready =
 
 function RockPaperScissors() {
     const [plrs, setPlrs] = useState([]);
+    const [localPlr, setLocalPlr] = useState();
+    const [playPairs, setPlayPairs] = useState([]);
     const [gameActive, setGameActive] = useState(false);
 
     function plrsPush(val) {
@@ -399,12 +401,15 @@ function RockPaperScissors() {
         for (let i = 0; i < botAmount * 0.5; i++) {
             plrsPush(CreatePlayer(getRandomValInArr(botNames.female), false, 0, false, false));
         }
-    }
 
-    /*
-    const youPlr = CreatePlayer('You', true, 0, true, false);
-    const botPlr = CreatePlayer('Bot', false, 0, false, false);
-    */
+        for (let i = 0; i < plrs.length; i++) {
+            const curPlr = plrs[i];
+            setTimeout(() => {
+                curPlr.states.choiceInd.set(Math.floor(Math.random() * choiceData.length));
+                setPlrReady(curPlr, true);
+            }, (1 + (Math.random() * 4)) * 1000);
+        }
+    }
 
     const [resStr, setResStr] = useState('');
 
@@ -429,6 +434,11 @@ function RockPaperScissors() {
                 curPlr.states.visible.set(true);
             }
 
+            const tmpPlrs = [...plrs];
+            while (tmpPlrs.length > 0) {
+                const randPlr = tmpPlrs[Math.floor(Math.random() * tmpPlrs.length - 1)];
+            }
+
             for (let i = 0; i < playPairs.length; i++) {
                 const pair = playPairs[i];
                 const c1 = choiceData[pair.plrs[0].states.choiceInd.val];
@@ -447,16 +457,6 @@ function RockPaperScissors() {
                     }
                     plrsSplice(plrs.indexOf(losePlr), 1);
                 }
-            }
-
-            const res = doesChoiceWin(plrChoice, botChoice);
-
-            if (res === 'win') {
-                setResStr('Player Wins');
-            } else if (res === 'lose') {
-                setResStr('Bot Wins');
-            } else if (res === 'tie') {
-                setResStr('Tie');
             }
         } else {
             setResStr('Waiting for players to choose their weapon');
@@ -487,29 +487,33 @@ function RockPaperScissors() {
         plr.states.ready.set(ready);
     }
 
-    const [didStart, setStart] = useState(false);
-
-    if (didStart === false) {
-        setStart(true);
-        setTimeout(() => {
-            botPlr.states.choiceInd.set(Math.floor(Math.random() * choiceData.length));
-            setPlrReady(botPlr, true);
-        }, 5000);
-    }
-
     const readyClicked = () => {
-        setPlrReady(youPlr, youPlr.states.ready.val === false);
+        //setPlrReady(youPlr, youPlr.states.ready.val === false);
     }
 
     let readyStr;
     let addClass;
-    if (youPlr.states.ready.val === true) {
-        readyStr = 'Unready';
-        addClass = 'ready';
+    if (localPlr !== undefined) {
+        if (localPlr.states.ready.val === true) {
+            readyStr = 'Unready';
+            addClass = 'ready';
+        } else {
+            readyStr = 'Ready';
+            addClass = 'not_ready';
+        }
     } else {
-        readyStr = 'Ready';
+        readyStr = 'Reveal answers';
         addClass = 'not_ready';
     }
+
+    /*
+    const plrsToRender = [];
+    for (let i = 0; i < plrs.length; i++) {
+        const curPlr = plrs[i];
+        plrsToRender.push(curPlr.plr);
+    }
+
+    console.log(plrsToRender)*/
 
     return (
         <div id="rps_container">
@@ -517,8 +521,7 @@ function RockPaperScissors() {
                 {resStr}
             </div>
             <div id="plrs">
-                {youPlr.plr}
-                {botPlr.plr}
+
             </div>
             <div id="ready" className={addClass} onClick={readyClicked}>
                 {readyStr}
