@@ -1,4 +1,4 @@
-import { useState, Component } from 'react';
+import { useState, Component, useEffect } from 'react';
 import './App.css';
 
 const choiceData = [
@@ -19,6 +19,217 @@ const choiceData = [
     },
 ];
 
+const botNames = {
+    male: [
+        'Adam',
+        'Alexander',
+        'Benjamin',
+        'Caleb',
+        'Daniel',
+        'Elijah',
+        'Felix',
+        'Gabriel',
+        'Henry',
+        'Isaac',
+        'Jacob',
+        'Kevin',
+        'Liam',
+        'Matthew',
+        'Nathan',
+        'Oliver',
+        'Patrick',
+        'Quentin',
+        'Ryan',
+        'Samuel',
+        'Theodore',
+        'Ulysses',
+        'Vincent',
+        'William',
+        'Xavier',
+        'Zachary',
+        'Aaron',
+        'Brandon',
+        'Christopher',
+        'David',
+        'Ethan',
+        'Franklin',
+        'George',
+        'Harrison',
+        'Ian',
+        'James',
+        'Kyle',
+        'Luke',
+        'Michael',
+        'Nicholas',
+        'Owen',
+        'Peter',
+        'Quincy',
+        'Robert',
+        'Stephen',
+        'Thomas',
+        'Ulysses',
+        'Victor',
+        'Wesley',
+        'Xavier',
+        'Yannick',
+        'Zacharias',
+        'Aaron',
+        'Brian',
+        'Calvin',
+        'Darius',
+        'Evan',
+        'Frederick',
+        'Gavin',
+        'Harrison',
+        'Isaiah',
+        'Jonathan',
+        'Kenneth',
+        'Leo',
+        'Maxwell',
+        'Nathaniel',
+        'Owen',
+        'Phillip',
+        'Quentin',
+        'Raymond',
+        'Sebastian',
+        'Tobias',
+        'Umar',
+        'Vincent',
+        'Walter',
+        'Xavier',
+        'Yannick',
+        'Zacharias',
+        'Andrew',
+        'Brody',
+        'Caleb',
+        'Dylan',
+        'Elijah',
+        'Finn',
+        'Grayson',
+        'Hayden',
+        'Isaiah',
+        'Jackson',
+        'Kaden',
+        'Liam',
+        'Mason',
+        'Noah',
+        'Owen',
+        'Peyton',
+        'Quinn',
+        'Ryan',
+        'Sebastian',
+        'Tyler',
+        'Ulysses',
+        'Victor',
+    ],
+    female: [
+        'Abigail',
+        'Bella',
+        'Charlotte',
+        'Daisy',
+        'Emma',
+        'Faith',
+        'Grace',
+        'Hannah',
+        'Isabella',
+        'Jasmine',
+        'Katherine',
+        'Lily',
+        'Mia',
+        'Natalie',
+        'Olivia',
+        'Penelope',
+        'Quinn',
+        'Rachel',
+        'Sophia',
+        'Taylor',
+        'Ula',
+        'Victoria',
+        'Willow',
+        'Xena',
+        'Yasmine',
+        'Zoe',
+        'Ada',
+        'Beatrice',
+        'Cecilia',
+        'Dahlia',
+        'Eleanora',
+        'Fiona',
+        'Giselle',
+        'Hazel',
+        'Isla',
+        'Juliette',
+        'Kira',
+        'Lila',
+        'Matilda',
+        'Nora',
+        'Ophelia',
+        'Persephone',
+        'Quinlan',
+        'Rosalie',
+        'Scarlett',
+        'Thea',
+        'Ulyana',
+        'Violet',
+        'Wren',
+        'Ximena',
+        'Yara',
+        'Zara',
+        'Adelaide',
+        'Bridget',
+        'Caroline',
+        'Delilah',
+        'Eleanor',
+        'Fiona',
+        'Georgia',
+        'Hazel',
+        'Isabella',
+        'Josephine',
+        'Kate',
+        'Lily',
+        'Madeline',
+        'Noelle',
+        'Olivia',
+        'Phoebe',
+        'Quinn',
+        'Ruby',
+        'Sophia',
+        'Tatiana',
+        'Ursula',
+        'Vivienne',
+        'Willow',
+        'Yara',
+        'Zara',
+        'Amelia',
+        'Bethany',
+        'Clara',
+        'Danielle',
+        'Eliza',
+        'Felicity',
+        'Genevieve',
+        'Josephine',
+        'Kate',
+        'Lillian',
+        'Margot',
+        'Nellie',
+        'Olivia',
+        'Poppy',
+        'Quinn',
+        'Rose',
+        'Sophia',
+        'Tessa',
+        'Vivian',
+        'Waverly',
+        'Xandra',
+        'Yasmine',
+        'Zara',
+    ],
+}
+
+function getRandomValInArr(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
+
 function getChoiceDataFromName(name) {
     let res;
     let resInd;
@@ -32,6 +243,36 @@ function getChoiceDataFromName(name) {
     }
 
     return [res, resInd];
+}
+
+function doesChoiceWin(c1, c2) {
+    const c1n = c1.name;
+    const c2n = c2.name;
+    let res;
+    if (c1n === c2n) {
+        res = 'tie';
+    } else {
+        if (c1n === 'rock') {
+            if (c2n === 'paper') {
+                res = 'lose';
+            } else if (c2n === 'scissors') {
+                res = 'win';
+            }
+        } else if (c1n === 'paper') {
+            if (c2n === 'rock') {
+                res = 'win';
+            } else if (c2n === 'scissors') {
+                res = 'lose';
+            }
+        } else if (c1n === 'scissors') {
+            if (c2n === 'rock') {
+                res = 'lose';
+            } else if (c2n === 'paper') {
+                res = 'win';
+            }
+        }
+    }
+    return res;
 }
 
 function Player(props) {
@@ -89,13 +330,16 @@ function Player(props) {
         );
     } else {
         let newText;
-        if (props.hasChosen === true) {
+        let addClass;
+        if (props.isReady === true) {
             newText = 'Ready';
+            addClass = 'ready';
         } else {
             newText = 'Not ready';
+            addClass = 'not_ready';
         }
         newContent = (
-            <div className="choice_status">
+            <div className={'choice_status' + ' ' + addClass}>
                 {newText}
             </div>
         );
@@ -116,30 +360,168 @@ function Player(props) {
     );
 }
 
+function CreatePlayer(name, isPlr = true, choiceInd = 0, visible = true, ready = false) {
+    const newPlr = {};
+
+    const states = {};
+    states.choiceInd = {};
+    [states.choiceInd.val, states.choiceInd.set] = useState(choiceInd);
+    states.visible = {};
+    [states.visible.val, states.visible.set] = useState(visible);
+    states.ready = {};
+    [states.ready.val, states.ready.set] = useState(ready);
+    newPlr.states = states;
+
+    newPlr.plr = <Player name={name} isPlr={isPlr} choiceInd={states.choiceInd.val} setChoiceInd={states.choiceInd.set} visible={states.visible.val} setVisible={states.visible.set} isReady={states.ready.val} />
+
+    return newPlr;
+}
+
 function RockPaperScissors() {
-    const [plrChoiceInd, setPlrChoiceInd] = useState(0);
-    const [botChoiceInd, setBotChoiceInd] = useState(0);
+    const [plrs, setPlrs] = useState([]);
+    const [gameActive, setGameActive] = useState(false);
 
-    const [plrVisible, setPlrVisible] = useState(true);
-    const [botVisible, setBotVisible] = useState(false);
+    function plrsPush(val) {
+        setPlrs(plrs.concat(val));
+    }
 
-    const [botHasChosen, setBotHasChosen] = useState(false);
+    function plrsSplice(start, end) {
+        setPlrs(plrs.slice(start, start + end));
+    }
 
-    const youPlr = <Player name="You" isPlr={true} choiceInd={plrChoiceInd} setChoiceInd={setPlrChoiceInd} visible={plrVisible} setVisible={setPlrVisible} />;
-    const botPlr = <Player name="Bot" isPlr={false} choiceInd={botChoiceInd} setChoiceInd={setBotChoiceInd} visible={botVisible} setVisible={setBotVisible} hasChosen={botHasChosen} />;
+    if (gameActive === false) {
+        setGameActive(true);
+        
+        let botAmount = 32;
+        for (let i = 0; i < botAmount * 0.5; i++) {
+            plrsPush(CreatePlayer(getRandomValInArr(botNames.male), false, 0, false, false));
+        }
+        for (let i = 0; i < botAmount * 0.5; i++) {
+            plrsPush(CreatePlayer(getRandomValInArr(botNames.female), false, 0, false, false));
+        }
+    }
 
-    const submitClicked = () => {
-        setPlrChoiceInd(1);
+    /*
+    const youPlr = CreatePlayer('You', true, 0, true, false);
+    const botPlr = CreatePlayer('Bot', false, 0, false, false);
+    */
+
+    const [resStr, setResStr] = useState('');
+
+    const plrReadyVals = [];
+    for (let i = 0; i < plrs.length; i++) {
+        const curPlr = plrs[i];
+        plrReadyVals.push(curPlr.states.ready.val);
+    }
+
+    useEffect(() => {
+        let allReady = true;
+        for (let i = 0; i < plrs.length; i++) {
+            const curPlr = plrs[i];
+            if (curPlr.states.ready.val === false) {
+                allReady = false;
+                break;
+            }
+        }
+        if (allReady === true) {
+            for (let i = 0; i < plrs.length; i++) {
+                const curPlr = plrs[i];
+                curPlr.states.visible.set(true);
+            }
+
+            for (let i = 0; i < playPairs.length; i++) {
+                const pair = playPairs[i];
+                const c1 = choiceData[pair.plrs[0].states.choiceInd.val];
+                const c2 = choiceData[pair.plrs[1].states.choiceInd.val];
+
+                const res = doesChoiceWin(c1, c2);
+
+                if (res === 'tie') {
+
+                } else {
+                    let losePlr;
+                    if (res === 'win') {
+                        losePlr = pair.plrs[1];
+                    } else if (res === 'lose') {
+                        losePlr = pair.plrs[0];
+                    }
+                    plrsSplice(plrs.indexOf(losePlr), 1);
+                }
+            }
+
+            const res = doesChoiceWin(plrChoice, botChoice);
+
+            if (res === 'win') {
+                setResStr('Player Wins');
+            } else if (res === 'lose') {
+                setResStr('Bot Wins');
+            } else if (res === 'tie') {
+                setResStr('Tie');
+            }
+        } else {
+            setResStr('Waiting for players to choose their weapon');
+        }
+        /*
+        if (youPlr.states.ready.val === true && botPlr.states.ready.val === true) {
+            botPlr.states.visible.set(true);
+            
+            const plrChoice = choiceData[youPlr.states.choiceInd.val];
+            const botChoice = choiceData[botPlr.states.choiceInd.val];
+
+            const res = doesChoiceWin(plrChoice, botChoice);
+
+            if (res === 'win') {
+                setResStr('Player Wins');
+            } else if (res === 'lose') {
+                setResStr('Bot Wins');
+            } else if (res === 'tie') {
+                setResStr('Tie');
+            }
+        } else {
+            setResStr('Waiting for players to choose their weapon');
+        }
+        */
+    }, plrReadyVals);
+
+    function setPlrReady(plr, ready) {
+        plr.states.ready.set(ready);
+    }
+
+    const [didStart, setStart] = useState(false);
+
+    if (didStart === false) {
+        setStart(true);
+        setTimeout(() => {
+            botPlr.states.choiceInd.set(Math.floor(Math.random() * choiceData.length));
+            setPlrReady(botPlr, true);
+        }, 5000);
+    }
+
+    const readyClicked = () => {
+        setPlrReady(youPlr, youPlr.states.ready.val === false);
+    }
+
+    let readyStr;
+    let addClass;
+    if (youPlr.states.ready.val === true) {
+        readyStr = 'Unready';
+        addClass = 'ready';
+    } else {
+        readyStr = 'Ready';
+        addClass = 'not_ready';
     }
 
     return (
         <div id="rps_container">
-            <div id="plrs">
-                {youPlr}
-                {botPlr}
+            <div id="result">
+                {resStr}
             </div>
-            <div id="submit" onClick={submitClicked}>
-                Ready
+            <div id="plrs">
+                {youPlr.plr}
+                {botPlr.plr}
+            </div>
+            <div id="ready" className={addClass} onClick={readyClicked}>
+                {readyStr}
             </div>
         </div>
     );
