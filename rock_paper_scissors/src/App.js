@@ -391,8 +391,8 @@ function RockPaperScissors() {
 
     if (gameActive === false) {
         setGameActive(true);
-        
-        let botAmount = 32;
+
+        const botAmount = 32;
         for (let i = 0; i < botAmount * 0.5; i++) {
             plrsPush(CreatePlayer(getRandomValInArr(botNames.male), false, 0, false, false));
         }
