@@ -23,18 +23,17 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 50svh;
     gap: 40px;
 }
 
 #plrs {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 20px;
     width: 100%;
-    height: 100%;
 }
 
 #ready {
@@ -67,12 +66,13 @@
 
 .plr {
     position: relative;
-    height: 100%;
-    aspect-ratio: 1 / 1;
+    width: 100px;
+    height: 100px;
     background-color: rgba(0, 0, 0, 0.1);
     border: 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     overflow: hidden;
+    font-size: 1rem;
 }
 
 .plr_main {
@@ -158,6 +158,7 @@
     justify-content: center;
     width: 100%;
     height: 100%;
+    transition: color 5s ease-in-out;
 }
 
 .choice_status.ready {
