@@ -18,6 +18,7 @@
 }
 
 #rps_container {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -27,6 +28,7 @@
 }
 
 #plrs {
+    position: relative;
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -34,6 +36,13 @@
     justify-content: center;
     gap: 20px;
     width: 100%;
+}
+
+#plrs.fighting {
+    aspect-ratio: 1 / 1;
+    width: initial;
+    height: 75svh;
+    /*display: block;*/
 }
 
 #ready {
@@ -73,6 +82,15 @@
     border-radius: 10px;
     overflow: hidden;
     font-size: 1rem;
+    left: var(--x);
+    top: var(--y);
+}
+
+.plr.fighting {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transition: left 1s ease-in-out, top 1s ease-in-out;
 }
 
 .plr_main {
@@ -106,7 +124,7 @@
 }
 
 .plr_choice_icon {
-    font-size: 4rem;
+    font-size: 3rem;
     width: 100%;
     height: 80%;
     text-align: center;
@@ -158,7 +176,7 @@
     justify-content: center;
     width: 100%;
     height: 100%;
-    transition: color 5s ease-in-out;
+    transition: color 0.5s ease-in-out;
 }
 
 .choice_status.ready {
