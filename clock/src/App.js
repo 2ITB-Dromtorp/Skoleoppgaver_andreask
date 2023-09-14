@@ -12,10 +12,6 @@ function Clock() {
         const rest = (div - whole) * step;
         return [whole, rest];
     }
-
-    function reqUpdate() {
-        window.requestAnimationFrame(update);
-    }
     
     function update() {
         let sec;
@@ -30,11 +26,9 @@ function Clock() {
         setHr((hr * (360 / 12)) + (min * ((360 / 12) / 60)) + (sec * (((360 / 12) / 60) / 60)));
         setMin((min * (360 / 60)) + (sec * ((360 / 60) / 60)));
         setSec(sec * 6);
-
-        reqUpdate();
     }
 
-    reqUpdate();
+    window.requestAnimationFrame(update);
 
     return (
         <div className="clock">
