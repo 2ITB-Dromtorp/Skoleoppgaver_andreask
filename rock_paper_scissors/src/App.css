@@ -45,32 +45,24 @@
     /*display: block;*/
 }
 
-#ready {
+#fight {
+    --r: 0;
+    --g: 255;
+    --b: 0;
     background-color: rgba(var(--r), var(--g), var(--b), 0.1);
     border: 2px solid rgba(var(--r), var(--g), var(--b), 0.1);
     border-radius: 10px;
     user-select: none;
+    padding: 4px;
 }
 
-#ready:hover {
+#fight:hover {
     background-color: rgba(var(--r), var(--g), var(--b), 0.2);
     cursor: pointer;
 }
 
-#ready:active {
+#fight:active {
     background-color: rgba(var(--r), var(--g), var(--b), 0.3);
-}
-
-#ready.not_ready {
-    --r: 0;
-    --g: 255;
-    --b: 0;
-}
-
-#ready.ready {
-    --r: 255;
-    --g: 0;
-    --b: 0;
 }
 
 .plr {

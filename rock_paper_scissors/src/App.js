@@ -19,6 +19,256 @@ const choiceData = [
     },
 ];
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getRandomValInArr(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function getChoiceDataFromName(name) {
+    let res;
+    let resInd;
+
+    for (let i = 0; i < choiceData.length; i++) {
+        const cur = choiceData[i];
+        if (cur.name === name) {
+            res = cur;
+            resInd = i;
+        }
+    }
+
+    return [res, resInd];
+}
+
+function doesChoiceWin(c1, c2) {
+    const c1n = c1.name;
+    const c2n = c2.name;
+    let res;
+    if (c1n === c2n) {
+        res = 'tie';
+    } else {
+        if (c1n === 'rock') {
+            if (c2n === 'paper') {
+                res = 'lose';
+            } else if (c2n === 'scissors') {
+                res = 'win';
+            }
+        } else if (c1n === 'paper') {
+            if (c2n === 'rock') {
+                res = 'win';
+            } else if (c2n === 'scissors') {
+                res = 'lose';
+            }
+        } else if (c1n === 'scissors') {
+            if (c2n === 'rock') {
+                res = 'lose';
+            } else if (c2n === 'paper') {
+                res = 'win';
+            }
+        }
+    }
+    return res;
+}
+
+function Player(props) {
+    let curChoice = choiceData[props.choiceInd];
+
+    const setChoiceInd = (ind) => {
+        props.setChoiceInd(ind);
+        curChoice = choiceData[props.choiceInd];
+    }
+
+    let newContent;
+    let plrContent = '';
+    if (props.visible === true) {
+        if (props.isPlr === true) {
+            plrContent = (
+                <div className="plr_choice_buttons">
+                    <div className="plr_choice_dir plr_choice_right" onClick={() => { cycleChoices(true) }}>
+                        {'>'}
+                    </div>
+                    <div className="plr_choice_dir plr_choice_left" onClick={() => { cycleChoices(false) }}>
+                        {'<'}
+                    </div>
+                </div>
+            );
+
+            const cycleChoices = (isRight) => {
+                let start;
+                let end;
+                let add;
+                if (isRight === true) {
+                    start = 0;
+                    end = choiceData.length - 1;
+                    add = 1;
+                } else {
+                    start = choiceData.length - 1;
+                    end = 0;
+                    add = -1;
+                }
+                if (props.choiceInd === end) {
+                    setChoiceInd(start);
+                } else {
+                    setChoiceInd(props.choiceInd + add);
+                }
+            }
+        }
+        newContent = (
+            <>
+                <div className="plr_choice_name">
+                    {curChoice.label}
+                </div>
+                <div className="plr_choice_icon">
+                    {curChoice.icon}
+                </div>
+            </>
+        );
+    } else {
+        let newText;
+        let addClass;
+        if (props.ready === true) {
+            newText = 'Ready';
+            addClass = 'ready';
+        } else {
+            newText = 'Not ready';
+            addClass = 'not_ready';
+        }
+        newContent = (
+            <div className={'choice_status' + ' ' + addClass}>
+                {newText}
+            </div>
+        );
+    }
+
+    return (
+        <div className="plr">
+            {plrContent}
+            <div className="plr_main">
+                <div className="plr_name">
+                    {props.name}
+                </div>
+                <div className="plr_choice">
+                    {newContent}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function RockPaperScissors() {
+    const [matchStr, setMatchStr] = useState('');
+
+    const p1Plr = CreatePlayer('You', true, 0, true, false);
+    const p2Plr = CreatePlayer('Bot', false, Math.floor(Math.random() * choiceData.length), false, true);
+
+    function CreatePlayer(name, isPlr, choiceInd, visible, ready) {
+        const newPlr = {};
+
+        newPlr.name = name;
+        newPlr.isPlr = isPlr;
+
+        const states = {};
+        states.choiceInd = {};
+        [states.choiceInd.val, states.choiceInd.set] = useState(choiceInd);
+        states.visible = {};
+        [states.visible.val, states.visible.set] = useState(visible);
+        states.ready = {};
+        [states.ready.val, states.ready.set] = useState(ready);
+        newPlr.states = states;
+
+        newPlr.plr = <Player name={name} isPlr={isPlr} choiceInd={newPlr.states.choiceInd.val} setChoiceInd={newPlr.states.choiceInd.set} visible={newPlr.states.visible.val} ready={newPlr.states.ready.val} />
+
+        return newPlr;
+    }
+
+    useEffect(() => {
+        if (p1Plr.states.ready.val === true && p2Plr.states.ready.val === true) {
+            p2Plr.states.visible.set(true);
+        }
+    }, [p1Plr.states.ready.val, p2Plr.states.ready.val]);
+
+    const readyClicked = () => {
+        p1Plr.states.ready.set((x) => { return x === false });
+        
+        const matchResult = doesChoiceWin(choiceData[p1Plr.states.choiceInd.val], choiceData[p2Plr.states.choiceInd.val]);
+
+        let resStr;
+        if (matchResult === 'tie') {
+            resStr = 'Tie';
+        } else if (matchResult === 'win') {
+            resStr = 'Player wins';
+        } else if (matchResult === 'lose') {
+            resStr = 'Bot wins';
+        }
+        setMatchStr(resStr);
+    }
+
+    return (
+        <div id="rps_container">
+            <div id="result">
+                {matchStr}
+            </div>
+            <div id="plrs">
+                {p1Plr.plr}
+                {p2Plr.plr}
+            </div>
+            <div id="fight" onClick={readyClicked}>
+                Fight
+            </div>
+        </div>
+    );
+}
+
+function App() {
+    return (
+        <div className="App">
+            <header className="App-header">
+                <RockPaperScissors />
+            </header>
+        </div>
+    );
+}
+
+export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 const botNames = {
     male: [
         'Adam',
@@ -659,3 +909,4 @@ function App() {
 }
 
 export default App;
+*/
