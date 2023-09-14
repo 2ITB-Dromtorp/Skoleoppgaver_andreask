@@ -2,9 +2,11 @@ import './App.css';
 import { useEffect, useState } from 'react';
 
 function Clock() {
-    const [curHr, setHr] = useState(0);
-    const [curMin, setMin] = useState(0);
-    const [curSec, setSec] = useState(0);
+    const [curTime, setTime] = useState({
+        hr: 0,
+        min: 0,
+        sec: 0,
+    });
 
     function getMaxStep(amount, step) {
         const div = amount / step;
@@ -23,9 +25,11 @@ function Clock() {
         [allMin, sec] = getMaxStep(((Date.now() * 0.001) - (new Date().getTimezoneOffset() * 60)) % (60 * 60 * 24), 60);
         [hr, min] = getMaxStep(allMin, 60);
 
-        setHr((hr * (360 / 12)) + (min * ((360 / 12) / 60)) + (sec * (((360 / 12) / 60) / 60)));
-        setMin((min * (360 / 60)) + (sec * ((360 / 60) / 60)));
-        setSec(sec * 6);
+        setTime({
+            hr: (hr * (360 / 12)) + (min * ((360 / 12) / 60)) + (sec * (((360 / 12) / 60) / 60)),
+            min: (min * (360 / 60)) + (sec * ((360 / 60) / 60)),
+            sec: sec * 6,
+        });
     }
 
     window.requestAnimationFrame(update);
@@ -33,9 +37,9 @@ function Clock() {
     return (
         <div className="clock">
             <div className="arrows">
-                <div className="hr" style={{ "--time": curHr }}></div>
-                <div className="min" style={{ "--time": curMin }}></div>
-                <div className="sec" style={{ "--time": curSec }}></div>
+                <div className="hr" style={{ "--time": curTime.hr }}></div>
+                <div className="min" style={{ "--time": curTime.min }}></div>
+                <div className="sec" style={{ "--time": curTime.sec }}></div>
             </div>
             <div className="indicators">
                 <div className="hour">
