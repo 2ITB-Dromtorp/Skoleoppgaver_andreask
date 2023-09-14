@@ -13,11 +13,6 @@ function App() {
             setIsExploding(true);
         }, 2000);
     }
-    /*
-    <iframe allow="autoplay" srcDoc={`
-        <audio src="${soundSrc}" autoplay></audio>
-    `}></iframe>
-    */
     return (
         <div className="App">
             <header className="App-header">
