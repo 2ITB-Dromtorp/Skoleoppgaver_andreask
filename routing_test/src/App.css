@@ -13,6 +13,11 @@
     color: rgb(255, 255, 255);
 }
 
+.button_link {
+    color: rgb(255, 255, 255) !important;
+    text-decoration: none;
+}
+
 a {
     color: rgb(0, 200, 255);
 }
@@ -21,9 +26,18 @@ a:visited {
     color: rgb(0, 100, 255);
 }
 
+#main {
+    width: 100%;
+    color: rgb(255, 255, 255);
+}
+
 nav {
-    background-color: rgb(50, 50, 50);
-    padding: 16px;
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: row;
+    height: 45px;
+    background-color: rgb(35, 35, 35);
 }
 
 #nav_list {
@@ -31,10 +45,65 @@ nav {
     flex-direction: row;
     gap: 12px;
     list-style: none;
+    padding: 10px;
     margin: 0;
-    padding: 0;
+}
+
+#nav_icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: rgb(30, 30, 30);
 }
 
 #content {
-    
+    overflow: auto;
+    min-height: 100svh;
+    background-color: rgb(25, 25, 25);
+}
+
+#footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 0 64px 0;
+    background-color: rgb(20, 20, 20);
+}
+
+#footer_list {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 80%;
+}
+
+#footer_list > * {
+    width: 100%;
+    padding: 0 24px 0 24px;
+}
+
+.footer_sub_list_main_list {
+    list-style: none;
+    padding: 0;
+}
+
+.footer_sub_list_title {
+    font-size: 24;
+}
+
+.footer_sub_list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer_sub_list > * {
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
