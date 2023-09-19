@@ -7,14 +7,14 @@ const Layout = () => {
                 <nav>
                     <div id="nav_icon">🗿</div>
                     <ul id="nav_list">
-                        <li>
-                            <Link className="button_link" to="/">Home</Link>
+                        <li className="nav_li">
+                            <Link className="button_link nav_button" to="/">Home</Link>
                         </li>
-                        <li>
-                            <Link className="button_link" to="/contact">Contact</Link>
+                        <li className="nav_li">
+                            <Link className="button_link nav_button" to="/contact">Contact</Link>
                         </li>
-                        <li>
-                            <Link className="button_link" to="/about">About</Link>
+                        <li className="nav_li">
+                            <Link className="button_link nav_button" to="/about">About</Link>
                         </li>
                     </ul>
                 </nav>
