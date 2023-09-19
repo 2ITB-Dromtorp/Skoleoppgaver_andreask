@@ -1,16 +1,16 @@
-.App {
-    text-align: left;
+code {
+    --r: 255;
+    --g: 255;
+    --b: 255;
+    font-family: Consolas;
+    background-color: rgba(var(--r), var(--g), var(--b), 0.1);
+    border: 1px solid rgba(var(--r), var(--g), var(--b), 0.1);
+    border-radius: 4px;
+    color: rgb(var(--r), var(--g), var(--b));
 }
 
-.App-header {
-    background-color: #282c34;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: rgb(255, 255, 255);
+.email {
+    text-decoration: underline;
 }
 
 .button_link {
@@ -18,7 +18,7 @@
     text-decoration: none;
 }
 
-a {
+a, .email {
     color: rgb(0, 200, 255);
 }
 
@@ -48,9 +48,11 @@ nav {
     margin: 0;
 }
 
+/*
 .nav_li {
     
 }
+*/
 
 .nav_li:hover {
     background-color: rgba(0, 0, 0, 0.1);
@@ -81,6 +83,13 @@ nav {
     overflow: auto;
     min-height: 100svh;
     background-color: rgb(25, 25, 25);
+}
+
+.standard_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #footer {
