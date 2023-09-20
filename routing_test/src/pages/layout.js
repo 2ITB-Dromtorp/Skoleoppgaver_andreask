@@ -6,15 +6,18 @@ const Layout = () => {
             <div id="main">
                 <nav>
                     <div id="nav_icon">🗿</div>
-                    <ul id="nav_list">
+                    <ul className="nav_list">
                         <li className="nav_li">
-                            <Link className="button_link nav_button" to="/">Home</Link>
+                            <Link className="button_link nav_button" to="./">Home</Link>
                         </li>
                         <li className="nav_li">
-                            <Link className="button_link nav_button" to="/contact">Contact</Link>
+                            <Link className="button_link nav_button" to="./learn">Learn</Link>
                         </li>
                         <li className="nav_li">
-                            <Link className="button_link nav_button" to="/about">About</Link>
+                            <Link className="button_link nav_button" to="./contact">Contact</Link>
+                        </li>
+                        <li className="nav_li">
+                            <Link className="button_link nav_button" to="./about">About</Link>
                         </li>
                     </ul>
                 </nav>

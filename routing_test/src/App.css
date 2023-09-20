@@ -1,15 +1,54 @@
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgb(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
 code {
-    --r: 255;
-    --g: 255;
-    --b: 255;
+    display: inline;
+    --r: 100;
+    --g: 100;
+    --b: 150;
     font-family: Consolas;
     background-color: rgba(var(--r), var(--g), var(--b), 0.1);
     border: 1px solid rgba(var(--r), var(--g), var(--b), 0.1);
     border-radius: 4px;
     color: rgb(var(--r), var(--g), var(--b));
+    white-space: pre;
+}
+
+code.big_code {
+    display: inline-block;
+    overflow: auto;
+    width: 100%;
+    padding: 8px;
+    margin: 16px 0 16px 0;
+}
+
+.big_code_wrapper {
+    display: inline-block;
+}
+
+.code_highlight {
+    display: inline-block;
+    width: 100%;
+    background-color: rgba(var(--r), var(--g), var(--b), 0.2);
 }
 
 .email {
+    color: rgb(0, 200, 255);
     text-decoration: underline;
 }
 
@@ -18,7 +57,7 @@ code {
     text-decoration: none;
 }
 
-a, .email {
+a {
     color: rgb(0, 200, 255);
 }
 
@@ -40,19 +79,14 @@ nav {
     background-color: rgb(35, 35, 35);
 }
 
-#nav_list {
+/*-----*/
+.nav_list {
     display: flex;
     flex-direction: row;
     list-style: none;
     padding: 0;
     margin: 0;
 }
-
-/*
-.nav_li {
-    
-}
-*/
 
 .nav_li:hover {
     background-color: rgba(0, 0, 0, 0.1);
@@ -70,6 +104,33 @@ nav {
     padding: 10px;
 }
 
+/*-----*/
+.sub_nav_list {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: rgb(35, 35, 35);
+}
+
+.sub_nav_li:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.sub_nav_li:active {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.sub_nav_button {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+/*-----*/
+
 #nav_icon {
     display: flex;
     justify-content: center;
@@ -85,11 +146,16 @@ nav {
     background-color: rgb(25, 25, 25);
 }
 
-.standard_content {
+.standard_content_container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width: 100%;
+}
+
+.standard_content {
+    width: 60%;
 }
 
 #footer {
