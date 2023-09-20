@@ -1,44 +1,55 @@
+html {
+    background-color: rgb(13, 17, 23);
+}
+
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 10, 0.1);
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgb(0, 0, 0, 0.2);
+    background-color: rgb(0, 0, 10, 0.4);
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 10, 0.8);
 }
 
 code {
     display: inline;
-    --r: 100;
-    --g: 100;
-    --b: 150;
-    font-family: Consolas;
+    --r: 134;
+    --g: 155;
+    --b: 187;
     background-color: rgba(var(--r), var(--g), var(--b), 0.1);
     border: 1px solid rgba(var(--r), var(--g), var(--b), 0.1);
     border-radius: 4px;
-    color: rgb(var(--r), var(--g), var(--b));
     white-space: pre;
 }
 
+code, .code_text {
+    font-family: Consolas;
+}
+
+code:not(.big_code), .code_text {
+    color: rgb(130, 170, 255);
+}
+
 code.big_code {
-    display: inline-block;
+    display: block;
     overflow: auto;
-    width: 100%;
     padding: 8px;
     margin: 16px 0 16px 0;
+    color: rgb(255, 255, 255);
 }
 
 .big_code_wrapper {
     display: inline-block;
+    min-width: 100%;
 }
 
 .code_highlight {
@@ -76,7 +87,8 @@ nav {
     display: flex;
     flex-direction: row;
     height: 45px;
-    background-color: rgb(35, 35, 35);
+    background-color: rgb(13, 17, 23);
+    border-bottom: 1px solid rgb(6, 7, 10);
 }
 
 /*-----*/
@@ -111,7 +123,7 @@ nav {
     list-style: none;
     padding: 0;
     margin: 0;
-    background-color: rgb(35, 35, 35);
+    background-color: rgb(13, 17, 23);
 }
 
 .sub_nav_li:hover {
@@ -137,13 +149,13 @@ nav {
     align-items: center;
     height: 100%;
     aspect-ratio: 1 / 1;
-    background-color: rgb(30, 30, 30);
+    background-color: rgb(9, 12, 16);
 }
 
 #content {
     overflow: auto;
     min-height: 100svh;
-    background-color: rgb(25, 25, 25);
+    background-color: rgb(1, 4, 9);
 }
 
 .standard_content_container {
@@ -164,20 +176,19 @@ nav {
     align-items: center;
     justify-content: center;
     padding: 64px 0 64px 0;
-    background-color: rgb(20, 20, 20);
+    background-color: rgb(13, 17, 23);
 }
 
 #footer_list {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     list-style: none;
     padding: 0;
     margin: 0;
-    width: 80%;
 }
 
 #footer_list > * {
-    width: 100%;
     padding: 0 24px 0 24px;
 }
 

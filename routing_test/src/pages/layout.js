@@ -8,16 +8,16 @@ const Layout = () => {
                     <div id="nav_icon">🗿</div>
                     <ul className="nav_list">
                         <li className="nav_li">
-                            <Link className="button_link nav_button" to="./">Home</Link>
+                            <Link className="button_link nav_button" to="./">Hjem</Link>
                         </li>
                         <li className="nav_li">
-                            <Link className="button_link nav_button" to="./learn">Learn</Link>
+                            <Link className="button_link nav_button" to="./learn">Lær</Link>
                         </li>
                         <li className="nav_li">
-                            <Link className="button_link nav_button" to="./contact">Contact</Link>
+                            <Link className="button_link nav_button" to="./contact">Kontakt</Link>
                         </li>
                         <li className="nav_li">
-                            <Link className="button_link nav_button" to="./about">About</Link>
+                            <Link className="button_link nav_button" to="./about">Om</Link>
                         </li>
                     </ul>
                 </nav>
@@ -28,15 +28,13 @@ const Layout = () => {
                     <ul id="footer_list">
                         <li>
                             <ul className="footer_sub_list_main_list">
-                                <li><h2 className="footer_sub_list_title">John Xina</h2></li>
+                                <li><h2 className="footer_sub_list_title">Nettsiden</h2></li>
                                 <li>
                                     <ul className="footer_sub_list">
-                                        <li><a className="button_link">Bing chilling</a></li>
-                                        <li><a className="button_link">Bing chilling</a></li>
-                                        <li><a className="button_link">Bing chilling</a></li>
-                                        <li><a className="button_link">Bing chilling</a></li>
-                                        <li><a className="button_link">Bing chilling</a></li>
-                                        <li><a className="button_link">Bing chilling</a></li>
+                                        <li><Link className="button_link">Hjem</Link></li>
+                                        <li><Link className="button_link">Lær</Link></li>
+                                        <li><Link className="button_link">Kontakt</Link></li>
+                                        <li><Link className="button_link">Om</Link></li>
                                     </ul>
                                 </li>
                             </ul>

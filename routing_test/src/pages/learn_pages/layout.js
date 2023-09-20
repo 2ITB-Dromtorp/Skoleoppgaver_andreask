@@ -7,7 +7,7 @@ const Layout = () => {
                 <div className="standard_content">
                     <ul className="sub_nav_list">
                         <li className="sub_nav_li">
-                            <Link className="button_link sub_nav_button" to="./introduction">Introduction</Link>
+                            <Link className="button_link sub_nav_button" to="./introduction">Introduksjon</Link>
                         </li>
                     </ul>
                     <Outlet />

@@ -3,8 +3,8 @@ const About = () => {
         <>
             <div className="standard_content_container">
                 <div className="standard_content">
-                    <h1>About me</h1>
-                    <p>Worlds best programmer 🤑🤑🤑</p>
+                    <h1>Om</h1>
+                    <p>Beste nettsiden noensinne</p>
                 </div>
             </div>
         </>
