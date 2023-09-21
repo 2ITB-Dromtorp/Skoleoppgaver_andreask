@@ -7,7 +7,7 @@ const Home = () => {
             <div className="standard_content_container">
                 <div className="standard_content">
                     <h1>Hjemmeside</h1>
-                    <p>Dette er en nettside om <code>React Router</code></p>
+                    <p>Dette er en nettside om <b>React Router</b></p>
                     <Link className="button_link" to="./learn"><Button>Lær React Router</Button></Link>
                 </div>
             </div>
