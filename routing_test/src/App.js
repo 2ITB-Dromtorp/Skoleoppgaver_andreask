@@ -1,12 +1,12 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from './pages/layout';
-import Home from './pages/home';
-import Contact from './pages/contact';
-import About from './pages/about';
-import LearnLayout from './pages/learn_pages/layout';
-import LearnHome from './pages/learn_pages/home';
-import LearnIntroduction from './pages/learn_pages/introduction';
+import Layout from './pages/main/layout';
+import Home from './pages/main/home';
+import Contact from './pages/main/contact';
+import About from './pages/main/about';
+import LearnLayout from './pages/learn/layout';
+import LearnHome from './pages/learn/home';
+import LearnIntroduction from './pages/learn/introduction';
 import NoPage from './pages/nopage';
 
 function App() {

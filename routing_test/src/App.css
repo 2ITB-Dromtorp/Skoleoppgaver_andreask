@@ -12,19 +12,56 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgb(0, 0, 10, 0.4);
+    background-color: rgb(134, 155, 187, 0.2);
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 10, 0.8);
+    background-color: rgba(134, 155, 187, 0.4);
+}
+
+.section_space {
+    display: block;
+    width: 100%;
+    height: var(--space);
+}
+
+.section_space.minimum {
+    --space: 1px;
+}
+
+.section_space.extra_small {
+    --space: 16px;
+}
+
+.section_space.small {
+    --space: 32px;
+}
+
+.section_space.medium {
+    --space: 64px;
+}
+
+.section_space.large {
+    --space: 128px;
+}
+
+.section_space.extra_large {
+    --space: 256px;
+}
+
+.content_center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 code {
-    display: inline;
     --r: 134;
     --g: 155;
     --b: 187;
+    display: inline;
     background-color: rgba(var(--r), var(--g), var(--b), 0.1);
     border: 1px solid rgba(var(--r), var(--g), var(--b), 0.1);
     border-radius: 4px;
@@ -53,9 +90,47 @@ code.big_code {
 }
 
 .code_highlight {
-    display: inline-block;
-    width: 100%;
     background-color: rgba(var(--r), var(--g), var(--b), 0.2);
+}
+
+.button_container {
+    position: relative;
+    cursor: pointer;
+}
+
+.button_container:is(:hover, :active)::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+}
+
+.button_container:hover::before {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.button_container:active::before {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.button {
+    --r: 130;
+    --g: 170;
+    --b: 255;
+    border-radius: 5px;
+    padding: 4px 8px 4px 8px;
+    background-color: rgba(var(--r), var(--g), var(--b), 0.4);
+    border: 1px solid rgba(var(--r), var(--g), var(--b), 0.4);
+    overflow: hidden;
+}
+
+.button_content {
+    position: relative;
+    z-index: 1;
+    font-weight: bold;
 }
 
 .email {

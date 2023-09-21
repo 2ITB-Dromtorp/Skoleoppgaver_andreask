@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "react-router-dom": "^6.16.0"
+  },
+  "dependencies": {
+    "react-render-markup": "^3.6.1",
+    "react-syntax-highlighter": "^15.5.0"
   }
 }
