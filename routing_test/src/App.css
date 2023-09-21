@@ -58,12 +58,12 @@ html {
 }
 
 code {
-    --r: 134;
-    --g: 155;
-    --b: 187;
+    --r: 40;
+    --g: 44;
+    --b: 52;
     display: inline;
-    background-color: rgba(var(--r), var(--g), var(--b), 0.1);
-    border: 1px solid rgba(var(--r), var(--g), var(--b), 0.1);
+    background-color: rgb(40, 44, 52);
+    border: 1px solid rgb(53, 59, 69);
     border-radius: 4px;
     white-space: pre;
 }
@@ -79,7 +79,7 @@ code:not(.big_code), .code_text {
 code.big_code {
     display: block;
     overflow: auto;
-    padding: 8px;
+    padding: 8px 8px 8px 0;
     margin: 16px 0 16px 0;
     color: rgb(255, 255, 255);
 }
@@ -90,7 +90,14 @@ code.big_code {
 }
 
 .code_highlight {
-    background-color: rgba(var(--r), var(--g), var(--b), 0.2);
+    background-color: rgb(53, 59, 69);
+}
+
+.linenumber {
+    position: sticky;
+    left: 0;
+    padding: 0 16px 0 8px;
+    background: rgb(40, 44, 52);
 }
 
 .button_container {
@@ -164,6 +171,7 @@ nav {
     height: 45px;
     background-color: rgb(13, 17, 23);
     border-bottom: 1px solid rgb(6, 7, 10);
+    z-index: 1;
 }
 
 /*-----*/
