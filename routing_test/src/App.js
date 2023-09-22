@@ -5,6 +5,7 @@ import Home from './pages/main/home';
 import Contact from './pages/main/contact';
 import About from './pages/main/about';
 import Login from './pages/main/login';
+import SignUp from './pages/main/signup';
 import ResetPassword from './pages/main/resetpassword';
 import LearnLayout from './pages/learn/layout';
 import LearnHome from './pages/learn/home';
@@ -22,6 +23,7 @@ function App() {
                         <Route path="introduction" element={<LearnIntroduction />} />
                     </Route>
                     <Route path="login" element={<Login />} />
+                    <Route path="signup" element={<SignUp />} />
                     <Route path="reset_password" element={<ResetPassword />} />
                     <Route path="contact" element={<Contact />} />
                     <Route path="about" element={<About />} />

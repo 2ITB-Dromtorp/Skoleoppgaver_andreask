@@ -1,6 +1,33 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Button from '../../button';
+
+const USERS = [
+    {
+        id: 1,
+        name: 'admin',
+        password: 'passord',
+    },
+];
+
+const getUserFromName = (name) => {
+    let res;
+    for (let i = 0; i < USERS.length; i++) {
+        const curUser = USERS[i];
+        if (curUser.name === name) {
+            res = curUser;
+            break;
+        }
+    }
+    return res;
+}
+
+const doesUserExist = (name) => {
+    return getUserFromName(name) !== undefined;
+}
+
+const checkUserPasswordCorrect = (name, password) => {
+    return getUserFromName(name).password === password;
+}
 
 const Login = () => {
     const [usernameClass, setUsernameClass] = useState();
@@ -13,23 +40,42 @@ const Login = () => {
         const passwordInputEl = document.getElementById('login_password_input');
         const usernameInput = usernameInputEl.value;
         const passwordInput = passwordInputEl.value;
-        let isUsernameValid;
-        let isPasswordValid;
+        let isUsernameValid = true;
+        let isPasswordValid = true;
         if (usernameInput === '') {
             isUsernameValid = false;
+            setUsernameMessage('Skriv inn email eller brukernavn');
         }
         if (passwordInput === '') {
             isPasswordValid = false;
-        }
-        if (isUsernameValid === false) {
-            console.log("USER WRON")
-            setUsernameClass('invalid');
-            setUsernameMessage('Skriv inn email eller brukernavn');
-        }
-        if (isPasswordValid === false) {
-            console.log("PASSOWRD WRON")
-            setPasswordClass('invalid');
             setPasswordMessage('Skriv inn passord');
+        }
+        if (isUsernameValid === true && isPasswordValid === true) {
+            const foundAttemptUser = doesUserExist(usernameInput);
+            if (foundAttemptUser === true) {
+                const passwordCorrect = checkUserPasswordCorrect(usernameInput, passwordInput);
+                if (passwordCorrect === true) {
+                    console.log("login successful")
+                } else {
+                    isPasswordValid = false;
+                    setPasswordMessage('Feil passord');
+                }
+            } else if (foundAttemptUser === false) {
+                isUsernameValid = false;
+                setUsernameMessage('Feil brukernavn');
+            }
+        }
+        if (isUsernameValid === true) {
+            setUsernameClass();
+            setUsernameMessage();
+        } else if (isUsernameValid === false) {
+            setUsernameClass('invalid');
+        }
+        if (isPasswordValid === true) {
+            setPasswordClass();
+            setPasswordMessage();
+        } else if (isPasswordValid === false) {
+            setPasswordClass('invalid');
         }
     }
 
@@ -68,28 +114,28 @@ const Login = () => {
     return (
         <>
             <div className="content_center">
-                <div id="login_container">
-                    <h1 id="login_header">Logg inn</h1>
-                    <form id="login_form" onSubmit={submit}>
-                        <label className="login_label" for="username">Brukernavn eller epost adresse</label>
+                <div id="login_container" className="front_account_management_container">
+                    <h1 id="login_header" className="front_account_management_header">Logg inn</h1>
+                    <form id="login_form" className="front_account_management_form" onSubmit={submit}>
+                        <label className="login_label front_account_management_layer" for="username">Brukernavn eller epost adresse</label>
                         {addUsernameMessage}
-                        <input id="login_username_input" className={'login_text_input' + addUsernameClass} name="username" type="text" />
-                        <div id="login_bottom_section">
-                            <label className="login_label" for="password">Passord</label>
+                        <input id="login_username_input" className={'front_account_management_username_input front_account_management_text_input' + addUsernameClass} name="username" type="text" />
+                        <div id="login_bottom_section" className="front_account_management_bottom_section">
+                            <label className="login_label front_account_management_layer" for="password">Passord</label>
                             {addPasswordMessage}
-                            <input id="login_password_input" className={'login_text_input' + addPasswordClass} name="password" type="password" />
+                            <input id="login_password_input" className={'front_account_management_password_input front_account_management_text_input' + addPasswordClass} name="password" type="password" />
                             <Link id="login_forgot_password" to="/reset_password">Glemt passord?</Link>
-                            <input type="submit" id="login_submit" value="Logg inn" />
+                            <input id="login_submit" className="front_account_management_submit" value="Logg inn" type="submit" />
+                            <div id="login_register_section" className="front_account_management_change_section">
+                                <p id="login_register_text">Har ikke en bruker?&nbsp;</p>
+                                <Link id="login_register" to="/signup">Registrer deg</Link>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
         </>
     );
-    /*
-    <Button id="login_submit" type="submit">Logg inn</Button>
-    <input id="login_submit" type="submit"/>
-    */
 }
 
 export default Login;
