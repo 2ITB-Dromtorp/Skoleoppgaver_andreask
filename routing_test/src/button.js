@@ -1,10 +1,28 @@
-const Button = (props) => {
+import { createElement } from 'react';
+
+const Button = ({ children, className, role, buttonTag, ...props }) => {
+    let addClass;
+    if (className !== undefined) {
+        addClass = className + ' ';
+    } else {
+        addClass = '';
+    }
+    let acButtonTag;
+    if (buttonTag !== undefined) {
+        acButtonTag = buttonTag;
+    } else {
+        acButtonTag = 'div';
+    }
     return (
-        <div role="button" className="button_container">
+        <div {...props} className={addClass + 'button_container'} role={role || 'button'}>
             <div className="button">
-                <div className="button_content">
-                    {props.children}
-                </div>
+                {createElement(
+                    acButtonTag,
+                    {
+                        className: "button_content",
+                    },
+                    children
+                )}
             </div>
         </div>
     );

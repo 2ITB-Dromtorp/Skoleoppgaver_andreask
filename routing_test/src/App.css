@@ -2,6 +2,10 @@ html {
     background-color: rgb(13, 17, 23);
 }
 
+input {
+    all: unset;
+}
+
 ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -113,7 +117,26 @@ code.big_code {
     left: 0;
     padding: 0 16px 0 8px;
     background: rgb(40, 44, 52);
+    min-width: 2.25em;
 }
+
+/*-----*/
+
+/*-----*/
+
+input[type="submit"] {
+    --r: 130;
+    --g: 170;
+    --b: 255;
+    border-radius: 5px;
+    padding: 4px 8px 4px 8px;
+    background-color: rgba(var(--r), var(--g), var(--b), 0.4);
+    border: 1px solid rgba(var(--r), var(--g), var(--b), 0.4);
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/*-----*/
 
 .button_container {
     position: relative;
@@ -155,6 +178,8 @@ code.big_code {
     font-weight: 500;
     text-align: center;
 }
+
+/*-----*/
 
 .email {
     color: rgb(0, 200, 255);
@@ -372,14 +397,16 @@ nav {
     font-size: 12px;
 }
 
+:is(.login_text_input,
+    .reset_password_text_input).invalid {
+    --border-col: rgb(255, 100, 100);
+    border: 1px solid var(--border-col);
+}
+
 #login_username_input,
-#reset_password_username_input {
+#reset_password_username_input {}
 
-}
-
-#login_password_input {
-
-}
+#login_password_input {}
 
 #login_forgot_password {
     position: absolute;
@@ -389,9 +416,14 @@ nav {
 
 #login_submit,
 #reset_password_submit {
-    all: unset;
     text-align: center;
     font-weight: 500;
+}
+
+.form_message {
+    color: rgb(255, 100, 100);
+    font-size: 12px;
+    margin: 0 0 5px 0;
 }
 
 /*-----*/
