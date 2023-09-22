@@ -44,7 +44,7 @@ const Login = () => {
         let isPasswordValid = true;
         if (usernameInput === '') {
             isUsernameValid = false;
-            setUsernameMessage('Skriv inn email eller brukernavn');
+            setUsernameMessage('Skriv inn epost eller brukernavn');
         }
         if (passwordInput === '') {
             isPasswordValid = false;
@@ -117,17 +117,17 @@ const Login = () => {
                 <div id="login_container" className="front_account_management_container">
                     <h1 id="login_header" className="front_account_management_header">Logg inn</h1>
                     <form id="login_form" className="front_account_management_form" onSubmit={submit}>
-                        <label className="login_label front_account_management_layer" for="username">Brukernavn eller epost adresse</label>
+                        <label className="login_label front_account_management_layer" for="login_username_input">Brukernavn eller epost adresse</label>
                         {addUsernameMessage}
                         <input id="login_username_input" className={'front_account_management_username_input front_account_management_text_input' + addUsernameClass} name="username" type="text" />
                         <div id="login_bottom_section" className="front_account_management_bottom_section">
-                            <label className="login_label front_account_management_layer" for="password">Passord</label>
+                            <label className="login_label front_account_management_layer" for="login_password_input">Passord</label>
                             {addPasswordMessage}
                             <input id="login_password_input" className={'front_account_management_password_input front_account_management_text_input' + addPasswordClass} name="password" type="password" />
                             <Link id="login_forgot_password" to="/reset_password">Glemt passord?</Link>
                             <input id="login_submit" className="front_account_management_submit" value="Logg inn" type="submit" />
                             <div id="login_register_section" className="front_account_management_change_section">
-                                <p id="login_register_text">Har ikke en bruker?&nbsp;</p>
+                                <p id="login_register_text" className="front_account_management_change_text">Har ikke en bruker?&nbsp;</p>
                                 <Link id="login_register" to="/signup">Registrer deg</Link>
                             </div>
                         </div>

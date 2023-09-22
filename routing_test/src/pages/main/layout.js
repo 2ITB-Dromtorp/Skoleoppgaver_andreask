@@ -23,6 +23,9 @@ const Layout = () => {
                         <li className="nav_li">
                             <Link className="button_link nav_button" to="./login">Logg inn</Link>
                         </li>
+                        <li className="nav_li">
+                            <Link className="button_link nav_button" to="./signup">Registrer deg</Link>
+                        </li>
                     </ul>
                 </nav>
                 <div id="content">
