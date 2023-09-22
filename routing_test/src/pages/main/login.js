@@ -13,7 +13,7 @@ const Login = () => {
                         <div id="login_bottom_section">
                             <label className="login_label" for="password">Passord</label>
                             <input id="login_password_input" className="login_text_input" name="password" type="password"></input>
-                            <Link id="login_forgot_password" to="./forgot_password">Glemt passord?</Link>
+                            <Link id="login_forgot_password" to="/reset_password">Glemt passord?</Link>
                             <Button id="login_submit" type="submit">Logg inn</Button>
                         </div>
                     </form>
