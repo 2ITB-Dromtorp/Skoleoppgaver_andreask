@@ -4,6 +4,8 @@ import Layout from './pages/main/layout';
 import Home from './pages/main/home';
 import Contact from './pages/main/contact';
 import About from './pages/main/about';
+import Login from './pages/main/login';
+import ResetPassword from './pages/main/resetpassword';
 import LearnLayout from './pages/learn/layout';
 import LearnHome from './pages/learn/home';
 import LearnIntroduction from './pages/learn/introduction';
@@ -19,6 +21,8 @@ function App() {
                         <Route index element={<LearnHome />} />
                         <Route path="introduction" element={<LearnIntroduction />} />
                     </Route>
+                    <Route path="login" element={<Login />} />
+                    <Route path="reset_password" element={<ResetPassword />} />
                     <Route path="contact" element={<Contact />} />
                     <Route path="about" element={<About />} />
                     <Route path="*" element={<NoPage />} />

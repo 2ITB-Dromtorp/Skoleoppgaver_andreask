@@ -1,19 +1,21 @@
 import Button from '../../button';
 import { Link } from 'react-router-dom';
 
-const Introduction = () => {
+const Login = () => {
     return (
         <>
             <div className="content_center">
                 <div id="login_container">
                     <h1 id="login_header">Logg inn</h1>
                     <form id="login_form">
-                        <label className="login_label" for="username">Username or email address</label>
+                        <label className="login_label" for="username">Brukernavn eller epost adresse</label>
                         <input id="login_username_input" className="login_text_input" name="username" type="text"></input>
-                        <label className="login_label" for="password">Passord</label>
-                        <input id="login_password_input" className="login_text_input" name="password" type="password"></input>
-                        <Link id="forgot_password" to="./forgot_password">Forgot password?</Link>
-                        <button id="login_username_input" type="submit">Logg inn</button>
+                        <div id="login_bottom_section">
+                            <label className="login_label" for="password">Passord</label>
+                            <input id="login_password_input" className="login_text_input" name="password" type="password"></input>
+                            <Link id="login_forgot_password" to="./forgot_password">Glemt passord?</Link>
+                            <Button id="login_submit" type="submit">Logg inn</Button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -21,4 +23,4 @@ const Introduction = () => {
     );
 }
 
-export default Introduction;
+export default Login;
