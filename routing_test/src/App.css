@@ -294,7 +294,6 @@ nav {
 
 #nav_icon {
     display: flex;
-    position: absolute;
     justify-content: center;
     align-items: center;
     height: 100%;
@@ -456,3 +455,14 @@ nav {
 }
 
 /*-----*/
+
+.learn_subjects_container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px;
+}
+
+#signup_button {
+    margin: 5px;
+}

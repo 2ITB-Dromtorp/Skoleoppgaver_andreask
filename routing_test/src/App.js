@@ -12,41 +12,44 @@ import SignUp from './pages/main/signup';
 import ResetPassword from './pages/main/resetpassword';
 
 //>learn
-import LearnLayout from './pages/learn/router/layout';
+import LearnLayout from './pages/learn/layout';
 
-import LearnHome from './pages/learn/router/home';
-
-const SUBJECTS_URL = './pages/learn/subjects/';
+import LearnHome from './pages/learn/home';
 
 //>learn>html
-import LearnHTMLLayout from SUBJECTS_URL + 'html/layout';
+import LearnHTMLLayout from './pages/learn/subjects/html/layout';
 
-import LearnHTMLHome from SUBJECTS_URL + 'html/home';
-import LearnHTMLIntroduction from SUBJECTS_URL + 'html/introduction';
+import LearnHTMLHome from './pages/learn/subjects/html/home';
+import LearnHTMLIntroduction from './pages/learn/subjects/html/introduction';
 
 //>learn>css
-import LearnCSSLayout from SUBJECTS_URL + 'css/layout';
+import LearnCSSLayout from './pages/learn/subjects/css/layout';
 
-import LearnCSSHome from SUBJECTS_URL + 'css/home';
-import LearnCSSIntroduction from SUBJECTS_URL + 'css/introduction';
+import LearnCSSHome from './pages/learn/subjects/css/home';
+import LearnCSSIntroduction from './pages/learn/subjects/css/introduction';
 
 //>learn>javascript
-import LearnJavaScriptLayout from SUBJECTS_URL + 'js/layout';
+import LearnJavaScriptLayout from './pages/learn/subjects/js/layout';
 
-import LearnJavaScriptHome from SUBJECTS_URL + 'js/home';
-import LearnJavaScriptIntroduction from SUBJECTS_URL + 'js/introduction';
+import LearnJavaScriptHome from './pages/learn/subjects/js/home';
+import LearnJavaScriptIntroduction from './pages/learn/subjects/js/introduction';
 
 //>learn>react
-import LearnReactReactLayout from SUBJECTS_URL + 'react/react/layout';
+import LearnReactLayout from './pages/learn/subjects/react/layout';
 
-import LearnReactReactHome from SUBJECTS_URL + 'react/react/home';
-import LearnReactReactIntroduction from SUBJECTS_URL + 'react/react/introduction';
+import LearnReactHome from './pages/learn/subjects/react/home';
+
+//>learn>react>react
+import LearnReactReactLayout from './pages/learn/subjects/react/react/layout';
+
+import LearnReactReactHome from './pages/learn/subjects/react/react/home';
+import LearnReactReactIntroduction from './pages/learn/subjects/react/react/introduction';
 
 //>learn>react>router
-import LearnReactRouterLayout from SUBJECTS_URL + 'react/router/layout';
+import LearnReactRouterLayout from './pages/learn/subjects/react/router/layout';
 
-import LearnReactRouterHome from SUBJECTS_URL + 'react/router/home';
-import LearnReactRouterIntroduction from SUBJECTS_URL + 'react/router/introduction';
+import LearnReactRouterHome from './pages/learn/subjects/react/router/home';
+import LearnReactRouterIntroduction from './pages/learn/subjects/react/router/introduction';
 
 //>nopage
 import NoPage from './pages/nopage';
@@ -71,8 +74,8 @@ function App() {
                             <Route index element={<LearnJavaScriptHome />} />
                             <Route path="introduction" element={<LearnJavaScriptIntroduction />} />
                         </Route>
-                        <Route path="react" element={<div>react dwadwdw</div>}>
-                            <Route index element={<div>you should not be here</div>} />
+                        <Route path="react" element={<LearnReactLayout />}>
+                            <Route index element={<LearnReactHome />} />
                             <Route path="react" element={<LearnReactReactLayout />}>
                                 <Route index element={<LearnReactReactHome />} />
                                 <Route path="introduction" element={<LearnReactReactIntroduction />} />

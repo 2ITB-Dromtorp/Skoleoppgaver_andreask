@@ -26,7 +26,7 @@ const Layout = () => {
                             <Link className="button_link nav_button" to="./login">Logg inn</Link>
                         </li>
                         <li className="nav_li">
-                            <Button id="signup_button"><Link className="button_link" to="./signup">Registrer deg</Link></Button>
+                            <Link id="signup_button" className="button_link" to="./signup"><Button>Registrer deg</Button></Link>
                         </li>
                     </ul>
                 </nav>

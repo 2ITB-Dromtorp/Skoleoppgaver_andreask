@@ -6,9 +6,14 @@ const Home = () => {
         <>
             <div className="standard_content_container">
                 <div className="standard_content">
-                    <h1>Lær</h1>
-                    <p>Her kan du velgde hva du vil lære om.</p>
-                    <Link className="button_link" to="./react"><Button>Lær React</Button></Link>
+                    <h1>Kurs</h1>
+                    <p>Her kan du velge mellom forskjellige kurs.</p>
+                    <div className="learn_subjects_container">
+                        <Link className="button_link" to="./html"><Button>HTML</Button></Link>
+                        <Link className="button_link" to="./css"><Button>CSS</Button></Link>
+                        <Link className="button_link" to="./javascript"><Button>JavaScript</Button></Link>
+                        <Link className="button_link" to="./react"><Button>React</Button></Link>
+                    </div>
                 </div>
             </div>
         </>

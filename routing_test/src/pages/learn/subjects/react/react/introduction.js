@@ -1,3 +1,14 @@
+const Introduction = () => {
+    return (
+        <>
+            <h2>React</h2>
+            <p>Introduksjon til <b>React</b></p>
+        </>
+    );
+}
+
+export default Introduction;
+/*
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
@@ -220,3 +231,4 @@ export default Layout;`}</PresetHighlight>
 }
 
 export default Introduction;
+*/
