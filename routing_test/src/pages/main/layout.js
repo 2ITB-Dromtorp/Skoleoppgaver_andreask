@@ -7,7 +7,7 @@ const Layout = () => {
             <div id="main">
                 <nav>
                     <div id="nav_icon" className="nav_button">🗿</div>
-                    <ul className="nav_list">
+                    <ul id="nav_list_left" className="nav_list">
                         <li className="nav_li">
                             <Link className="button_link nav_button" to="./">Hjem</Link>
                         </li>
@@ -20,11 +20,13 @@ const Layout = () => {
                         <li className="nav_li">
                             <Link className="button_link nav_button" to="./about">Om</Link>
                         </li>
+                    </ul>
+                    <ul id="nav_list_right"  className="nav_list">
                         <li className="nav_li">
                             <Link className="button_link nav_button" to="./login">Logg inn</Link>
                         </li>
                         <li className="nav_li">
-                            <Link className="button_link nav_button" to="./signup">Registrer deg</Link>
+                            <Button id="signup_button"><Link className="button_link" to="./signup">Registrer deg</Link></Button>
                         </li>
                     </ul>
                 </nav>

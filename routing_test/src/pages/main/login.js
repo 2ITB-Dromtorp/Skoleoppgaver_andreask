@@ -1,33 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-
-const USERS = [
-    {
-        id: 1,
-        name: 'admin',
-        password: 'passord',
-    },
-];
-
-const getUserFromName = (name) => {
-    let res;
-    for (let i = 0; i < USERS.length; i++) {
-        const curUser = USERS[i];
-        if (curUser.name === name) {
-            res = curUser;
-            break;
-        }
-    }
-    return res;
-}
-
-const doesUserExist = (name) => {
-    return getUserFromName(name) !== undefined;
-}
-
-const checkUserPasswordCorrect = (name, password) => {
-    return getUserFromName(name).password === password;
-}
+import { doesUserExist, checkUserPasswordCorrect, getUserFromName, getUsers } from '../../users';
 
 const Login = () => {
     const [usernameClass, setUsernameClass] = useState();
@@ -117,19 +90,21 @@ const Login = () => {
                 <div id="login_container" className="front_account_management_container">
                     <h1 id="login_header" className="front_account_management_header">Logg inn</h1>
                     <form id="login_form" className="front_account_management_form" onSubmit={submit}>
+
                         <label className="login_label front_account_management_layer" for="login_username_input">Brukernavn eller epost adresse</label>
                         {addUsernameMessage}
                         <input id="login_username_input" className={'front_account_management_username_input front_account_management_text_input' + addUsernameClass} name="username" type="text" />
+
                         <div id="login_bottom_section" className="front_account_management_bottom_section">
                             <label className="login_label front_account_management_layer" for="login_password_input">Passord</label>
                             {addPasswordMessage}
-                            <input id="login_password_input" className={'front_account_management_password_input front_account_management_text_input' + addPasswordClass} name="password" type="password" />
                             <Link id="login_forgot_password" to="/reset_password">Glemt passord?</Link>
-                            <input id="login_submit" className="front_account_management_submit" value="Logg inn" type="submit" />
-                            <div id="login_register_section" className="front_account_management_change_section">
-                                <p id="login_register_text" className="front_account_management_change_text">Har ikke en bruker?&nbsp;</p>
-                                <Link id="login_register" to="/signup">Registrer deg</Link>
-                            </div>
+                        </div>
+                        <input id="login_password_input" className={'front_account_management_password_input front_account_management_text_input' + addPasswordClass} name="password" type="password" />
+                        <input id="login_submit" className="front_account_management_submit" value="Logg inn" type="submit" />
+                        <div id="login_register_section" className="front_account_management_change_section">
+                            <p id="login_register_text" className="front_account_management_change_text">Har ikke en bruker?&nbsp;</p>
+                            <Link id="login_register" to="/signup">Registrer deg</Link>
                         </div>
                     </form>
                 </div>
