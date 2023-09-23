@@ -1,16 +1,18 @@
 import Button from '../../button';
 import { Link } from 'react-router-dom';
 
-const Introduction = () => {
+const Home = () => {
     return (
         <>
-            <div className="content_center">
-                <h1>Lær React Router</h1>
-                <p>Her er all informasjonen du trenger for å lage din første nettside med <b>React Router</b></p>
-                <Link className="button_link" to="./introduction"><Button>Start</Button></Link>
+            <div className="standard_content_container">
+                <div className="standard_content">
+                    <h1>Lær</h1>
+                    <p>Her kan du velgde hva du vil lære om.</p>
+                    <Link className="button_link" to="./react"><Button>Lær React</Button></Link>
+                </div>
             </div>
         </>
     );
 }
 
-export default Introduction;
+export default Home;
