@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { doesUserExist, checkUserPasswordCorrect, getUserFromName, getUsers } from '../../users';
+import { doesUserExist, checkUserPasswordCorrect } from '../../users';
 
 const Login = () => {
     const [usernameClass, setUsernameClass] = useState();
@@ -17,11 +17,11 @@ const Login = () => {
         let isPasswordValid = true;
         if (usernameInput === '') {
             isUsernameValid = false;
-            setUsernameMessage('Skriv inn epost eller brukernavn');
+            setUsernameMessage('Username or email address required');
         }
         if (passwordInput === '') {
             isPasswordValid = false;
-            setPasswordMessage('Skriv inn passord');
+            setPasswordMessage('Password required');
         }
         if (isUsernameValid === true && isPasswordValid === true) {
             const foundAttemptUser = doesUserExist(usernameInput);
@@ -31,11 +31,11 @@ const Login = () => {
                     console.log("login successful")
                 } else {
                     isPasswordValid = false;
-                    setPasswordMessage('Feil passord');
+                    setPasswordMessage('Incorrect password');
                 }
             } else if (foundAttemptUser === false) {
                 isUsernameValid = false;
-                setUsernameMessage('Feil brukernavn');
+                setUsernameMessage('No user with chosen name');
             }
         }
         if (isUsernameValid === true) {
@@ -91,20 +91,20 @@ const Login = () => {
                     <h1 id="login_header" className="front_account_management_header">Logg inn</h1>
                     <form id="login_form" className="front_account_management_form" onSubmit={submit}>
 
-                        <label className="login_label front_account_management_layer" for="login_username_input">Brukernavn eller epost adresse</label>
+                        <label className="login_label front_account_management_layer" for="login_username_input">Username or email address</label>
                         {addUsernameMessage}
                         <input id="login_username_input" className={'front_account_management_username_input front_account_management_text_input' + addUsernameClass} name="username" type="text" />
 
                         <div id="login_bottom_section" className="front_account_management_bottom_section">
-                            <label className="login_label front_account_management_layer" for="login_password_input">Passord</label>
+                            <label className="login_label front_account_management_layer" for="login_password_input">Password</label>
                             {addPasswordMessage}
-                            <Link id="login_forgot_password" to="/reset_password">Glemt passord?</Link>
+                            <Link id="login_forgot_password" to="/reset_password">Forgot password?</Link>
                         </div>
                         <input id="login_password_input" className={'front_account_management_password_input front_account_management_text_input' + addPasswordClass} name="password" type="password" />
-                        <input id="login_submit" className="front_account_management_submit" value="Logg inn" type="submit" />
+                        <input id="login_submit" className="front_account_management_submit" value="Log in" type="submit" />
                         <div id="login_register_section" className="front_account_management_change_section">
-                            <p id="login_register_text" className="front_account_management_change_text">Har ikke en bruker?&nbsp;</p>
-                            <Link id="login_register" to="/signup">Registrer deg</Link>
+                            <p id="login_register_text" className="front_account_management_change_text">Don't have a user?&nbsp;</p>
+                            <Link id="login_register" to="/signup">Sign up</Link>
                         </div>
                     </form>
                 </div>

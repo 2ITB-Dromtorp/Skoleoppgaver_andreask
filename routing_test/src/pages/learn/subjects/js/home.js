@@ -6,7 +6,7 @@ const Introduction = () => {
         <>
             <div className="content_center">
                 <h1>JavaScript</h1>
-                <p>Her er en god del dokumentasjon om <b>JavaScript</b></p>
+                <p>Some documentation relating <b>JavaScript</b></p>
                 <Link className="button_link" to="./introduction"><Button>Start</Button></Link>
             </div>
         </>

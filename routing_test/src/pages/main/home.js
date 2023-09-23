@@ -6,8 +6,8 @@ const Home = () => {
         <>
             <div className="standard_content_container">
                 <div className="standard_content">
-                    <h1>Hjemmeside</h1>
-                    <p>Dette er en nettside som gir nyttig informasjon og kurs om</p>
+                    <h1>Home</h1>
+                    <p>This website provides useful courses for web and app developers.</p>
                     <ul>
                         <li>
                             <p>HTML</p>

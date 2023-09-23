@@ -28,27 +28,27 @@ const SignUp = () => {
         let isRepeatPasswordValid = true;
         if (usernameInput === '') {
             isUsernameValid = false;
-            setUsernameMessage('Skriv inn brukernavn');
+            setUsernameMessage('Username required');
         }
         if (emailInput === '') {
             isEmailValid = false;
-            setEmailMessage('Skriv inn en epostadresse');
+            setEmailMessage('Email required');
         }
         if (passwordInput === '') {
             isPasswordValid = false;
-            setPasswordMessage('Skriv inn et passord');
+            setPasswordMessage('Password required');
         }
         if (isPasswordValid === true) {
             if (passwordInput !== repeatPasswordInput) {
                 isRepeatPasswordValid = false;
-                setRepeatPasswordMessage('Passord er ikke like');
+                setRepeatPasswordMessage('Passwords do not match');
             }
         }
         if (isUsernameValid === true) {
             const len = usernameInput.length
             if (len < 4 || len > 20) {
                 isUsernameValid = false;
-                setUsernameMessage('Brukernavn må være mellom 4 og 20 tegn langt');
+                setUsernameMessage('Username must be between 4 and 20 characters long');
             }
         }
         if (isUsernameValid === true) {
@@ -58,7 +58,7 @@ const SignUp = () => {
             const foundEmail = emailInput.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g);
             if (foundEmail === null) {
                 isEmailValid = false;
-                setEmailMessage('Skriv inn en gyldig epostadresse');
+                setEmailMessage('Email address is invalid');
             }
         }
         if (isUsernameValid === true && isEmailValid === true && isPasswordValid === true && isRepeatPasswordValid === true) {
@@ -68,7 +68,7 @@ const SignUp = () => {
                 navigate('/');
             } else if (foundAttemptUser === true) {
                 isUsernameValid = false;
-                setUsernameMessage('Brukernavn er ikke tilgjengelig');
+                setUsernameMessage('Username not available');
             }
         }
         if (isUsernameValid === true) {
@@ -164,29 +164,29 @@ const SignUp = () => {
         <>
             <div className="content_center">
                 <div id="signup_container" className="front_account_management_container">
-                    <h1 id="signup_header" className="front_account_management_header">Registrer deg</h1>
+                    <h1 id="signup_header" className="front_account_management_header">Sign up</h1>
                     <form id="signup_form" className="front_account_management_form" onSubmit={submit}>
 
-                        <label className="signup_label front_account_management_layer" for="signup_username_input">Brukernavn</label>
+                        <label className="signup_label front_account_management_layer" for="signup_username_input">Username</label>
                         {addUsernameMessage}
                         <input id="signup_username_input" className={'front_account_management_username_input front_account_management_text_input' + addUsernameClass} name="username" type="text" />
 
-                        <label className="signup_label front_account_management_layer" for="signup_email_input">Epost adresse</label>
+                        <label className="signup_label front_account_management_layer" for="signup_email_input">Email address</label>
                         {addEmailMessage}
                         <input id="signup_email_input" className={'front_account_management_email_input front_account_management_text_input' + addEmailClass} name="email" type="text" />
 
-                        <label className="signup_label front_account_management_layer" for="signup_password_input">Passord</label>
+                        <label className="signup_label front_account_management_layer" for="signup_password_input">Password</label>
                         {addPasswordMessage}
                         <input id="signup_password_input" className={'front_account_management_password_input front_account_management_text_input' + addPasswordClass} name="password" type="password" />
                         
-                        <label className="signup_label front_account_management_layer" for="signup_repeat_password_input">Gjenta passord</label>
+                        <label className="signup_label front_account_management_layer" for="signup_repeat_password_input">Repeat password</label>
                         {addRepeatPasswordMessage}
                         <input id="signup_repeat_password_input" className={'front_account_management_password_input front_account_management_text_input' + addRepeatPasswordClass} name="repeat_password" type="password" />
 
                         <input id="signup_submit" className="front_account_management_submit" type="submit" value="Registrer deg" />
                         <div id="signup_login_section" className="front_account_management_change_section">
-                            <p id="signup_login_text" className="front_account_management_change_text">Har allerede en bruker?&nbsp;</p>
-                            <Link id="signup_login" to="/login">Logg inn</Link>
+                            <p id="signup_login_text" className="front_account_management_change_text">Already have a user?&nbsp;</p>
+                            <Link id="signup_login" to="/login">Log in</Link>
                         </div>
                     </form>
                 </div>

@@ -6,7 +6,7 @@ const Introduction = () => {
         <>
             <div className="content_center">
                 <h1>React</h1>
-                <p>Her er all informasjon du trenger for å lage din første nettside med <b>React</b></p>
+                <p>Some documentation relating <b>React</b></p>
                 <Link className="button_link" to="./introduction"><Button>Start</Button></Link>
             </div>
         </>

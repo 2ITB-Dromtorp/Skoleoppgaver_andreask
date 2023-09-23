@@ -2,7 +2,7 @@ const Introduction = () => {
     return (
         <>
             <h2>JavaScript</h2>
-            <p>Introduksjon til <b>JavaScript</b></p>
+            <p>Introduction to <b>JavaScript</b></p>
         </>
     );
 }

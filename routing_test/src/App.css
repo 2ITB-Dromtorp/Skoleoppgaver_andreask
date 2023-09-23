@@ -466,3 +466,15 @@ nav {
 #signup_button {
     margin: 5px;
 }
+
+.desc_list {
+
+}
+
+.desc_list > dt {
+    margin: 40px 0 5px 0;
+}
+
+.desc_list > dd {
+    margin: 0 0 20px 20px;
+}

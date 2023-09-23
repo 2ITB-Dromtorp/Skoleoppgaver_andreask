@@ -3,7 +3,7 @@ const Contact = () => {
         <>
             <div className="standard_content_container">
                 <div className="standard_content">
-                    <h1>Kontakt meg</h1>
+                    <h1>Contact me</h1>
                     <p className="email">joe.mama@yodadashouse.com</p>
                 </div>
             </div>

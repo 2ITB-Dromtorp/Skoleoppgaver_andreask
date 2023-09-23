@@ -2,7 +2,7 @@ const Introduction = () => {
     return (
         <>
             <h2>React</h2>
-            <p>Introduksjon til <b>React</b></p>
+            <p>Introduction to <b>React</b></p>
         </>
     );
 }
