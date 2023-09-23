@@ -15,19 +15,38 @@ import ResetPassword from './pages/main/resetpassword';
 import LearnLayout from './pages/learn/router/layout';
 
 import LearnHome from './pages/learn/router/home';
-import LearnIntroduction from './pages/learn/router/introduction';
+
+const SUBJECTS_URL = './pages/learn/subjects/';
+
+//>learn>html
+import LearnHTMLLayout from SUBJECTS_URL + 'html/layout';
+
+import LearnHTMLHome from SUBJECTS_URL + 'html/home';
+import LearnHTMLIntroduction from SUBJECTS_URL + 'html/introduction';
+
+//>learn>css
+import LearnCSSLayout from SUBJECTS_URL + 'css/layout';
+
+import LearnCSSHome from SUBJECTS_URL + 'css/home';
+import LearnCSSIntroduction from SUBJECTS_URL + 'css/introduction';
+
+//>learn>javascript
+import LearnJavaScriptLayout from SUBJECTS_URL + 'js/layout';
+
+import LearnJavaScriptHome from SUBJECTS_URL + 'js/home';
+import LearnJavaScriptIntroduction from SUBJECTS_URL + 'js/introduction';
 
 //>learn>react
-import LearnReactLayout from './pages/learn/react/react/layout';
+import LearnReactReactLayout from SUBJECTS_URL + 'react/react/layout';
 
-import LearnReactHome from './pages/learn/react/react/home';
-import LearnReactIntroduction from './pages/learn/react/react/introduction';
+import LearnReactReactHome from SUBJECTS_URL + 'react/react/home';
+import LearnReactReactIntroduction from SUBJECTS_URL + 'react/react/introduction';
 
-//>learn>router
-import LearnReactRouterLayout from './pages/learn/react/router/layout';
+//>learn>react>router
+import LearnReactRouterLayout from SUBJECTS_URL + 'react/router/layout';
 
-import LearnReactRouterHome from './pages/learn/react/router/home';
-import LearnReactRouterIntroduction from './pages/learn/react/router/introduction';
+import LearnReactRouterHome from SUBJECTS_URL + 'react/router/home';
+import LearnReactRouterIntroduction from SUBJECTS_URL + 'react/router/introduction';
 
 //>nopage
 import NoPage from './pages/nopage';
@@ -40,7 +59,29 @@ function App() {
                     <Route index element={<Home />} />
                     <Route path="learn" element={<LearnLayout />}>
                         <Route index element={<LearnHome />} />
-                        <Route path="introduction" element={<LearnIntroduction />} />
+                        <Route path="html" element={<LearnHTMLLayout />}>
+                            <Route index element={<LearnHTMLHome />} />
+                            <Route path="introduction" element={<LearnHTMLIntroduction />} />
+                        </Route>
+                        <Route path="css" element={<LearnCSSLayout />}>
+                            <Route index element={<LearnCSSHome />} />
+                            <Route path="introduction" element={<LearnCSSIntroduction />} />
+                        </Route>
+                        <Route path="javascript" element={<LearnJavaScriptLayout />}>
+                            <Route index element={<LearnJavaScriptHome />} />
+                            <Route path="introduction" element={<LearnJavaScriptIntroduction />} />
+                        </Route>
+                        <Route path="react" element={<div>react dwadwdw</div>}>
+                            <Route index element={<div>you should not be here</div>} />
+                            <Route path="react" element={<LearnReactReactLayout />}>
+                                <Route index element={<LearnReactReactHome />} />
+                                <Route path="introduction" element={<LearnReactReactIntroduction />} />
+                            </Route>
+                            <Route path="router" element={<LearnReactRouterLayout />}>
+                                <Route index element={<LearnReactRouterHome />} />
+                                <Route path="introduction" element={<LearnReactRouterIntroduction />} />
+                            </Route>
+                        </Route>
                     </Route>
                     <Route path="login" element={<Login />} />
                     <Route path="signup" element={<SignUp />} />

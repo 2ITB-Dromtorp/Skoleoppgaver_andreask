@@ -5,8 +5,8 @@ const Introduction = () => {
     return (
         <>
             <div className="content_center">
-                <h1>Lær React</h1>
-                <p>Her er all informasjonen du trenger for å lage din første nettside med <b>React</b></p>
+                <h1>HTML</h1>
+                <p>Her er en god del dokumentasjon om <b>HTML</b></p>
                 <Link className="button_link" to="./introduction"><Button>Start</Button></Link>
             </div>
         </>
