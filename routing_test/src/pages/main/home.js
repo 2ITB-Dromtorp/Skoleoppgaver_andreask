@@ -25,7 +25,7 @@ const Home = () => {
                             <p>React Router</p>
                         </li>
                     </ul>
-                    <Link className="button_link" to="./learn"><Button>Se kurs</Button></Link>
+                    <Link className="button_link" to="./learn"><Button>View courses</Button></Link>
                 </div>
             </div>
         </>
