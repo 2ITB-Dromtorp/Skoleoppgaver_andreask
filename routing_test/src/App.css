@@ -472,6 +472,7 @@ nav {
 }
 
 .desc_list > dt {
+    font-weight: 500;
     margin: 40px 0 5px 0;
 }
 
