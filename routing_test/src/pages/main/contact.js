@@ -4,7 +4,7 @@ const Contact = () => {
             <div className="standard_content_container">
                 <div className="standard_content">
                     <h1>Contact me</h1>
-                    <p className="email">joe.mama@yodadashouse.com</p>
+                    <a className="email" href="mailto:joe.mama@yodadashouse.com">joe.mama@yodadashouse.com</a>
                 </div>
             </div>
         </>
