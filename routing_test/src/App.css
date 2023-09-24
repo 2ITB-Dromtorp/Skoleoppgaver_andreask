@@ -8,6 +8,10 @@ html {
     background-color: var(--bg-col);
 }
 
+p, dt, dd {
+    line-height: 28px;
+}
+
 input {
     all: unset;
     transition-duration: 0.1s;
@@ -307,6 +311,7 @@ nav {
     overflow: auto;
     min-height: 100svh;
     background-color: rgb(10, 14, 21);
+    padding-bottom: 100px;
 }
 
 .standard_content_container {

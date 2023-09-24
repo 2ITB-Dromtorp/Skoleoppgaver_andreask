@@ -183,7 +183,7 @@ const SignUp = () => {
                         {addRepeatPasswordMessage}
                         <input id="signup_repeat_password_input" className={'front_account_management_password_input front_account_management_text_input' + addRepeatPasswordClass} name="repeat_password" type="password" />
 
-                        <input id="signup_submit" className="front_account_management_submit" type="submit" value="Registrer deg" />
+                        <input id="signup_submit" className="front_account_management_submit" type="submit" value="Sign up" />
                         <div id="signup_login_section" className="front_account_management_change_section">
                             <p id="signup_login_text" className="front_account_management_change_text">Already have a user?&nbsp;</p>
                             <Link id="signup_login" to="/login">Log in</Link>
