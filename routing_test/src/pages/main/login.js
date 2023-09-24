@@ -91,12 +91,12 @@ const Login = () => {
                     <h1 id="login_header" className="front_account_management_header">Logg inn</h1>
                     <form id="login_form" className="front_account_management_form" onSubmit={submit}>
 
-                        <label className="login_label front_account_management_layer" for="login_username_input">Username or email address</label>
+                        <label className="form_label login_label front_account_management_label" for="login_username_input">Username or email address</label>
                         {addUsernameMessage}
                         <input id="login_username_input" className={'front_account_management_username_input front_account_management_text_input' + addUsernameClass} name="username" type="text" />
 
                         <div id="login_bottom_section" className="front_account_management_bottom_section">
-                            <label className="login_label front_account_management_layer" for="login_password_input">Password</label>
+                            <label className="form_label login_label front_account_management_label" for="login_password_input">Password</label>
                             {addPasswordMessage}
                             <Link id="login_forgot_password" to="/reset_password">Forgot password?</Link>
                         </div>

@@ -167,19 +167,19 @@ const SignUp = () => {
                     <h1 id="signup_header" className="front_account_management_header">Sign up</h1>
                     <form id="signup_form" className="front_account_management_form" onSubmit={submit}>
 
-                        <label className="signup_label front_account_management_layer" for="signup_username_input">Username</label>
+                        <label className="form_label signup_label front_account_management_label" for="signup_username_input">Username</label>
                         {addUsernameMessage}
                         <input id="signup_username_input" className={'front_account_management_username_input front_account_management_text_input' + addUsernameClass} name="username" type="text" />
 
-                        <label className="signup_label front_account_management_layer" for="signup_email_input">Email address</label>
+                        <label className="form_label signup_label front_account_management_label" for="signup_email_input">Email address</label>
                         {addEmailMessage}
                         <input id="signup_email_input" className={'front_account_management_email_input front_account_management_text_input' + addEmailClass} name="email" type="text" />
 
-                        <label className="signup_label front_account_management_layer" for="signup_password_input">Password</label>
+                        <label className="form_label signup_label front_account_management_label" for="signup_password_input">Password</label>
                         {addPasswordMessage}
                         <input id="signup_password_input" className={'front_account_management_password_input front_account_management_text_input' + addPasswordClass} name="password" type="password" />
                         
-                        <label className="signup_label front_account_management_layer" for="signup_repeat_password_input">Repeat password</label>
+                        <label className="form_label signup_label front_account_management_label" for="signup_repeat_password_input">Repeat password</label>
                         {addRepeatPasswordMessage}
                         <input id="signup_repeat_password_input" className={'front_account_management_password_input front_account_management_text_input' + addRepeatPasswordClass} name="repeat_password" type="password" />
 
