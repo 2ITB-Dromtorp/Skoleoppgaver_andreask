@@ -1,9 +1,20 @@
 export const setUsers = (users) => {
+    const response = {};
     localStorage.setItem('users', JSON.stringify(users));
+    response.success = true;
+    return response;
 }
 
 export const getUsers = () => {
-    return JSON.parse(localStorage.getItem('users'));
+    const response = {};
+    const gotUsers = localStorage.getItem('users');
+    if (gotUsers !== null) {
+        response.users = JSON.parse(gotUsers);
+        response.success = true;
+    } else {
+        response.success = false;
+    }
+    return response;
 }
 
 export const getNewUserId = () => {
@@ -35,7 +46,8 @@ export const createUserData = (username, email, password) => {
     return {
         username: username,
         email: email,
-        password, password,
+        password: password,
+        id: getNewUserId(),
     };
 }
 

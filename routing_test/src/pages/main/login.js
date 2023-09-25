@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { doesUserExist, checkUserPasswordCorrect } from '../../users';
+import { doesUserExist, checkUserPasswordCorrect, getUserFromName } from '../../users';
 
 const Login = () => {
     const [usernameClass, setUsernameClass] = useState();
@@ -28,7 +28,8 @@ const Login = () => {
             if (foundAttemptUser === true) {
                 const passwordCorrect = checkUserPasswordCorrect(usernameInput, passwordInput);
                 if (passwordCorrect === true) {
-                    console.log("login successful")
+                    const user = getUserFromName(usernameInput);
+                    setLogin(user.userId);
                 } else {
                     isPasswordValid = false;
                     setPasswordMessage('Incorrect password');

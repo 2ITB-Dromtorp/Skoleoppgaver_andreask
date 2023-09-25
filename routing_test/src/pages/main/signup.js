@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { doesUserExist, createUser, getUsers } from '../../users';
+import { getLogin, setLogin } from '../../server';
 
 const SignUp = () => {
     const navigate = useNavigate();
@@ -64,7 +65,8 @@ const SignUp = () => {
         if (isUsernameValid === true && isEmailValid === true && isPasswordValid === true && isRepeatPasswordValid === true) {
             const foundAttemptUser = doesUserExist(usernameInput);
             if (foundAttemptUser === false) {
-                createUser(usernameInput, emailInput, passwordInput);
+                const user = createUser(usernameInput, emailInput, passwordInput);
+                setLogin(user.userId);
                 navigate('/');
             } else if (foundAttemptUser === true) {
                 isUsernameValid = false;
