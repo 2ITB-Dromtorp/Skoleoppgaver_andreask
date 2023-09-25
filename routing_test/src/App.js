@@ -70,7 +70,7 @@ function App() {
                         <Route path="html" element={<LearnHTMLLayout />}>
                             <Route index element={<LearnHTMLHome />} />
                             <Route path="introduction" element={<LearnHTMLIntroduction />} />
-                            <Route path="tutorials">
+                            <Route path="tutorial">
                                 <Route index element={<Navigate to="beginner" />} />
                                 <Route path="beginner" element={<LearnHTMLTutorialBeginner />} />
                             </Route>
@@ -78,7 +78,7 @@ function App() {
                         <Route path="css" element={<LearnCSSLayout />}>
                             <Route index element={<LearnCSSHome />} />
                             <Route path="introduction" element={<LearnCSSIntroduction />} />
-                            <Route path="tutorials">
+                            <Route path="tutorial">
                                 <Route index element={<Navigate to="beginner" />} />
                                 <Route path="beginner" element={<LearnCSSTutorialBeginner />} />
                             </Route>
@@ -86,7 +86,7 @@ function App() {
                         <Route path="javascript" element={<LearnJavaScriptLayout />}>
                             <Route index element={<LearnJavaScriptHome />} />
                             <Route path="introduction" element={<LearnJavaScriptIntroduction />} />
-                            <Route path="tutorials">
+                            <Route path="tutorial">
                                 <Route index element={<Navigate to="beginner" />} />
                                 <Route path="beginner" element={<LearnJavaScriptTutorialBeginner />} />
                             </Route>
@@ -96,7 +96,7 @@ function App() {
                             <Route path="react" element={<LearnReactReactLayout />}>
                                 <Route index element={<LearnReactReactHome />} />
                                 <Route path="introduction" element={<LearnReactReactIntroduction />} />
-                                <Route path="tutorials">
+                                <Route path="tutorial">
                                     <Route index element={<Navigate to="beginner" />} />
                                     <Route path="beginner" element={<LearnReactReactTutorialBeginner />} />
                                 </Route>
@@ -104,7 +104,7 @@ function App() {
                             <Route path="router" element={<LearnReactRouterLayout />}>
                                 <Route index element={<LearnReactRouterHome />} />
                                 <Route path="introduction" element={<LearnReactRouterIntroduction />} />
-                                <Route path="tutorials">
+                                <Route path="tutorial">
                                     <Route index element={<Navigate to="beginner" />} />
                                     <Route path="beginner" element={<LearnReactRouterTutorialBeginner />} />
                                 </Route>

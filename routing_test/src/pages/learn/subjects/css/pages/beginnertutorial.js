@@ -85,6 +85,7 @@ const BeginnerTutorial = () => {
                 <dt>width and height</dt>
                 <dd>Define the dimensions of elements.</dd>
             </dl>
+            <p>Experiment with these properties and values to enhance the style of your web page.</p>
             <span className="section_space medium"></span>
             <h2>Conclusion</h2>
             <p>Congratulations! You've taken your first steps into the world of CSS. This beginner's guide has introduced you to the basics of CSS syntax and applying styles to HTML elements. As you continue to explore and practice, you'll gain a deeper understanding of CSS and its capabilities, allowing you to create beautiful and responsive websites. Happy coding!</p>
