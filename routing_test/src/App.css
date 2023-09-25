@@ -259,10 +259,18 @@ nav {
     padding: 10px;
 }
 
+/*
 #nav_list_left {}
+*/
 
 #nav_list_right {
     margin-left: auto;
+}
+
+#nav_profile_button {
+    overflow: hidden;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
 }
 
 /*-----*/
@@ -537,3 +545,7 @@ input[type="submit"] {
 }
 
 /*-----*/
+
+.profile_picture {
+    fill: var(--light-col-2);
+}

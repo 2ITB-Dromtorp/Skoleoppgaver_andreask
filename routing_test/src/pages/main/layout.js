@@ -1,8 +1,33 @@
 import { Outlet, Link } from 'react-router-dom';
-import { getUserFromId } from '../../users';
+import { getLogin } from '../../server';
 import Button from '../../button';
 
 const Layout = () => {
+    const loginResponse = getLogin();
+    let accountContent;
+    if (loginResponse.success === true) {
+        console.log("ambawd")
+        if (loginResponse.loggedIn === true) {
+            accountContent = (
+                <>
+                    <li className="nav_li">
+                        <Link id="nav_profile_button"><img className="profile_picture" src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg"/></Link>
+                    </li>
+                </>
+            );
+        } else {
+            accountContent = (
+                <>
+                    <li className="nav_li">
+                        <Link className="button_link nav_button" to="./login">Log in</Link>
+                    </li>
+                    <li className="nav_li">
+                        <Link id="signup_button" className="button_link" to="./signup"><Button>Sign up</Button></Link>
+                    </li>
+                </>
+            )
+        }
+    }
 
     return (
         <>
@@ -23,13 +48,8 @@ const Layout = () => {
                             <Link className="button_link nav_button" to="./about">About</Link>
                         </li>
                     </ul>
-                    <ul id="nav_list_right"  className="nav_list">
-                        <li className="nav_li">
-                            <Link className="button_link nav_button" to="./login">Log in</Link>
-                        </li>
-                        <li className="nav_li">
-                            <Link id="signup_button" className="button_link" to="./signup"><Button>Sign up</Button></Link>
-                        </li>
+                    <ul id="nav_list_right" className="nav_list">
+                        {accountContent}
                     </ul>
                 </nav>
                 <div id="content">

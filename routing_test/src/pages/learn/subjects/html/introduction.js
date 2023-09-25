@@ -3,7 +3,7 @@ const Introduction = () => {
         <>
             <h2>HTML</h2>
             <p><b>HTML</b>, or HyperText Markup Language, is the backbone of the web, serving as the essential language for structuring and presenting content on websites. To work effectively with HTML, it's crucial to grasp its technical properties, which include:</p>
-            <dl>
+            <dl className="desc_list">
                 <dt>Syntax and Structure</dt>
                 <dd>
                     <ul>

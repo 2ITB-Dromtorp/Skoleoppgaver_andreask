@@ -11,7 +11,12 @@ export const getLogin = () => {
     const response = {};
     const gotId = localStorage.getItem('login_id');
     if (gotId !== null) {
-        response.user = getUserFromId(gotId);
+        if (true) {
+            response.loggedIn = true;
+            response.user = getUserFromId(gotId);
+        } else {
+            response.loggedIn = false;
+        }
         response.success = true;
     } else {
         response.success = false;
