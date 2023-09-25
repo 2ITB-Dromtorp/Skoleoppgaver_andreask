@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 //>/
 import Layout from './pages/main/layout';
@@ -20,19 +20,19 @@ import LearnHome from './pages/learn/home';
 import LearnHTMLLayout from './pages/learn/subjects/html/layout';
 
 import LearnHTMLHome from './pages/learn/subjects/html/home';
-import LearnHTMLIntroduction from './pages/learn/subjects/html/introduction';
+import LearnHTMLIntroduction from './pages/learn/subjects/html/pages/introduction';
 
 //>learn>css
 import LearnCSSLayout from './pages/learn/subjects/css/layout';
 
 import LearnCSSHome from './pages/learn/subjects/css/home';
-import LearnCSSIntroduction from './pages/learn/subjects/css/introduction';
+import LearnCSSIntroduction from './pages/learn/subjects/css/pages/introduction';
 
 //>learn>javascript
 import LearnJavaScriptLayout from './pages/learn/subjects/js/layout';
 
 import LearnJavaScriptHome from './pages/learn/subjects/js/home';
-import LearnJavaScriptIntroduction from './pages/learn/subjects/js/introduction';
+import LearnJavaScriptIntroduction from './pages/learn/subjects/js/pages/introduction';
 
 //>learn>react
 import LearnReactLayout from './pages/learn/subjects/react/layout';
@@ -43,13 +43,14 @@ import LearnReactHome from './pages/learn/subjects/react/home';
 import LearnReactReactLayout from './pages/learn/subjects/react/react/layout';
 
 import LearnReactReactHome from './pages/learn/subjects/react/react/home';
-import LearnReactReactIntroduction from './pages/learn/subjects/react/react/introduction';
+import LearnReactReactIntroduction from './pages/learn/subjects/react/react/pages/introduction';
+import LearnReactReactTutorialBeginner from './pages/learn/subjects/react/react/pages/beginnertutorial';
 
 //>learn>react>router
 import LearnReactRouterLayout from './pages/learn/subjects/react/router/layout';
 
 import LearnReactRouterHome from './pages/learn/subjects/react/router/home';
-import LearnReactRouterIntroduction from './pages/learn/subjects/react/router/introduction';
+import LearnReactRouterIntroduction from './pages/learn/subjects/react/router/pages/introduction';
 
 //>nopage
 import NoPage from './pages/nopage';
@@ -79,6 +80,10 @@ function App() {
                             <Route path="react" element={<LearnReactReactLayout />}>
                                 <Route index element={<LearnReactReactHome />} />
                                 <Route path="introduction" element={<LearnReactReactIntroduction />} />
+                                <Route path="tutorials">
+                                    <Route index element={<Navigate to="beginner" />} />
+                                    <Route path="beginner" element={<LearnReactReactTutorialBeginner />} />
+                                </Route>
                             </Route>
                             <Route path="router" element={<LearnReactRouterLayout />}>
                                 <Route index element={<LearnReactRouterHome />} />

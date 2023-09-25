@@ -2,7 +2,23 @@ const Introduction = () => {
     return (
         <>
             <h2>React</h2>
-            <p>Introduction to <b>React</b></p>
+            <p>React's technical properties play a crucial role in making it a popular choice among developers for building dynamic user interfaces. Here are some key technical properties and features of React:</p>
+            <dl className="desc_list">
+                <dt>Declarative Syntax</dt>
+                <dd>React uses a declarative syntax, which means you describe what you want the user interface to look like, and React takes care of updating the actual DOM to match your description. This simplifies the code and makes it more predictable.</dd>
+                <dt>Component-Based</dt>
+                <dd>React encourages the development of UIs as a composition of reusable components. Each component encapsulates its own logic and rendering, making it easier to manage and scale applications. Components can be nested inside other components to create complex UI hierarchies.</dd>
+                <dt>Virtual DOM</dt>
+                <dd>React maintains a virtual representation of the actual DOM in memory, known as the Virtual DOM. When data changes, React first updates the Virtual DOM and then efficiently calculates the difference (diffing) between the Virtual DOM and the real DOM. This minimizes DOM manipulations and improves performance.</dd>
+                <dt>Unidirectional Data Flow</dt>
+                <dd>React enforces a one-way data flow, meaning data flows downward from parent components to child components. This ensures that changes in one part of the application do not unexpectedly affect other parts, making the application more predictable and easier to debug.</dd>
+                <dt>JSX (JavaScript XML)</dt>
+                <dd>React uses JSX, an extension of JavaScript, to define the structure of UI components. JSX allows developers to write HTML-like code within JavaScript, making it easier to create and visualize the UI structure.</dd>
+                <dt>State Management</dt>
+                <dd>React allows components to manage their internal state. State represents data that can change over time and is crucial for building dynamic and interactive user interfaces. You can use the useState hook (in functional components) or this.state (in class components) to manage state.</dd>
+                <dt>Lifecycle Methods (Class Components)</dt>
+                <dd>In class components, React provides a set of lifecycle methods that allow you to hook into various stages of a component's life, such as mounting, updating, and unmounting. These methods</dd>
+            </dl>
         </>
     );
 }

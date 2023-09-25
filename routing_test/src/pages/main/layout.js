@@ -4,33 +4,40 @@ import Button from '../../button';
 
 const Layout = () => {
     const loginResponse = getLogin();
-    let accountContent;
+    let isLoggedIn
     if (loginResponse.success === true) {
-        console.log("ambawd")
         if (loginResponse.loggedIn === true) {
-            accountContent = (
-                <>
-                    <li className="nav_li">
-                        <Link id="nav_profile_button">
-                            <svg viewBox="0 0 40 40" width="40" height="40">
-                                <path d="m169,.5a169,169 0 1,0 2,0zm0,86a76,76 0 1 1-2,0zM57,287q27-35 67-35h92q40,0 67,35a164,164 0 0,1-226,0" />
-                            </svg>
-                        </Link>
-                    </li>
-                </>
-            );
+            isLoggedIn = true;
         } else {
-            accountContent = (
-                <>
-                    <li className="nav_li">
-                        <Link className="button_link nav_button" to="./login">Log in</Link>
-                    </li>
-                    <li className="nav_li">
-                        <Link id="signup_button" className="button_link" to="./signup"><Button>Sign up</Button></Link>
-                    </li>
-                </>
-            )
+            isLoggedIn = false;
         }
+    } else {
+        isLoggedIn = false;
+    }
+    let accountContent;
+    if (isLoggedIn === true) {
+        accountContent = (
+            <>
+                <li className="nav_li">
+                    <Link id="nav_profile_button">
+                        <svg className="profile_picture_svg" viewBox="0 0 338 338">
+                            <path className="profile_picture_svg_path" d="m169,.5a169,169 0 1,0 2,0zm0,86a76,76 0 1 1-2,0zM57,287q27-35 67-35h92q40,0 67,35a164,164 0 0,1-226,0" />
+                        </svg>
+                    </Link>
+                </li>
+            </>
+        );
+    } else {
+        accountContent = (
+            <>
+                <li className="nav_li">
+                    <Link className="button_link nav_button" to="./login">Log in</Link>
+                </li>
+                <li className="nav_li">
+                    <Link id="signup_button" className="button_link" to="./signup"><Button>Sign up</Button></Link>
+                </li>
+            </>
+        );
     }
 
     return (

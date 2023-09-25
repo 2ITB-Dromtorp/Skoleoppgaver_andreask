@@ -546,6 +546,9 @@ input[type="submit"] {
 
 /*-----*/
 
-.profile_picture {
+.profile_picture_svg {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
     fill: var(--light-col-2);
 }
