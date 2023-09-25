@@ -21,7 +21,7 @@ export const DefaultHighlighter = SyntaxHighlighter;
 
 export const Highlighter = (props) => {
     return (
-        <SyntaxHighlighter language={props.language} customStyle={{ padding: '' }} lineNumberStyle={{'min-width': '1.25em'}} className={props.className || 'big_code'} codeTagProps={{ className: props.codeTagClassName || 'big_code_wrapper' }} style={SYNTAX_HIGHLIGHTING_STYLE} wrapLines={true} PreTag={'code'} CodeTag={'div'} useInlineStyles={true} showLineNumbers={true} showInlineLineNumbers={true} lineProps={highlightLines(props.linesToHighlight)}>
+        <SyntaxHighlighter language={props.language} customStyle={{ padding: '' }} lineNumberStyle={{'min-width': ''}} className={props.className || 'big_code'} codeTagProps={{ className: props.codeTagClassName || 'big_code_wrapper' }} style={SYNTAX_HIGHLIGHTING_STYLE} wrapLines={true} PreTag={'code'} CodeTag={'div'} useInlineStyles={true} showLineNumbers={true} showInlineLineNumbers={true} lineProps={highlightLines(props.linesToHighlight)}>
             {props.children}
         </SyntaxHighlighter>
     );

@@ -21,18 +21,21 @@ import LearnHTMLLayout from './pages/learn/subjects/html/layout';
 
 import LearnHTMLHome from './pages/learn/subjects/html/home';
 import LearnHTMLIntroduction from './pages/learn/subjects/html/pages/introduction';
+import LearnHTMLTutorialBeginner from './pages/learn/subjects/html/pages/beginnertutorial';
 
 //>learn>css
 import LearnCSSLayout from './pages/learn/subjects/css/layout';
 
 import LearnCSSHome from './pages/learn/subjects/css/home';
 import LearnCSSIntroduction from './pages/learn/subjects/css/pages/introduction';
+import LearnCSSTutorialBeginner from './pages/learn/subjects/css/pages/beginnertutorial';
 
 //>learn>javascript
 import LearnJavaScriptLayout from './pages/learn/subjects/js/layout';
 
 import LearnJavaScriptHome from './pages/learn/subjects/js/home';
 import LearnJavaScriptIntroduction from './pages/learn/subjects/js/pages/introduction';
+import LearnJavaScriptTutorialBeginner from './pages/learn/subjects/js/pages/beginnertutorial';
 
 //>learn>react
 import LearnReactLayout from './pages/learn/subjects/react/layout';
@@ -51,6 +54,7 @@ import LearnReactRouterLayout from './pages/learn/subjects/react/router/layout';
 
 import LearnReactRouterHome from './pages/learn/subjects/react/router/home';
 import LearnReactRouterIntroduction from './pages/learn/subjects/react/router/pages/introduction';
+import LearnReactRouterTutorialBeginner from './pages/learn/subjects/react/router/pages/beginnertutorial';
 
 //>nopage
 import NoPage from './pages/nopage';
@@ -66,14 +70,26 @@ function App() {
                         <Route path="html" element={<LearnHTMLLayout />}>
                             <Route index element={<LearnHTMLHome />} />
                             <Route path="introduction" element={<LearnHTMLIntroduction />} />
+                            <Route path="tutorials">
+                                <Route index element={<Navigate to="beginner" />} />
+                                <Route path="beginner" element={<LearnHTMLTutorialBeginner />} />
+                            </Route>
                         </Route>
                         <Route path="css" element={<LearnCSSLayout />}>
                             <Route index element={<LearnCSSHome />} />
                             <Route path="introduction" element={<LearnCSSIntroduction />} />
+                            <Route path="tutorials">
+                                <Route index element={<Navigate to="beginner" />} />
+                                <Route path="beginner" element={<LearnCSSTutorialBeginner />} />
+                            </Route>
                         </Route>
                         <Route path="javascript" element={<LearnJavaScriptLayout />}>
                             <Route index element={<LearnJavaScriptHome />} />
                             <Route path="introduction" element={<LearnJavaScriptIntroduction />} />
+                            <Route path="tutorials">
+                                <Route index element={<Navigate to="beginner" />} />
+                                <Route path="beginner" element={<LearnJavaScriptTutorialBeginner />} />
+                            </Route>
                         </Route>
                         <Route path="react" element={<LearnReactLayout />}>
                             <Route index element={<LearnReactHome />} />
@@ -88,6 +104,10 @@ function App() {
                             <Route path="router" element={<LearnReactRouterLayout />}>
                                 <Route index element={<LearnReactRouterHome />} />
                                 <Route path="introduction" element={<LearnReactRouterIntroduction />} />
+                                <Route path="tutorials">
+                                    <Route index element={<Navigate to="beginner" />} />
+                                    <Route path="beginner" element={<LearnReactRouterTutorialBeginner />} />
+                                </Route>
                             </Route>
                         </Route>
                     </Route>

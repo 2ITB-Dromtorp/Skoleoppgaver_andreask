@@ -1,7 +1,7 @@
 const Introduction = () => {
     return (
         <>
-            <h2>JavaScript</h2>
+            <h1>JavaScript</h1>
             <p><b>JavaScript</b> is a high-level, dynamic, and versatile programming language known for its unique properties that make it a powerful tool for web development. Here are some of its key technical characteristics:</p>
             <dl className="desc_list">
                 <dt>Interpreted Language</dt>

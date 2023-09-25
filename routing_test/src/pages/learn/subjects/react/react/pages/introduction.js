@@ -1,7 +1,7 @@
 const Introduction = () => {
     return (
         <>
-            <h2>React</h2>
+            <h1>React</h1>
             <p>React's technical properties play a crucial role in making it a popular choice among developers for building dynamic user interfaces. Here are some key technical properties and features of React:</p>
             <dl className="desc_list">
                 <dt>Declarative Syntax</dt>
