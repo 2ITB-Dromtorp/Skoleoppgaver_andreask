@@ -406,16 +406,24 @@ nav {
     margin: 0 0 12px 0;
 }
 
+.front_account_management_bottom_section {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/*-----*/
+
+/*-----*/
+
 form {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-.front_account_management_bottom_section {
-    display: flex;
-    flex-direction: column;
-    position: relative;
+form p {
+    line-height: normal;
 }
 
 .form_label {

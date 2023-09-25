@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { doesUserExist, createUser, getUsers } from '../../users';
+import { doesUserExist, createUser, getUsers, getUserFromName } from '../../users';
 import { getLogin, setLogin } from '../../server';
 
 const SignUp = () => {
@@ -63,14 +63,21 @@ const SignUp = () => {
             }
         }
         if (isUsernameValid === true && isEmailValid === true && isPasswordValid === true && isRepeatPasswordValid === true) {
-            const foundAttemptUser = doesUserExist(usernameInput);
-            if (foundAttemptUser === false) {
-                const user = createUser(usernameInput, emailInput, passwordInput);
-                setLogin(user.userId);
-                navigate('/');
-            } else if (foundAttemptUser === true) {
-                isUsernameValid = false;
-                setUsernameMessage('Username not available');
+            const foundAttemptUserResponse = doesUserExist(usernameInput);
+            if (foundAttemptUserResponse.success === true) {
+                if (foundAttemptUserResponse.exists === false) {
+                    const createResponse = createUser(usernameInput, emailInput, passwordInput);
+                    if (createResponse.success === true) {
+                        const userResponse = getUserFromName(usernameInput);
+                        if (userResponse.success === true) {
+                            setLogin(userResponse.user.userId);
+                            navigate('/');
+                        }
+                    }
+                } else {
+                    isUsernameValid = false;
+                    setUsernameMessage('Username not available');
+                }
             }
         }
         if (isUsernameValid === true) {
@@ -180,7 +187,7 @@ const SignUp = () => {
                         <label className="form_label signup_label front_account_management_label" for="signup_password_input">Password</label>
                         {addPasswordMessage}
                         <input id="signup_password_input" className={'front_account_management_password_input front_account_management_text_input' + addPasswordClass} name="password" type="password" />
-                        
+
                         <label className="form_label signup_label front_account_management_label" for="signup_repeat_password_input">Repeat password</label>
                         {addRepeatPasswordMessage}
                         <input id="signup_repeat_password_input" className={'front_account_management_password_input front_account_management_text_input' + addRepeatPasswordClass} name="repeat_password" type="password" />

@@ -1,7 +1,9 @@
 import { Outlet, Link } from 'react-router-dom';
+import { getUserFromId } from '../../users';
 import Button from '../../button';
 
 const Layout = () => {
+
     return (
         <>
             <div id="main">

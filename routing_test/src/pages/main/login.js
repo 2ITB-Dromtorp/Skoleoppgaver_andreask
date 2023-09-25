@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { doesUserExist, checkUserPasswordCorrect, getUserFromName } from '../../users';
+import { getLogin, setLogin } from '../../server';
 
 const Login = () => {
     const [usernameClass, setUsernameClass] = useState();
@@ -24,19 +25,25 @@ const Login = () => {
             setPasswordMessage('Password required');
         }
         if (isUsernameValid === true && isPasswordValid === true) {
-            const foundAttemptUser = doesUserExist(usernameInput);
-            if (foundAttemptUser === true) {
-                const passwordCorrect = checkUserPasswordCorrect(usernameInput, passwordInput);
-                if (passwordCorrect === true) {
-                    const user = getUserFromName(usernameInput);
-                    setLogin(user.userId);
-                } else {
-                    isPasswordValid = false;
-                    setPasswordMessage('Incorrect password');
+            const foundAttemptUserResponse = doesUserExist(usernameInput);
+            if (foundAttemptUserResponse.success === true) {
+                if (foundAttemptUserResponse.exists === true) {
+                    const passwordCorrectResponse = checkUserPasswordCorrect(usernameInput, passwordInput);
+                    if (passwordCorrectResponse.success === true) {
+                        if (passwordCorrectResponse.password_matches === true) {
+                            const userResponse = getUserFromName(usernameInput);
+                            if (userResponse.success === true) {
+                                setLogin(userResponse.user.userId);
+                            }
+                        } else {
+                            isPasswordValid = false;
+                            setPasswordMessage('Incorrect password');
+                        }
+                    }
+                } else if (foundAttemptUserResponse.exists === false) {
+                    isUsernameValid = false;
+                    setUsernameMessage('No user with chosen name');
                 }
-            } else if (foundAttemptUser === false) {
-                isUsernameValid = false;
-                setUsernameMessage('No user with chosen name');
             }
         }
         if (isUsernameValid === true) {

@@ -2,8 +2,8 @@ import { getUserFromId } from './users';
 
 export const setLogin = (id) => {
     const response = {};
-    response.success = true;
     localStorage.setItem('login_id', JSON.stringify(id));
+    response.success = true;
     return response;
 }
 
