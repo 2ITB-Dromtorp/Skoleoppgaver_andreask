@@ -63,7 +63,7 @@ const Layout = () => {
                         {accountContent}
                     </ul>
                 </nav>
-                <div id="learn_content" className="content_container">
+                <div id="content" className="content_container">
                     <Outlet />
                 </div>
                 <div id="footer">
