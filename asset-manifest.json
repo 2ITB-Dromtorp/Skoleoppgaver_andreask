@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Skoleoppgaver_andreask/routing_test/static/css/main.b41f35aa.css",
-    "main.js": "/Skoleoppgaver_andreask/routing_test/static/js/main.daf7d276.js",
-    "static/js/787.a5a266d6.chunk.js": "/Skoleoppgaver_andreask/routing_test/static/js/787.a5a266d6.chunk.js",
-    "index.html": "/Skoleoppgaver_andreask/routing_test/index.html",
-    "main.b41f35aa.css.map": "/Skoleoppgaver_andreask/routing_test/static/css/main.b41f35aa.css.map",
-    "main.daf7d276.js.map": "/Skoleoppgaver_andreask/routing_test/static/js/main.daf7d276.js.map",
-    "787.a5a266d6.chunk.js.map": "/Skoleoppgaver_andreask/routing_test/static/js/787.a5a266d6.chunk.js.map"
+    "main.css": "/baka/static/css/main.b41f35aa.css",
+    "main.js": "/baka/static/js/main.6d529aa3.js",
+    "static/js/787.a5a266d6.chunk.js": "/baka/static/js/787.a5a266d6.chunk.js",
+    "index.html": "/baka/index.html",
+    "main.b41f35aa.css.map": "/baka/static/css/main.b41f35aa.css.map",
+    "main.6d529aa3.js.map": "/baka/static/js/main.6d529aa3.js.map",
+    "787.a5a266d6.chunk.js.map": "/baka/static/js/787.a5a266d6.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b41f35aa.css",
-    "static/js/main.daf7d276.js"
+    "static/js/main.6d529aa3.js"
   ]
 }
