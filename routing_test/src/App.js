@@ -53,7 +53,7 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="" element={<Layout />}>
+                <Route element={<Layout />}>
                     <Route index element={<Home />} />
                     <Route path="learn" element={<LearnLayout />}>
                         <Route index element={<LearnHome />} />
