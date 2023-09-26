@@ -50,7 +50,6 @@ import LearnReactRouterTutorialBeginner from './pages/learn/subjects/react/route
 import NoPage from './pages/nopage';
 
 function App() {
-    console.log()
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Routes>
