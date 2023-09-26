@@ -1,6 +1,8 @@
 import './App.css';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
+//https://2itb-dromtorp.github.io/Skoleoppgaver_andreask/routing_test
+
 //>/
 import Layout from './pages/main/layout';
 
