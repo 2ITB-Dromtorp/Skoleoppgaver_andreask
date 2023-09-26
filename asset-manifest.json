@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Skoleoppgaver_andreask/static/css/main.b41f35aa.css",
+    "main.js": "/Skoleoppgaver_andreask/static/js/main.60be0088.js",
+    "static/js/787.a5a266d6.chunk.js": "/Skoleoppgaver_andreask/static/js/787.a5a266d6.chunk.js",
+    "index.html": "/Skoleoppgaver_andreask/index.html",
+    "main.b41f35aa.css.map": "/Skoleoppgaver_andreask/static/css/main.b41f35aa.css.map",
+    "main.60be0088.js.map": "/Skoleoppgaver_andreask/static/js/main.60be0088.js.map",
+    "787.a5a266d6.chunk.js.map": "/Skoleoppgaver_andreask/static/js/787.a5a266d6.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b41f35aa.css",
+    "static/js/main.60be0088.js"
+  ]
+}
