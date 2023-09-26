@@ -51,7 +51,7 @@ import NoPage from './pages/nopage';
 
 function App() {
     return (
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <BrowserRouter>
             <Routes>
                 <Route element={<Layout />}>
                     <Route index element={<Home />} />
