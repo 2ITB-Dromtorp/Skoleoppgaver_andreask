@@ -25,6 +25,11 @@ input {
     transition-property: color, background-color, box-shadow, border-color;
 }
 
+button {
+    all: unset;
+    cursor: pointer;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -143,7 +148,7 @@ code.big_code {
     position: sticky;
     left: 0;
     padding: 0 16px 0 8px;
-    background: rgb(40, 44, 52);
+    background: rgb(17, 27, 39);
     min-width: 1.25em;
 }
 
@@ -253,9 +258,7 @@ a:visited {
     margin: 0;
 }
 
-#side_bar_main_list > li {
-
-}
+#side_bar_main_list>li {}
 
 .side_bar_main_section_list {
     list-style: none;
