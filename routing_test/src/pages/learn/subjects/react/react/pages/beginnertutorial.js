@@ -17,7 +17,7 @@ const BeginnerTutorial = () => {
             <span className="section_space medium"></span>
             <h2>Setting Up a React Application</h2>
             <p>Let's start by creating a new React application using the official tool called Create React App. Open your terminal and run the following command:</p>
-            <Highlighter>{`npx create-react-app "my-react-app"`}</Highlighter>
+            <Highlighter language="npm">{`npx create-react-app "my-react-app"`}</Highlighter>
             <p>Replace <code>my-react-app</code> with your preferred project name. This command will create a new directory with the necessary files and dependencies for your React app.</p>
             <p>Once the installation is complete, navigate to your project folder:</p>
             <Highlighter>cd "my-react-app"</Highlighter>

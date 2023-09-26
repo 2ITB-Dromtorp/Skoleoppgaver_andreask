@@ -26,12 +26,12 @@ const BeginnerTutorial = () => {
                 <dt>Import Required Components</dt>
                 <dd>
                     <p>In your main application file (usually App.js), import the necessary components from React Router.</p>
-                    <Highlighter>{`import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';`}</Highlighter>
+                    <Highlighter language="javascript">{`import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';`}</Highlighter>
                 </dd>
                 <dt>Wrap Your App with Router</dt>
                 <dd>
                     <p>Wrap your entire application with the Router component to enable routing throughout your app.</p>
-                    <Highlighter>{`function App() {
+                    <Highlighter language="javascript">{`function App() {
     return (
         <Router>
         {/* Your application content */}
@@ -42,7 +42,7 @@ const BeginnerTutorial = () => {
                 <dt>Define Routes</dt>
                 <dd>
                     <p>Inside the Router, define your routes using the Route component. Each Route should specify a path and the component to render when that path is matched.</p>
-                    <Highlighter>{`function App() {
+                    <Highlighter language="javascript">{`function App() {
     return (
         <Router>
             <Switch>
