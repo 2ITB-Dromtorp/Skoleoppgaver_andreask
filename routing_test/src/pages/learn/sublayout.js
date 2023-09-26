@@ -1,13 +1,11 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation, matchPath } from 'react-router-dom';
 
 const Layout = () => {
+    const loc = useLocation();
+    console.log(loc);
     return (
         <>
-            <div className="learn_content_container">
-                <div className="learn_content">
-                    <Outlet />
-                </div>
-            </div>
+            <Outlet />
         </>
     );
 }
