@@ -43,7 +43,7 @@ const Layout = () => {
     return (
         <>
             <div id="main">
-                <nav>
+                <nav id="top_bar">
                     <div id="nav_icon" className="nav_button">🗿</div>
                     <ul id="nav_list_left" className="nav_list">
                         <li className="nav_li">
@@ -63,7 +63,7 @@ const Layout = () => {
                         {accountContent}
                     </ul>
                 </nav>
-                <div id="content">
+                <div id="learn_content" className="content_container">
                     <Outlet />
                 </div>
                 <div id="footer">

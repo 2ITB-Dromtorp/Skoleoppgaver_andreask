@@ -17,22 +17,16 @@ import LearnLayout from './pages/learn/layout';
 import LearnHome from './pages/learn/home';
 
 //>learn>html
-import LearnHTMLLayout from './pages/learn/subjects/html/layout';
-
 import LearnHTMLHome from './pages/learn/subjects/html/home';
 import LearnHTMLIntroduction from './pages/learn/subjects/html/pages/introduction';
 import LearnHTMLTutorialBeginner from './pages/learn/subjects/html/pages/beginnertutorial';
 
 //>learn>css
-import LearnCSSLayout from './pages/learn/subjects/css/layout';
-
 import LearnCSSHome from './pages/learn/subjects/css/home';
 import LearnCSSIntroduction from './pages/learn/subjects/css/pages/introduction';
 import LearnCSSTutorialBeginner from './pages/learn/subjects/css/pages/beginnertutorial';
 
 //>learn>javascript
-import LearnJavaScriptLayout from './pages/learn/subjects/js/layout';
-
 import LearnJavaScriptHome from './pages/learn/subjects/js/home';
 import LearnJavaScriptIntroduction from './pages/learn/subjects/js/pages/introduction';
 import LearnJavaScriptTutorialBeginner from './pages/learn/subjects/js/pages/beginnertutorial';
@@ -43,15 +37,11 @@ import LearnReactLayout from './pages/learn/subjects/react/layout';
 import LearnReactHome from './pages/learn/subjects/react/home';
 
 //>learn>react>react
-import LearnReactReactLayout from './pages/learn/subjects/react/react/layout';
-
 import LearnReactReactHome from './pages/learn/subjects/react/react/home';
 import LearnReactReactIntroduction from './pages/learn/subjects/react/react/pages/introduction';
 import LearnReactReactTutorialBeginner from './pages/learn/subjects/react/react/pages/beginnertutorial';
 
 //>learn>react>router
-import LearnReactRouterLayout from './pages/learn/subjects/react/router/layout';
-
 import LearnReactRouterHome from './pages/learn/subjects/react/router/home';
 import LearnReactRouterIntroduction from './pages/learn/subjects/react/router/pages/introduction';
 import LearnReactRouterTutorialBeginner from './pages/learn/subjects/react/router/pages/beginnertutorial';
@@ -67,7 +57,7 @@ function App() {
                     <Route index element={<Home />} />
                     <Route path="learn" element={<LearnLayout />}>
                         <Route index element={<LearnHome />} />
-                        <Route path="html" element={<LearnHTMLLayout />}>
+                        <Route path="html">
                             <Route index element={<LearnHTMLHome />} />
                             <Route path="introduction" element={<LearnHTMLIntroduction />} />
                             <Route path="tutorial">
@@ -75,7 +65,7 @@ function App() {
                                 <Route path="beginner" element={<LearnHTMLTutorialBeginner />} />
                             </Route>
                         </Route>
-                        <Route path="css" element={<LearnCSSLayout />}>
+                        <Route path="css">
                             <Route index element={<LearnCSSHome />} />
                             <Route path="introduction" element={<LearnCSSIntroduction />} />
                             <Route path="tutorial">
@@ -83,7 +73,7 @@ function App() {
                                 <Route path="beginner" element={<LearnCSSTutorialBeginner />} />
                             </Route>
                         </Route>
-                        <Route path="javascript" element={<LearnJavaScriptLayout />}>
+                        <Route path="javascript">
                             <Route index element={<LearnJavaScriptHome />} />
                             <Route path="introduction" element={<LearnJavaScriptIntroduction />} />
                             <Route path="tutorial">
@@ -93,7 +83,7 @@ function App() {
                         </Route>
                         <Route path="react" element={<LearnReactLayout />}>
                             <Route index element={<LearnReactHome />} />
-                            <Route path="react" element={<LearnReactReactLayout />}>
+                            <Route path="react">
                                 <Route index element={<LearnReactReactHome />} />
                                 <Route path="introduction" element={<LearnReactReactIntroduction />} />
                                 <Route path="tutorial">
@@ -101,7 +91,7 @@ function App() {
                                     <Route path="beginner" element={<LearnReactReactTutorialBeginner />} />
                                 </Route>
                             </Route>
-                            <Route path="router" element={<LearnReactRouterLayout />}>
+                            <Route path="router">
                                 <Route index element={<LearnReactRouterHome />} />
                                 <Route path="introduction" element={<LearnReactRouterIntroduction />} />
                                 <Route path="tutorial">
