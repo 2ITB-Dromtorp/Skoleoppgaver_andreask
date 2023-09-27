@@ -63,6 +63,14 @@ const BeginnerTutorial = () => {
     );
 }`}</Highlighter>
                 </dd>
+                <dt>Importing Pages</dt>
+                <dd>
+                    <p>Now you need to import your pages (layout, home, about and contact):</p>
+                    <Highlighter language="jsx">{`import Layout from 'pages/layout';
+import Home from 'pages/home';
+import About from 'pages/about';
+import Contact from 'pages/contact';`}</Highlighter>
+                </dd>
                 <dt>Define Routes</dt>
                 <dd>
                     <p>Inside the Router, define your routes using the Route component. Each Route should specify a path and the component to render when that path is matched.</p>
