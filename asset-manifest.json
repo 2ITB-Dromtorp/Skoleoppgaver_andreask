@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Skoleoppgaver_andreask/routing_test/static/css/main.5d477539.css",
-    "main.js": "/Skoleoppgaver_andreask/routing_test/static/js/main.66f97896.js",
+    "main.js": "/Skoleoppgaver_andreask/routing_test/static/js/main.048ea499.js",
     "static/js/787.173e293b.chunk.js": "/Skoleoppgaver_andreask/routing_test/static/js/787.173e293b.chunk.js",
     "index.html": "/Skoleoppgaver_andreask/routing_test/index.html",
     "main.5d477539.css.map": "/Skoleoppgaver_andreask/routing_test/static/css/main.5d477539.css.map",
-    "main.66f97896.js.map": "/Skoleoppgaver_andreask/routing_test/static/js/main.66f97896.js.map",
+    "main.048ea499.js.map": "/Skoleoppgaver_andreask/routing_test/static/js/main.048ea499.js.map",
     "787.173e293b.chunk.js.map": "/Skoleoppgaver_andreask/routing_test/static/js/787.173e293b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.5d477539.css",
-    "static/js/main.66f97896.js"
+    "static/js/main.048ea499.js"
   ]
 }
