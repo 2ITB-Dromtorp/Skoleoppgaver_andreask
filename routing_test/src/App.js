@@ -30,6 +30,8 @@ import LearnHTMLTutorialLoginForm from './pages/learn/subjects/html/pages/tutori
 
 //
 import LearnHTMLElementP from './pages/learn/subjects/html/pages/element/p';
+import LearnHTMLElementDiv from './pages/learn/subjects/html/pages/element/div';
+import LearnHTMLElementImg from './pages/learn/subjects/html/pages/element/img';
 
 //>learn>css
 import LearnCSSHome from './pages/learn/subjects/css/home';
@@ -97,6 +99,8 @@ function App() {
                             <Route path="element">
                                 <Route index element={<Navigate to="../" />} />
                                 <Route path="p" element={<LearnHTMLElementP />} />
+                                <Route path="div" element={<LearnHTMLElementDiv />} />
+                                <Route path="img" element={<LearnHTMLElementImg />} />
                             </Route>
                         </Route>
                         <Route path="css" element={<LearnSubjectLayout subject="css" />}>

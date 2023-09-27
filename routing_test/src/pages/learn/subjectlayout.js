@@ -37,6 +37,16 @@ const SUBJECT_DATA = {
                         text: 'p',
                         to: 'p',
                     },
+                    {
+                        type: 'link',
+                        text: 'div',
+                        to: 'div',
+                    },
+                    {
+                        type: 'link',
+                        text: 'img',
+                        to: 'img',
+                    },
                 ],
             },
         ],
@@ -219,7 +229,6 @@ const Layout = ({ subject: subjectName, ...props }) => {
                     res.push(getSection(relative + newRel, section.pages[i]));
                 }
             } else if (section.type === 'link') {
-                console.log('./' + relative + section.to)
                 res = <FullReferenceLink to={'./' + relative + section.to}>{section.text}</FullReferenceLink>;
             } else {
                 console.warn("bruh secion no go sir, ", section.type);
