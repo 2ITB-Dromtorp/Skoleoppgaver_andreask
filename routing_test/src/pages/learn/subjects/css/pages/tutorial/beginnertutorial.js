@@ -1,4 +1,4 @@
-import { Highlighter } from '../../../../../syntaxhighlighter';
+import { Highlighter } from '../../../../../../syntaxhighlighter';
 
 const BeginnerTutorial = () => {
     return (

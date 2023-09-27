@@ -65,7 +65,7 @@ const BeginnerTutorial = () => {
                 </dd>
                 <dt>Importing Pages</dt>
                 <dd>
-                    <p>Now you need to import your pages (layout, home, about and contact):</p>
+                    <p>Now you need to import your pages <b>before</b> declaring your app function:</p>
                     <Highlighter language="jsx">{`import Layout from 'pages/layout';
 import Home from 'pages/home';
 import About from 'pages/about';
