@@ -92,6 +92,11 @@ import Contact from 'pages/contact';`}</Highlighter>
                 <dd>
                     <p>After following the instructions, this is what your App.js file should look like:</p>
                     <Highlighter language="jsx">{`import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import Layout from 'pages/layout';
+import Home from 'pages/home';
+import About from 'pages/about';
+import Contact from 'pages/contact';
                     
 function App() {
     return (
@@ -108,7 +113,7 @@ function App() {
 }
 
 export default App;`}</Highlighter>
-                    </dd>
+                </dd>
                 <dt>Link Component</dt>
                 <dd>
                     <p>To navigate between routes, use the Link component. It creates anchor tags that allow users to click and navigate to different routes. The <code>{`<Outlet>`}</code> component is the current page the browser is displaying (home, about or contact). The nav tag is the nav bar which will stay on the page no matter which page you're on.</p>
