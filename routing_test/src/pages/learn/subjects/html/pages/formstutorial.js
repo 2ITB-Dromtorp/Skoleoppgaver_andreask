@@ -1,6 +1,6 @@
 import { Highlighter } from "../../../../../syntaxhighlighter";
 
-const BeginnerTutorial = () => {
+const FormsTutorial = () => {
     return (
         <>
             <h1>Beginner's Tutorial for HTML Forms</h1>
@@ -116,4 +116,4 @@ const BeginnerTutorial = () => {
     );
 }
 
-export default BeginnerTutorial;
+export default FormsTutorial;
