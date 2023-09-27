@@ -89,7 +89,6 @@ import Contact from 'pages/contact';`}</Highlighter>
 }`}</Highlighter>
                 </dd>
                 <dt>App.js</dt>
-                balls
                 <dd>
                     <p>After following the instructions, this is what your App.js file should look like:</p>
                     <Highlighter language="jsx">{`import { BrowserRouter, Routes, Route } from 'react-router-dom';
