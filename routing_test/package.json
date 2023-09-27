@@ -1,5 +1,5 @@
 {
-    "homepage": "https://github.com/2ITB-Dromtorp/Skoleoppgaver_andreask/",
+    "homepage": "https://2itb-dromtorp.github.io/Skoleoppgaver_andreask/",
     "name": "routing_test",
     "version": "0.1.0",
     "private": true,
@@ -39,6 +39,7 @@
         ]
     },
     "devDependencies": {
+        "gh-pages": "^6.0.0",
         "react-router-dom": "^6.16.0"
     }
 }

@@ -4,7 +4,7 @@ const BeginnerTutorial = () => {
     return (
         <>
             <h1>Getting Started with CSS: A Beginner's Tutorial</h1>
-            <p>CSS (Cascading Style Sheets) is a fundamental technology for web development that allows you to control the design and layout of your web pages. Whether you're a beginner or have some coding experience, this tutorial will introduce you to the basics of CSS.</p>
+            <p><b>CSS</b> (Cascading Style Sheets) is a fundamental technology for web development that allows you to control the design and layout of your web pages. Whether you're a beginner or have some coding experience, this tutorial will introduce you to the basics of CSS.</p>
             <span className="section_space medium"></span>
             <h2>What is CSS?</h2>
             <p>CSS stands for "Cascading Style Sheets." It's a stylesheet language that describes how HTML elements should be displayed on a web page. CSS separates the content of your webpage (HTML) from its presentation (CSS), making it easier to create visually appealing and responsive websites.</p>
