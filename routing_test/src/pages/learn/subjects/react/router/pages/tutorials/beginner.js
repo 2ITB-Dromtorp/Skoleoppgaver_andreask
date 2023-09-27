@@ -47,7 +47,7 @@ const BeginnerTutorial = () => {
             <dl className="desc_list">
                 <dt>Import Required Components</dt>
                 <dd>
-                    <p>In your main application file (usually App.js), import the necessary components from React Router.</p>
+                    <p>In your main application file (App.js), import the necessary components from React Router.</p>
                     <Highlighter language="jsx">{`import { BrowserRouter, Routes, Route } from 'react-router-dom';`}</Highlighter>
                 </dd>
                 <dt>Wrap Your App with Router</dt>
@@ -55,9 +55,11 @@ const BeginnerTutorial = () => {
                     <p>Wrap your entire application with the Router component to enable routing throughout your app.</p>
                     <Highlighter language="jsx">{`function App() {
     return (
-        <Router>
-        {/* Your application content */}
-        </Router>
+        <BrowserRouter>
+            <Routes>
+                {/* Your application content */}
+            </Routes>
+        </BrowserRouter>
     );
 }`}</Highlighter>
                 </dd>
@@ -67,20 +69,20 @@ const BeginnerTutorial = () => {
                     <Highlighter language="jsx">{`function App() {
     return (
         <BrowserRouter>
-            <Router>
+            <Routes>
                 <Route element={<Layout />}>
                     <Route index component={<Home />} />
                     <Route path="/about" component={<About />} />
                     <Route path="/contact" component={<Contact />} />
                 </Route>
-            </Router>
+            </Routes>
         </BrowserRouter>
     );
 }`}</Highlighter>
                 </dd>
                 <dt>Link Component</dt>
                 <dd>
-                    <p>To navigate between routes, use the Link component. It creates anchor tags that allow users to click and navigate to different routes. The <code>{`<Outlet>`}</code> component is the current page the browser is displaying (home, about or contact).</p>
+                    <p>To navigate between routes, use the Link component. It creates anchor tags that allow users to click and navigate to different routes. The <code>{`<Outlet>`}</code> component is the current page the browser is displaying (home, about or contact). The nav tag is the nav bar which will stay on the page no matter which page you're on.</p>
                     <Highlighter language="jsx">{`import { Link, Outlet } from 'react-router-dom';
 
 function Layout() {
