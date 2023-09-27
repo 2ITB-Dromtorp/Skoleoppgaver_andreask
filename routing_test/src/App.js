@@ -49,10 +49,6 @@ import LearnReactRouterTutorialBeginner from './pages/learn/subjects/react/route
 //>nopage
 import NoPage from './pages/nopage';
 
-//https://2itb-dromtorp.github.io/Skoleoppgaver_andreask/routing_test
-
-console.log(process.env.PUBLIC_URL)
-
 function App() {
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
