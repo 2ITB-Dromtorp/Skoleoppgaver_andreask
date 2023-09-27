@@ -34,7 +34,7 @@ const BeginnerTutorial = () => {
             <span className="section_space medium"></span>
             <h2>Creating Files</h2>
             <p>Create a new folder in src/ and name it "pages".</p>
-            <p>Add 3 files into your pages folder:</p>
+            <p>Add 4 files into your pages folder:</p>
             <ol>
                 <li>layout.js</li>
                 <li>home.js</li>
