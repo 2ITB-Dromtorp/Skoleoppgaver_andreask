@@ -20,13 +20,35 @@ const BeginnerTutorial = () => {
             <h2>Installation</h2>
             <p>To begin using React Router, you'll need to install it in your React project. You can do this by running the following command in your project directory:</p>
             <Highlighter>{`npm install react-router-dom@latest`}</Highlighter>
+            <p>Your app folder should look like this</p>
+            <Highlighter>{`my-react-app/
+  ├── src/
+  │     ├── App.js
+  │     ├── App.css
+  │     ├── index.js
+  │     ├── ...
+  ├── public/
+  │     ├── ...
+  ├── package.json
+  ├── ...`}</Highlighter>
+            <span className="section_space medium"></span>
+            <h2>Creating Files</h2>
+            <p>Create a new folder in src/ and name it "pages".</p>
+            <p>Add 3 files into your pages folder:</p>
+            <ol>
+                <li>layout.js</li>
+                <li>home.js</li>
+                <li>about.js</li>
+                <li>contact.js</li>
+            </ol>
+            <p>Leave these files empty for now.</p>
             <span className="section_space medium"></span>
             <h2>Setting Up Routes</h2>
             <dl className="desc_list">
                 <dt>Import Required Components</dt>
                 <dd>
                     <p>In your main application file (usually App.js), import the necessary components from React Router.</p>
-                    <Highlighter language="jsx">{`import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';`}</Highlighter>
+                    <Highlighter language="jsx">{`import { BrowserRouter, Routes, Route } from 'react-router-dom';`}</Highlighter>
                 </dd>
                 <dt>Wrap Your App with Router</dt>
                 <dd>
@@ -44,60 +66,90 @@ const BeginnerTutorial = () => {
                     <p>Inside the Router, define your routes using the Route component. Each Route should specify a path and the component to render when that path is matched.</p>
                     <Highlighter language="jsx">{`function App() {
     return (
-        <Router>
-            <Switch>
-                <Route path="/" exact component={Home} />
-                <Route path="/about" component={About} />
-                <Route path="/contact" component={Contact} />
-            </Switch>
-        </Router>
+        <BrowserRouter>
+            <Router>
+                <Route element={<Layout />}>
+                    <Route index component={<Home />} />
+                    <Route path="/about" component={<About />} />
+                    <Route path="/contact" component={<Contact />} />
+                </Route>
+            </Router>
+        </BrowserRouter>
     );
 }`}</Highlighter>
                 </dd>
-                <dt>Switch Component</dt>
-                <dd>Wrap your Route components with a Switch component. The Switch will ensure that only the first matching route is rendered, preventing multiple components from rendering simultaneously.</dd>
                 <dt>Link Component</dt>
                 <dd>
-                    <p>To navigate between routes, use the Link component. It creates anchor tags that allow users to click and navigate to different routes.</p>
-                    <Highlighter language="jsx">{`import { Link } from 'react-router-dom';
+                    <p>To navigate between routes, use the Link component. It creates anchor tags that allow users to click and navigate to different routes. The <code>{`<Outlet>`}</code> component is the current page the browser is displaying (home, about or contact).</p>
+                    <Highlighter language="jsx">{`import { Link, Outlet } from 'react-router-dom';
 
-function Navigation() {
+function Layout() {
     return (
-        <nav>
-            <ul>
-                <li><Link to="/">Home</Link></li>
-                <li><Link to="/about">About</Link></li>
-                <li><Link to="/contact">Contact</Link></li>
-            </ul>
-        </nav>
+        <>
+            <nav>
+                <ul>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/about">About</Link></li>
+                    <li><Link to="/contact">Contact</Link></li>
+                </ul>
+            </nav>
+            <Outlet/>
+        </>
     );
-}`}</Highlighter>
+}
+
+export default Layout;`}</Highlighter>
                 </dd>
             </dl>
             <span className="section_space medium"></span>
             <h2>Creating Route Components</h2>
-            <p>Now, let's create the components for the routes you defined earlier (Home, About, and Contact).</p>
-            <Highlighter language="jsx">{`// Home.js
-import React from 'react';
+            <p>Now, let's create the components for the routes you defined earlier (layout, home, about, and contact).</p>
+            <p>layout.js</p>
+            <Highlighter language="jsx">{`import { Link, Outlet } from 'react-router-dom';
 
-function Home() {
-    return <div>Welcome to the Home Page!</div>;
+function Layout() {
+    return (
+        <>
+            <nav>
+                <ul>
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/about">About</Link></li>
+                    <li><Link to="/contact">Contact</Link></li>
+                </ul>
+            </nav>
+            <Outlet/>
+        </>
+    );
+}
+
+export default Layout;`}</Highlighter>
+            <p>home.js</p>
+            <Highlighter language="jsx">{`function Home() {
+    return (
+        <div>
+            Welcome to the Home Page!
+        </div>
+    );
 }
 
 export default Home;`}</Highlighter>
-            <Highlighter language="jsx">{`// About.js
-import React from 'react';
-
-function About() {
-  return <div>About Us</div>;
+            <p>about.js</p>
+            <Highlighter language="jsx">{`function About() {
+    return (
+        <div>
+            About us
+        </div>
+    );
 }
 
 export default About;`}</Highlighter>
-            <Highlighter language="jsx">{`// Contact.js
-import React from 'react';
-
-function Contact() {
-  return <div>Contact Us</div>;
+            <p>contact.js</p>
+            <Highlighter language="jsx">{`function Contact() {
+    return (
+        <div>
+            Contact us
+        </div>
+    );
 }
 
 export default Contact;`}</Highlighter>
