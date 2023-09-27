@@ -13,17 +13,17 @@ const Introduction = () => {
                 <dt>Route Component</dt>
                 <dd>
                     <p>The Route component is at the heart of React Router. It allows you to specify which component should render when a particular route matches the current URL. You can also pass route parameters to components, making it easy to access dynamic segments of the URL.</p>
-                    <Highlighter language="javascript">{`<Route path="products/:id" component={<ProductDetail/>} />`}</Highlighter>
+                    <Highlighter language="jsx">{`<Route path="products/:id" component={<ProductDetail/>} />`}</Highlighter>
                 </dd>
                 <dt>Link Component</dt>
                 <dd>
                     <p>The Link component is used for creating navigation links within your application. It ensures that the application's state is preserved during navigation, providing a seamless user experience.</p>
-                    <Highlighter language="javascript">{`<Link to="products">Products</Link>`}</Highlighter>
+                    <Highlighter language="jsx">{`<Link to="products">Products</Link>`}</Highlighter>
                 </dd>
                 <dt>Switch Component</dt>
                 <dd>
                     <p>The Switch component renders only the first Route or Redirect that matches the current URL. This is useful for ensuring that only one route is matched at a time, preventing multiple components from rendering simultaneously.</p>
-                    <Highlighter language="javascript">{`<Switch>
+                    <Highlighter language="jsx">{`<Switch>
     <Route path="home" component={<Home/>} />
     <Route path="about" component={<About/>} />
     <Route path="contact" component={<Contact/>} />
@@ -33,7 +33,7 @@ const Introduction = () => {
                 <dt>Redirect Component</dt>
                 <dd>
                     <p>The Redirect component allows you to programmatically redirect users to another route. This is handy for scenarios like authentication checks or route aliases.</p>
-                    <Highlighter language="javascript">{`<Redirect from="/old-route" to="/new-route" />`}</Highlighter>
+                    <Highlighter language="jsx">{`<Redirect from="/old-route" to="/new-route" />`}</Highlighter>
                 </dd>
                 <dt>Nested Routes</dt>
                 <dd>React Router supports nested routes, enabling you to build complex page layouts with multiple levels of routing. This is particularly useful for applications with nested UI structures.</dd>
@@ -42,7 +42,7 @@ const Introduction = () => {
                 <dt>History Object</dt>
                 <dd>
                     <p>React Router provides access to the history object, which allows you to programmatically navigate, go back, or perform other actions related to the browsing history.</p>
-                    <Highlighter language="javascript">{`import { useHistory } from 'react-router-dom';
+                    <Highlighter language="jsx">{`import { useHistory } from 'react-router-dom';
 
 function MyComponent() {
     const history = useHistory();

@@ -1,4 +1,4 @@
-import { Outlet, useLocation, matchPath } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 const Layout = () => {
     const loc = useLocation();

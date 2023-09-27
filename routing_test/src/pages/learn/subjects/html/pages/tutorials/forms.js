@@ -1,4 +1,4 @@
-import { Highlighter } from "../../../../../syntaxhighlighter";
+import { Highlighter } from "../../../../../../syntaxhighlighter";
 
 const FormsTutorial = () => {
     return (
@@ -45,7 +45,7 @@ const FormsTutorial = () => {
             <span className="section_space small"></span>
             <h3>Radio Buttons and Checkboxes</h3>
             <p>Radio buttons and checkboxes allow users to make choices. Radio buttons allow a single selection, while checkboxes permit multiple selections. Use the <code>{`<input>`}</code> element with type="radio" and type="checkbox":</p>
-            <Highlighter language="javascript">{`<input type="radio" id="male" name="gender" value="male">
+            <Highlighter language="html">{`<input type="radio" id="male" name="gender" value="male">
 <label for="male">Male</label>
 
 <input type="radio" id="female" name="gender" value="female">
@@ -103,7 +103,7 @@ const FormsTutorial = () => {
                 <dd>Defines the HTTP method used for sending data, usually "GET" or "POST".</dd>
             </dl>
             <p>Example:</p>
-            <Highlighter>{`<form action="process.php" method="post">
+            <Highlighter language="html">{`<form action="process.php" method="post">
     <!-- Form controls go here -->
 </form>`}</Highlighter>
             <span className="section_space small"></span>

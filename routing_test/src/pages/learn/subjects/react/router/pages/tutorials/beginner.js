@@ -1,4 +1,4 @@
-import { Highlighter } from '../../../../../../syntaxhighlighter';
+import { Highlighter } from '../../../../../../../syntaxhighlighter';
 
 const BeginnerTutorial = () => {
     return (
@@ -19,19 +19,19 @@ const BeginnerTutorial = () => {
             <span className="section_space medium"></span>
             <h2>Installation</h2>
             <p>To begin using React Router, you'll need to install it in your React project. You can do this by running the following command in your project directory:</p>
-            <Highlighter>{`npm install react-router-dom`}</Highlighter>
+            <Highlighter>{`npm install react-router-dom@latest`}</Highlighter>
             <span className="section_space medium"></span>
             <h2>Setting Up Routes</h2>
             <dl className="desc_list">
                 <dt>Import Required Components</dt>
                 <dd>
                     <p>In your main application file (usually App.js), import the necessary components from React Router.</p>
-                    <Highlighter language="javascript">{`import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';`}</Highlighter>
+                    <Highlighter language="jsx">{`import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';`}</Highlighter>
                 </dd>
                 <dt>Wrap Your App with Router</dt>
                 <dd>
                     <p>Wrap your entire application with the Router component to enable routing throughout your app.</p>
-                    <Highlighter language="javascript">{`function App() {
+                    <Highlighter language="jsx">{`function App() {
     return (
         <Router>
         {/* Your application content */}
@@ -42,7 +42,7 @@ const BeginnerTutorial = () => {
                 <dt>Define Routes</dt>
                 <dd>
                     <p>Inside the Router, define your routes using the Route component. Each Route should specify a path and the component to render when that path is matched.</p>
-                    <Highlighter language="javascript">{`function App() {
+                    <Highlighter language="jsx">{`function App() {
     return (
         <Router>
             <Switch>
@@ -59,7 +59,7 @@ const BeginnerTutorial = () => {
                 <dt>Link Component</dt>
                 <dd>
                     <p>To navigate between routes, use the Link component. It creates anchor tags that allow users to click and navigate to different routes.</p>
-                    <Highlighter>{`import { Link } from 'react-router-dom';
+                    <Highlighter language="jsx">{`import { Link } from 'react-router-dom';
 
 function Navigation() {
     return (
@@ -77,7 +77,7 @@ function Navigation() {
             <span className="section_space medium"></span>
             <h2>Creating Route Components</h2>
             <p>Now, let's create the components for the routes you defined earlier (Home, About, and Contact).</p>
-            <Highlighter>{`// Home.js
+            <Highlighter language="jsx">{`// Home.js
 import React from 'react';
 
 function Home() {
@@ -85,7 +85,7 @@ function Home() {
 }
 
 export default Home;`}</Highlighter>
-            <Highlighter>{`// About.js
+            <Highlighter language="jsx">{`// About.js
 import React from 'react';
 
 function About() {
@@ -93,7 +93,7 @@ function About() {
 }
 
 export default About;`}</Highlighter>
-            <Highlighter>{`// Contact.js
+            <Highlighter language="jsx">{`// Contact.js
 import React from 'react';
 
 function Contact() {

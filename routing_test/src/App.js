@@ -20,17 +20,24 @@ import LearnHome from './pages/learn/home';
 
 //>learn>html
 import LearnHTMLHome from './pages/learn/subjects/html/home';
+
 import LearnHTMLIntroduction from './pages/learn/subjects/html/pages/introduction';
-import LearnHTMLTutorialBeginner from './pages/learn/subjects/html/pages/beginnertutorial';
+
+import LearnHTMLTutorialBeginner from './pages/learn/subjects/html/pages/tutorials/beginner';
+import LearnHTMLTutorialForms from './pages/learn/subjects/html/pages/tutorials/forms';
+import LearnHTMLTutorialLoginForm from './pages/learn/subjects/html/pages/tutorials/loginform';
 
 //>learn>css
 import LearnCSSHome from './pages/learn/subjects/css/home';
 import LearnCSSIntroduction from './pages/learn/subjects/css/pages/introduction';
+
 import LearnCSSTutorialBeginner from './pages/learn/subjects/css/pages/beginnertutorial';
 
 //>learn>javascript
 import LearnJavaScriptHome from './pages/learn/subjects/js/home';
+
 import LearnJavaScriptIntroduction from './pages/learn/subjects/js/pages/introduction';
+
 import LearnJavaScriptTutorialBeginner from './pages/learn/subjects/js/pages/beginnertutorial';
 
 //>learn>react
@@ -38,13 +45,17 @@ import LearnReactHome from './pages/learn/subjects/react/home';
 
 //>learn>react>react
 import LearnReactReactHome from './pages/learn/subjects/react/react/home';
+
 import LearnReactReactIntroduction from './pages/learn/subjects/react/react/pages/introduction';
-import LearnReactReactTutorialBeginner from './pages/learn/subjects/react/react/pages/beginnertutorial';
+
+import LearnReactReactTutorialBeginner from './pages/learn/subjects/react/react/pages/tutorials/beginner';
 
 //>learn>react>router
 import LearnReactRouterHome from './pages/learn/subjects/react/router/home';
+
 import LearnReactRouterIntroduction from './pages/learn/subjects/react/router/pages/introduction';
-import LearnReactRouterTutorialBeginner from './pages/learn/subjects/react/router/pages/beginnertutorial';
+
+import LearnReactRouterTutorialBeginner from './pages/learn/subjects/react/router/pages/tutorials/beginner';
 
 //>nopage
 import NoPage from './pages/nopage';
@@ -63,6 +74,8 @@ function App() {
                             <Route path="tutorial">
                                 <Route index element={<Navigate to="beginner" />} />
                                 <Route path="beginner" element={<LearnHTMLTutorialBeginner />} />
+                                <Route path="forms" element={<LearnHTMLTutorialForms />} />
+                                <Route path="loginform" element={<LearnHTMLTutorialLoginForm />} />
                             </Route>
                         </Route>
                         <Route path="css" element={<LearnSubjectLayout />}>

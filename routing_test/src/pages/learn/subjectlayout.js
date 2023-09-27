@@ -13,6 +13,14 @@ const SUBJECT_DATA = {
                 text: 'Beginner',
                 to: 'beginner',
             },
+            {
+                text: 'Forms',
+                to: 'forms',
+            },
+            {
+                text: 'Login Form',
+                to: 'loginform',
+            },
         ],
         references: {
             relative: 'element',
