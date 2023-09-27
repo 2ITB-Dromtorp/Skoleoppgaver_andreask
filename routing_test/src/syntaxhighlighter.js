@@ -1,7 +1,8 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import coldark_dark from 'react-syntax-highlighter/dist/esm/styles/prism/coldark-dark';
 
-const SYNTAX_HIGHLIGHTING_STYLE = coldark_dark
+const SYNTAX_HIGHLIGHTING_STYLE = coldark_dark;
+
 const highlightLines = (lines) => {
     return (n) => {
         const props = {
