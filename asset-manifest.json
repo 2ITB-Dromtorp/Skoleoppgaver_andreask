@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Skoleoppgaver_andreask/static/css/main.5d477539.css",
-    "main.js": "/Skoleoppgaver_andreask/static/js/main.1d3ec11f.js",
+    "main.js": "/Skoleoppgaver_andreask/static/js/main.b6da2e45.js",
     "static/js/787.173e293b.chunk.js": "/Skoleoppgaver_andreask/static/js/787.173e293b.chunk.js",
     "index.html": "/Skoleoppgaver_andreask/index.html",
     "main.5d477539.css.map": "/Skoleoppgaver_andreask/static/css/main.5d477539.css.map",
-    "main.1d3ec11f.js.map": "/Skoleoppgaver_andreask/static/js/main.1d3ec11f.js.map",
+    "main.b6da2e45.js.map": "/Skoleoppgaver_andreask/static/js/main.b6da2e45.js.map",
     "787.173e293b.chunk.js.map": "/Skoleoppgaver_andreask/static/js/787.173e293b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.5d477539.css",
-    "static/js/main.1d3ec11f.js"
+    "static/js/main.b6da2e45.js"
   ]
 }
