@@ -57,7 +57,7 @@ const BeginnerTutorial = () => {
     return (
         <BrowserRouter>
             <Routes>
-                {/* Your application content */}
+                /* Your application content */
             </Routes>
         </BrowserRouter>
     );
@@ -80,6 +80,27 @@ const BeginnerTutorial = () => {
     );
 }`}</Highlighter>
                 </dd>
+                <dt>App.js</dt>
+                <dd>
+                    <p>After following the instructions, this is what your App.js file should look like:</p>
+                    <Highlighter language="jsx">{`import { BrowserRouter, Routes, Route } from 'react-router-dom';
+                    
+function App() {
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route element={<Layout />}>
+                    <Route index component={<Home />} />
+                    <Route path="/about" component={<About />} />
+                    <Route path="/contact" component={<Contact />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    );
+}
+
+export default App;`}</Highlighter>
+                    </dd>
                 <dt>Link Component</dt>
                 <dd>
                     <p>To navigate between routes, use the Link component. It creates anchor tags that allow users to click and navigate to different routes. The <code>{`<Outlet>`}</code> component is the current page the browser is displaying (home, about or contact). The nav tag is the nav bar which will stay on the page no matter which page you're on.</p>
