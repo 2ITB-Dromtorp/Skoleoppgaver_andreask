@@ -76,6 +76,27 @@ input:-webkit-autofill:active {
     background-color: rgba(134, 155, 187, 0.4);
 }
 
+/*-----*/
+
+/*-----*/
+
+.text_center {
+    text-align: center;
+}
+
+/*-----*/
+
+/*-----*/
+
+#home_top_container {
+    height: 100svh;
+    background-color: var(--light-col-2);
+}
+
+/*-----*/
+
+/*-----*/
+
 .section_space {
     display: block;
     width: 100%;
@@ -117,7 +138,7 @@ input:-webkit-autofill:active {
 code {
     display: inline;
     background-color: var(--light-col-3);
-    border: 1px solid var(--light-col-4);
+    border: 1px solid var(--light-col-5);
     border-radius: 4px;
     white-space: pre;
 }
@@ -185,6 +206,8 @@ input[type="submit"],
     overflow: hidden;
     cursor: pointer;
 }
+
+/*-----*/
 
 /*-----*/
 
@@ -500,7 +523,7 @@ a:visited {
     padding: 20px;
     border-radius: 10px;
     background-color: var(--light-col-1);
-    border: 1px solid var(--light-col-2);
+    border: 1px solid var(--light-col-3);
 }
 
 /*-----*/
@@ -555,7 +578,7 @@ input[type="password"],
 input[type="email"] {
     all: unset;
     background-color: var(--light-col-2);
-    border: 1px solid var(--light-col-3);
+    border: 1px solid var(--light-col-4);
     border-radius: 5px;
     margin-bottom: 20px;
     padding: 6px;

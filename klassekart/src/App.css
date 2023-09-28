@@ -1,0 +1,24 @@
+#class_map {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    gap: 50px;
+}
+
+.class_row {
+    display: flex;
+    flex-direction: column;
+}
+
+.elev {
+    padding: 20px;
+    color: rgb(0, 0, 0);
+}
+
+.table {
+    display: flex;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(20, 20, 20);
+    border-radius: 10px;
+}

@@ -1,5 +1,5 @@
 const About = () => {
-    const websiteName = 'Moai Coding';
+    const websiteName = 'Moai Academy';
     return (
         <>
             <div className="standard_content_container">
