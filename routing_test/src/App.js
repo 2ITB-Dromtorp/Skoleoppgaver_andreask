@@ -79,89 +79,95 @@ import LearnReactRouterComponentBrowserRouter from './pages/learn/subjects/react
 //>nopage
 import NoPage from './pages/nopage';
 
+export const RoutesList = (
+    <>
+        <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="learn" element={<LearnLayout />}>
+                <Route index element={<LearnHome />} />
+                <Route path="html" element={<LearnSubjectLayout subject="html" />}>
+                    <Route index element={<LearnHTMLHome />} />
+                    <Route path="introduction" element={<LearnHTMLIntroduction />} />
+                    <Route path="tutorial">
+                        <Route index element={<Navigate to="beginner" />} />
+                        <Route path="beginner" element={<LearnHTMLTutorialBeginner />} />
+                        <Route path="forms" element={<LearnHTMLTutorialForms />} />
+                        <Route path="loginform" element={<LearnHTMLTutorialLoginForm />} />
+                    </Route>
+                    <Route path="element">
+                        <Route index element={<Navigate to="../" />} />
+                        <Route path="p" element={<LearnHTMLElementP />} />
+                        <Route path="div" element={<LearnHTMLElementDiv />} />
+                        <Route path="img" element={<LearnHTMLElementImg />} />
+                    </Route>
+                </Route>
+                <Route path="css" element={<LearnSubjectLayout subject="css" />}>
+                    <Route index element={<LearnCSSHome />} />
+                    <Route path="introduction" element={<LearnCSSIntroduction />} />
+                    <Route path="tutorial">
+                        <Route index element={<Navigate to="beginner" />} />
+                        <Route path="beginner" element={<LearnCSSTutorialBeginner />} />
+                    </Route>
+                    <Route path="property">
+                        <Route index element={<Navigate to="../" />} />
+                        <Route path="color" element={<LearnCSSPropertyColor />} />
+                    </Route>
+                </Route>
+                <Route path="javascript" element={<LearnSubjectLayout subject="js" />}>
+                    <Route index element={<LearnJavaScriptHome />} />
+                    <Route path="introduction" element={<LearnJavaScriptIntroduction />} />
+                    <Route path="tutorial">
+                        <Route index element={<Navigate to="beginner" />} />
+                        <Route path="beginner" element={<LearnJavaScriptTutorialBeginner />} />
+                    </Route>
+                    <Route path="dom">
+                        <Route index element={<Navigate to="../" />} />
+                        <Route path="document" element={<LearnJavaScriptDomDocument />} />
+                    </Route>
+                </Route>
+                <Route path="react" element={<LearnSubLayout subject="react" />}>
+                    <Route index element={<LearnReactHome />} />
+                    <Route path="react" element={<LearnSubjectLayout />}>
+                        <Route index element={<LearnReactReactHome />} />
+                        <Route path="introduction" element={<LearnReactReactIntroduction />} />
+                        <Route path="tutorial">
+                            <Route index element={<Navigate to="beginner" />} />
+                            <Route path="beginner" element={<LearnReactReactTutorialBeginner />} />
+                        </Route>
+                        <Route path="hook">
+                            <Route index element={<Navigate to="../" />} />
+                            <Route path="usestate" element={<LearnReactReactHookUseState />} />
+                        </Route>
+                    </Route>
+                    <Route path="router" element={<LearnSubjectLayout subject="react_router" />}>
+                        <Route index element={<LearnReactRouterHome />} />
+                        <Route path="introduction" element={<LearnReactRouterIntroduction />} />
+                        <Route path="tutorial">
+                            <Route index element={<Navigate to="beginner" />} />
+                            <Route path="beginner" element={<LearnReactRouterTutorialBeginner />} />
+                        </Route>
+                        <Route path="component">
+                            <Route index element={<Navigate to="../" />} />
+                            <Route path="browserrouter" element={<LearnReactRouterComponentBrowserRouter />} />
+                        </Route>
+                    </Route>
+                </Route>
+            </Route>
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<SignUp />} />
+            <Route path="reset_password" element={<ResetPassword />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="about" element={<About />} />
+            <Route path="*" element={<NoPage />} />
+        </Route>
+    </>
+);
+
 function App() {
     return (
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             <Routes>
-                <Route path="/" element={<Layout />}>
-                    <Route index element={<Home />} />
-                    <Route path="learn" element={<LearnLayout />}>
-                        <Route index element={<LearnHome />} />
-                        <Route path="html" element={<LearnSubjectLayout subject="html" />}>
-                            <Route index element={<LearnHTMLHome />} />
-                            <Route path="introduction" element={<LearnHTMLIntroduction />} />
-                            <Route path="tutorial">
-                                <Route index element={<Navigate to="beginner" />} />
-                                <Route path="beginner" element={<LearnHTMLTutorialBeginner />} />
-                                <Route path="forms" element={<LearnHTMLTutorialForms />} />
-                                <Route path="loginform" element={<LearnHTMLTutorialLoginForm />} />
-                            </Route>
-                            <Route path="element">
-                                <Route index element={<Navigate to="../" />} />
-                                <Route path="p" element={<LearnHTMLElementP />} />
-                                <Route path="div" element={<LearnHTMLElementDiv />} />
-                                <Route path="img" element={<LearnHTMLElementImg />} />
-                            </Route>
-                        </Route>
-                        <Route path="css" element={<LearnSubjectLayout subject="css" />}>
-                            <Route index element={<LearnCSSHome />} />
-                            <Route path="introduction" element={<LearnCSSIntroduction />} />
-                            <Route path="tutorial">
-                                <Route index element={<Navigate to="beginner" />} />
-                                <Route path="beginner" element={<LearnCSSTutorialBeginner />} />
-                            </Route>
-                            <Route path="property">
-                                <Route index element={<Navigate to="../" />} />
-                                <Route path="color" element={<LearnCSSPropertyColor />} />
-                            </Route>
-                        </Route>
-                        <Route path="javascript" element={<LearnSubjectLayout subject="js" />}>
-                            <Route index element={<LearnJavaScriptHome />} />
-                            <Route path="introduction" element={<LearnJavaScriptIntroduction />} />
-                            <Route path="tutorial">
-                                <Route index element={<Navigate to="beginner" />} />
-                                <Route path="beginner" element={<LearnJavaScriptTutorialBeginner />} />
-                            </Route>
-                            <Route path="dom">
-                                <Route index element={<Navigate to="../" />} />
-                                <Route path="document" element={<LearnJavaScriptDomDocument />} />
-                            </Route>
-                        </Route>
-                        <Route path="react" element={<LearnSubLayout subject="react" />}>
-                            <Route index element={<LearnReactHome />} />
-                            <Route path="react" element={<LearnSubjectLayout />}>
-                                <Route index element={<LearnReactReactHome />} />
-                                <Route path="introduction" element={<LearnReactReactIntroduction />} />
-                                <Route path="tutorial">
-                                    <Route index element={<Navigate to="beginner" />} />
-                                    <Route path="beginner" element={<LearnReactReactTutorialBeginner />} />
-                                </Route>
-                                <Route path="hook">
-                                    <Route index element={<Navigate to="../" />} />
-                                    <Route path="usestate" element={<LearnReactReactHookUseState />} />
-                                </Route>
-                            </Route>
-                            <Route path="router" element={<LearnSubjectLayout subject="react_router" />}>
-                                <Route index element={<LearnReactRouterHome />} />
-                                <Route path="introduction" element={<LearnReactRouterIntroduction />} />
-                                <Route path="tutorial">
-                                    <Route index element={<Navigate to="beginner" />} />
-                                    <Route path="beginner" element={<LearnReactRouterTutorialBeginner />} />
-                                </Route>
-                                <Route path="component">
-                                    <Route index element={<Navigate to="../" />} />
-                                    <Route path="browserrouter" element={<LearnReactRouterComponentBrowserRouter />} />
-                                </Route>
-                            </Route>
-                        </Route>
-                    </Route>
-                    <Route path="login" element={<Login />} />
-                    <Route path="signup" element={<SignUp />} />
-                    <Route path="reset_password" element={<ResetPassword />} />
-                    <Route path="contact" element={<Contact />} />
-                    <Route path="about" element={<About />} />
-                    <Route path="*" element={<NoPage />} />
-                </Route>
+                {RoutesList}
             </Routes>
         </BrowserRouter>
     );

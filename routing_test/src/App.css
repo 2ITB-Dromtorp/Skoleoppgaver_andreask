@@ -1,11 +1,31 @@
 :root {
-    --bg-col: rgb(13, 17, 23);
+    --dark-col-3: rgb(0, 17, 28);
+    --dark-col-2: rgb(0, 17, 28);
+    --dark-col-1: rgb(0, 17, 28);
+    --main-col: rgb(0, 21, 35);
+    --light-col-1: rgb(0, 26, 44);
+    --light-col-2: rgb(0, 33, 55);
+    --light-col-3: rgb(0, 37, 62);
+    --light-col-4: rgb(0, 41, 69);
+    --light-col-5: rgb(0, 46, 78);
+    --light-col-6: rgb(0, 51, 86);
+    --light-col-7: rgb(0, 58, 97);
+    --light-col-8: rgb(0, 64, 108);
+    --text-col: rgb(255, 255, 255);
+    --code-col: hsl(204, 100%, 42%);
+    --form-invalid-col: rgb(255, 100, 100);
+    --button-col: var(--light-col-5);
+    --button-border-col: var(--light-col-8);
+    /*
+    --main-col: rgb(13, 17, 23);
     --light-col-1: rgb(16, 21, 30);
     --light-col-2: rgb(32, 42, 60);
+    --text-col: rgb(255, 255, 255);
+    */
 }
 
 html {
-    background-color: var(--bg-col);
+    background-color: var(--main-col);
 }
 
 * {
@@ -35,7 +55,7 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     box-shadow: 0 0 0 262px var(--light-col-2) inset !important;
-    -webkit-text-fill-color: rgb(255, 255, 255) !important;
+    -webkit-text-fill-color: var(--text-col) !important;
 }
 
 ::-webkit-scrollbar {
@@ -95,12 +115,9 @@ input:-webkit-autofill:active {
 }
 
 code {
-    --r: 40;
-    --g: 44;
-    --b: 52;
     display: inline;
-    background-color: rgb(40, 44, 52);
-    border: 1px solid var(--light-col-2);
+    background-color: var(--light-col-3);
+    border: 1px solid var(--light-col-4);
     border-radius: 4px;
     white-space: pre;
 }
@@ -112,7 +129,7 @@ code,
 
 code:not(.big_code),
 .code_text {
-    color: rgb(130, 170, 255);
+    color: var(--code-col);
 }
 
 code.big_code {
@@ -120,7 +137,7 @@ code.big_code {
     overflow: auto;
     padding: 8px 8px 8px 0;
     margin: 16px 0 16px 0;
-    color: rgb(255, 255, 255);
+    color: var(--text-col);
 }
 
 .big_code_wrapper {
@@ -163,8 +180,8 @@ input[type="submit"],
     --b: 255;
     border-radius: 5px;
     padding: 4px 8px 4px 8px;
-    background-color: rgba(var(--r), var(--g), var(--b), 0.4);
-    border: 1px solid rgba(var(--r), var(--g), var(--b), 0.4);
+    background-color: var(--button-col);
+    border: 1px solid var(--button-border-col);
     overflow: hidden;
     cursor: pointer;
 }
@@ -210,7 +227,7 @@ input[type="submit"],
 
 .button_link {
     display: inline-block;
-    color: rgb(255, 255, 255) !important;
+    color: var(--text-col) !important;
     text-decoration: none;
 }
 
@@ -224,7 +241,7 @@ a:visited {
 
 #main {
     width: 100%;
-    color: rgb(255, 255, 255);
+    color: var(--text-col);
 }
 
 #top_bar {
@@ -258,11 +275,19 @@ a:visited {
     margin: 0;
 }
 
-#side_bar_main_list>li {}
+/*
+#side_bar_main_list>li {
+
+}
+*/
 
 .side_bar_main_section_list {
     list-style: none;
-    padding: 0 0 0 20px;
+    padding: 0;
+}
+
+.side_bar_main_section_list>li:not(:first-child) {
+    padding-left: 20px;
 }
 
 .side_bar_main_section_list_link_list {
@@ -284,6 +309,7 @@ a:visited {
 /*-----*/
 
 /*-----*/
+
 .nav_list {
     display: flex;
     flex-direction: row;
@@ -343,7 +369,7 @@ a:visited {
     list-style: none;
     padding: 0;
     margin: 0;
-    background-color: var(--bg-col);
+    background-color: var(--main-col);
 }
 
 .sub_nav_li:hover {
@@ -381,12 +407,7 @@ a:visited {
     display: flex;
     flex-direction: column;
     min-height: 100svh;
-    background-color: rgb(10, 14, 21);
-}
-
-#learn_content {
-    display: flex;
-    flex-direction: row;
+    background-color: var(--main-col);
 }
 
 /*-----*/
@@ -414,6 +435,7 @@ a:visited {
     display: flex;
     flex-direction: row;
     width: 100%;
+    flex: 1;
 }
 
 .learn_content {
@@ -432,7 +454,7 @@ a:visited {
     align-items: center;
     justify-content: center;
     padding: 64px 0 64px 0;
-    background-color: rgb(6, 10, 16);
+    background-color: var(--dark-col-2);
 }
 
 #footer_list {
@@ -533,7 +555,7 @@ input[type="password"],
 input[type="email"] {
     all: unset;
     background-color: var(--light-col-2);
-    border: 1px solid rgb(43, 56, 80);
+    border: 1px solid var(--light-col-3);
     border-radius: 5px;
     margin-bottom: 20px;
     padding: 6px;
@@ -558,7 +580,7 @@ input[type="email"] {
 }
 
 .front_account_management_text_input.invalid {
-    --border-col: rgb(255, 100, 100);
+    --border-col: var(--form-invalid-col);
     border: 1px solid var(--border-col);
 }
 
@@ -576,7 +598,7 @@ input[type="submit"] {
 }
 
 .form_message {
-    color: rgb(255, 100, 100);
+    color: var(--form-invalid-col);
     font-size: 12px;
     margin: 0 0 5px 0;
 }
