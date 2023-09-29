@@ -1,24 +1,99 @@
+:root {
+    --bg-col: rgb(20, 20, 20);
+    --top-nav-bg-col: rgb(30, 30, 30);
+    --top-nav-border-col: rgb(35, 35, 35);
+    --text-col: rgb(255, 255, 255);
+    --class-map-bg-col: rgb(30, 30, 30);
+    --class-map-border-col: rgb(60, 60, 60);
+    --table-bg-col: rgb(40, 40, 40);
+    --table-border-col: rgb(60, 60, 60);
+}
+
+.text_center {
+    text-align: center;
+}
+
+.button_link {
+    text-decoration: none;
+    color: var(--text-col);
+}
+
+#main {
+    width: 100%;
+    min-height: 100svh;
+    background-color: var(--bg-col);
+    color: var(--text-col);
+}
+
+#top_nav {
+    display: flex;
+    position: sticky;
+    background-color: var(--top-nav-bg-col);
+    border-bottom: 1px solid var(--top-nav-border-col);
+}
+
+#top_nav_list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.top_nav_li {
+    display: flex;
+}
+
+.top_nav_link {
+    padding: 10px;
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+}
+
 #class_map {
     display: flex;
     flex-direction: row;
-    width: 100%;
-    height: 100%;
-    gap: 50px;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    align-self: center;
+    gap: 60px;
+    padding: 40px;
+    border-radius: 20px;
+    background-color: var(--class-map-bg-col);
+    border: 1px solid var(--class-map-border-col);
+    box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.5);
+}
+
+.table {
+    display: flex;
+    background-color: var(--table-bg-col);
+    border: 1px solid var(--table-border-col);
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .class_row {
     display: flex;
     flex-direction: column;
+    gap: 60px;
 }
 
-.elev {
-    padding: 20px;
-    color: rgb(0, 0, 0);
-}
-
-.table {
+.student {
     display: flex;
-    background-color: rgb(255, 255, 255);
-    border: 1px solid rgb(20, 20, 20);
-    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+}
+
+.student_link {
+    transition-property: color, text-shadow;
+    transition-duration: 0.05s;
+}
+
+.student_link:hover {
+    text-shadow: 0 0 5px var(--text-col);
 }

@@ -3,11 +3,11 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Layout from './pages/layout';
+
 import Home from './pages/home';
 import Profile from './pages/profile';
 
-
-import Elev from './elev.js';
+import NoProfile from './pages/noprofile';
 
 function App() {
     return (
@@ -15,7 +15,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />} />
-                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/profile/:name" element={<Profile />} />
+                    <Route path="/noprofile" element={<NoProfile />} />
                 </Route>
             </Routes>
         </BrowserRouter>
