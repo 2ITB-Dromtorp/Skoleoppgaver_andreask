@@ -5,34 +5,34 @@ import { Students } from '../students';
 
 const Home = () => {
     const classRows = [];
-    for (let ai = 0; ai < Students.length; ai++) {
-        const curRow = Students[ai];
+    for (let columnIndex = 0; columnIndex < Students.length; columnIndex++) {
+        const curColumn = Students[columnIndex];
         const tables = [];
-        for (let bI = 0; bI < curRow.length; bI++) {
-            const curTable = curRow[bI];
+        for (let tableIndex = 0; tableIndex < curColumn.length; tableIndex++) {
+            const curTable = curColumn[tableIndex];
             const students = [];
-            for (let cI = 0; cI < curTable.length; cI++) {
-                const curStudent = curTable[cI];
+            for (let studentIndex = 0; studentIndex < curTable.length; studentIndex++) {
+                const curStudent = curTable[studentIndex];
                 let resStudent;
                 if (curStudent.noStudent === true) {
                     resStudent = (
-                        <Student nostudent></Student>
+                        <Student key={studentIndex.toString()} nostudent></Student>
                     );
                 } else {
                     resStudent = (
-                        <Student name={curStudent.name}></Student>
+                        <Student key={studentIndex.toString()} name={curStudent.name}></Student>
                     );
                 }
                 students.push(resStudent);
             }
             tables.push((
-                <Table>
+                <Table key={tableIndex.toString()}>
                     {students}
                 </Table>
             ));
         }
         classRows.push((
-            <div className="class_row" data-rows="2">
+            <div key={columnIndex.toString()} className="class_row" data-rows="2">
                 {tables}
             </div>
         ));
@@ -45,42 +45,6 @@ const Home = () => {
             </div>
         </>
     );
-
-    /*
-    <div id="class_map">
-        <div className="class_row" data-rows="2">
-            <Table>
-                <Student name="Andreas"></Student>
-                <Student name="Ahmad"></Student>
-            </Table>
-            <Table>
-                <Student name="Philip"></Student>
-                <Student nostudent></Student>
-            </Table>
-            <Table>
-                <Student name="Gabriel"></Student>
-                <Student name="Theodor"></Student>
-            </Table>
-        </div>
-        <div className="class_row" data-rows="3">
-            <Table>
-                <Student name="Mattis"></Student>
-                <Student name="Alva"></Student>
-                <Student name="Silas"></Student>
-            </Table>
-            <Table>
-                <Student name="Axel"></Student>
-                <Student name="Vetle"></Student>
-                <Student name="Kristoffer"></Student>
-            </Table>
-            <Table>
-                <Student name="Johannes"></Student>
-                <Student name="Elias"></Student>
-                <Student name="Matheo"></Student>
-            </Table>
-        </div>
-    </div>
-    */
 }
 
 export default Home;

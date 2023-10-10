@@ -1,68 +1,19 @@
-export const Students = [
-    [
-        [
-            {
-                name: 'Andreas',
-            },
-            {
-                name: 'Ahmad',
-            },
-        ],
-        [
-            {
-                name: 'Philip',
-            },
-            {
-                noStudent: true,
-            },
-        ],
-        [
-            {
-                name: 'Gabriel',
-            },
-            {
-                name: 'Theodor',
-            },
-        ],
-    ],
-    [
-        [
-            {
-                name: 'Mattis',
-            },
-            {
-                name: 'Alva',
-            },
-            {
-                name: 'Silas',
-            },
-        ],
-        [
-            {
-                name: 'Axel',
-            },
-            {
-                name: 'Vetle',
-            },
-            {
-                name: 'Kristoffer',
-            },
-        ],
-        [
-            {
-                name: 'Johannes',
-            },
-            {
-                name: 'Elias',
-            },
-            {
-                name: 'Matheo',
-            },
-        ],
-    ],
-];
+import oStudents from "./resources/students.json";
+
+export const Students = oStudents;
 
 export const AllStudents = [];
+
+for (let columnIndex = 0; columnIndex < Students.length; columnIndex++) {
+    const column = Students[columnIndex];
+    for (let tableIndex = 0; tableIndex < column.length; tableIndex++) {
+        const table = column[tableIndex];
+        for (let studentIndex = 0; studentIndex < table.length; studentIndex++) {
+            const student = table[studentIndex];
+            AllStudents.push(student);
+        }
+    }
+}
 
 export const getStudentFromName = (name) => {
     let res;
