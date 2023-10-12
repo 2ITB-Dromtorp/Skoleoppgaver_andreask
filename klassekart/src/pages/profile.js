@@ -8,13 +8,15 @@ const Profile = () => {
     if (student !== undefined) {
         content = (
             <>
-                <h1>{name}</h1>
-                <p>Dette er profilen til {name}</p>
+                <div id="profile_content">
+                    <h1>{name}</h1>
+                    <p>Dette er profilen til {name}</p>
+                </div>
             </>
         );
     } else {
         content = (
-            <Navigate to="/noprofile"/>
+            <Navigate to="/noprofile" />
         );
     }
     return content;
