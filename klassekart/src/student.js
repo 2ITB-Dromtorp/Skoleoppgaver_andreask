@@ -5,7 +5,7 @@ const Student = ({ nostudent, name, ...props }) => {
     if (nostudent === true) {
         content = (
             <>
-                <div className="student student_placeholder">
+                <div className="student student_placeholder button">
 
                 </div>
             </>
@@ -13,7 +13,7 @@ const Student = ({ nostudent, name, ...props }) => {
     } else {
         content = (
             <>
-                <div className="student">
+                <div className="student button">
                     <Link className="student_link button_link" to={'/profile/' + name}>{name}</Link>
                 </div>
             </>

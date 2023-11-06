@@ -1,77 +1,61 @@
 [
-    [
-        [
-            {
-                "name": "Andreas",
-                "description": "🍌🍌🍌"
-            },
-            {
-                "name": "Ahmad",
-                "description": "🤡"
-            }
-        ],
-        [
-            {
-                "name": "Philip",
-                "description": ""
-            },
-            {
-                "noStudent": true
-            }
-        ],
-        [
-            {
-                "name": "Gabriel",
-                "description": ""
-            },
-            {
-                "name": "Theodor",
-                "description": ""
-            }
-        ]
-    ],
-    [
-        [
-            {
-                "name": "Mattis",
-                "description": "🗿"
-            },
-            {
-                "name": "Alva",
-                "description": ""
-            },
-            {
-                "name": "Silas",
-                "description": ""
-            }
-        ],
-        [
-            {
-                "name": "Axel",
-                "description": "🤓☝️"
-            },
-            {
-                "name": "Vetle",
-                "description": ""
-            },
-            {
-                "name": "Kristoffer",
-                "description": "Jeffrey Dahmer"
-            }
-        ],
-        [
-            {
-                "name": "Johannes",
-                "description": ""
-            },
-            {
-                "name": "Elias",
-                "description": "🐛"
-            },
-            {
-                "name": "Matheo",
-                "description": ""
-            }
-        ]
-    ]
+    {
+        "name": "Andreas",
+        "description": "🍌🍌🍌"
+    },
+    {
+        "name": "Ahmad",
+        "description": "🤡"
+    },
+    {
+        "name": "Mattis",
+        "description": "🗿"
+    },
+    {
+        "name": "Alva",
+        "description": ""
+    },
+    {
+        "name": "Silas",
+        "description": ""
+    },
+    {
+        "name": "Philip",
+        "description": ""
+    },
+    {
+        "noStudent": true
+    },
+    {
+        "name": "Axel",
+        "description": "🤓☝️"
+    },
+    {
+        "name": "Vetle",
+        "description": ""
+    },
+    {
+        "name": "Kristoffer",
+        "description": "Jeffrey Dahmer"
+    },
+    {
+        "name": "Gabriel",
+        "description": ""
+    },
+    {
+        "name": "Theodor",
+        "description": ""
+    },
+    {
+        "name": "Johannes",
+        "description": ""
+    },
+    {
+        "name": "Elias",
+        "description": "🐛"
+    },
+    {
+        "name": "Matheo",
+        "description": "🤡🤡🤡🤡🤡"
+    }
 ]
