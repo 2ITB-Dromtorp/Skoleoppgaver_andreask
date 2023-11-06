@@ -310,7 +310,7 @@ app.post(getAPIURL('/signup'), async (req, res) => {
             } else {
                 const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-                pool.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword], (err, baba) => {
+                pool.query('INSERT INTO users (id, username, password) VALUES (?, ?, ?)', [null, username, hashedPassword], (err, baba) => {
                     if (err) {
                         console.error(err);
                         res.status(400).send(err);
