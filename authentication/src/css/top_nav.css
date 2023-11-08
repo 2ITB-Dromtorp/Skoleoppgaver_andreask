@@ -60,3 +60,49 @@ nav {
     flex-shrink: 0;
     box-sizing: border-box;
 }
+
+
+
+
+
+
+/*home icon animation (spent too much time on animating so dropped it)*/
+#home_link_icon {
+    position: absolute;
+    stroke: var(--main-col);
+    stroke-width: 1px;
+    fill: black;
+    transition-property: transform;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-out;
+    z-index: 2;
+}
+
+#home_link:hover>#home_link_icon {
+    transform: rotate(-15deg) scale(1.2);
+}
+
+#home_link:not(:hover)>#home_link_icon {
+    transform: scale(1);
+}
+
+
+/*home icon animation (the second page)*/
+#home_link_icon_second {
+    position: absolute;
+    stroke: var(--main-col);
+    stroke-width: 1px;
+    fill: black;
+    transition-property: transform;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-out;
+    z-index: 1;
+}
+
+#home_link:hover>#home_link_icon_second {
+    transform: translate(20%, 0%) rotate(30deg) scale(1.2);
+}
+
+#home_link:not(:hover)>#home_link_icon_second {
+    transform: scale(1);
+}

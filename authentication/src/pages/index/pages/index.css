@@ -1,3 +1,40 @@
+:root {
+    --card-border-col: rgb(50, 50, 50);
+    --card-bg-col: rgb(0, 0, 0);
+    --card-padding: 24px;
+    --card-border-radius: 16px;
+}
+
 #main_content {
     margin: 0px 64px 0px 64px;
+}
+
+#cards_section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin: 0px 128px 0px 128px;
+}
+
+.home_card {
+    display: flex;
+    flex-direction: column;
+    max-height: 320px;
+    padding: var(--card-padding);
+    border: 1px solid var(--card-border-col);
+    border-radius: var(--card-border-radius);
+}
+
+.home_card_large {
+    min-height: 320px;
+}
+
+.home_card_small {
+    min-height: 0px;
+}
+
+.home_card_content {
+    display: flex;
+    flex-grow: 1;
+    height: 100%;
 }

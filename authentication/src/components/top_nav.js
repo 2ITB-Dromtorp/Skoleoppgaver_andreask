@@ -35,7 +35,10 @@ function TopNav() {
 
     return (
         <nav id='top_nav'>
-            <Link id='home_link' className='button' to='/'><LogoSvg id='home_link_icon' /></Link>
+            <Link id='home_link' className='button' to='/'>
+                <LogoSvg id='home_link_icon' />
+                <LogoSvg id='home_link_icon_second' />
+            </Link>
             <form id='search_form' onSubmit={(e) => {
                 e.preventDefault();
                 const url = new URL('/search', window.location.origin);

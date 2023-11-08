@@ -413,24 +413,6 @@ input[type=number] {
 
 
 
-/*home icon animation (spent too much time on animating so dropped it)*/
-#home_link_icon {
-    /*
-    fill: url(#gradient);
-    */
-    fill: var(--main-col);
-    transition-property: scale;
-    transition-duration: 0.25s;
-    transition-timing-function: ease-out;
-}
-
-#home_link_icon:hover {
-    scale: 1.2;
-}
-
-#home_link_icon:not(:hover) {
-    scale: 1;
-}
 
 
 
@@ -440,11 +422,7 @@ input[type=number] {
 
 
 
-
-
-
-
-/*reduced animations*/
+/*reduced (no) animations*/
 @media (prefers-reduced-motion) {
     * {
         transition-duration: 0s;
