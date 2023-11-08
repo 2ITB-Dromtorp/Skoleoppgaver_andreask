@@ -1,0 +1,46 @@
+#page_nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+#page_nav_nav {
+    display: flex;
+    gap: 8px;
+}
+
+.page_nav_item {
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+    padding: 6px;
+    box-sizing: content-box;
+}
+
+/*
+#page_nav_prev {}
+*/
+
+/*
+#page_nav_next {}
+*/
+
+#page_nav_page_input {
+    text-align: center;
+}
+
+#page_nav_per_page_input {
+    text-align: center;
+}
+
+.page_nav_button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.page_nav_button_icon {
+    margin: 4px;
+}

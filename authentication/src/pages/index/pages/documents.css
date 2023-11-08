@@ -1,0 +1,31 @@
+#documents {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.document {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    aspect-ratio: 1.5 / 1;
+}
+
+.document_top_section {
+    flex-grow: 1;
+}
+
+.document_bottom_section {
+    flex-shrink: 0;
+    flex-grow: 1;
+}
+
+.document_name {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.document_text {
+    font-size: 14px;
+    text-overflow: ellipsis;
+    min-height: 0;
+}

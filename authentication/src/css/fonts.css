@@ -1,0 +1,14 @@
+@font-face {
+    font-family: "Telenor Evolution UI";
+    src: url("../fonts/TelenorEvolutionUI.woff") format("woff");
+}
+
+@font-face {
+    font-family: "Telenor Evolution UI Light";
+    src: url("../fonts/TelenorEvolutionUILight.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Telenor Evolution UI Medium";
+    src: url("../fonts/TelenorEvolutionUIMedium.ttf") format("truetype");
+}

@@ -1,0 +1,24 @@
+#login_section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 300px;
+    padding: 16px;
+    border-radius: 16px;
+    margin: 4rem auto auto auto;
+}
+
+#login_form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#login_input_field_container {
+    display: flex;
+    flex-direction: column;
+}
+
+#login_submit_button {
+    margin-top: 16px;
+}

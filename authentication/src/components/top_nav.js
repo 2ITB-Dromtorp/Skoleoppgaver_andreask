@@ -1,0 +1,62 @@
+import '../css/top_nav.css';
+
+import { ReactComponent as LogoSvg } from '../svgs/logo.svg';
+import { ReactComponent as SearchSvg } from '../svgs/search.svg';
+
+import { useContext, useEffect, useState } from 'react';
+
+import { UserContext } from '../context';
+
+import { Link } from 'react-router-dom';
+
+function TopNav() {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [userData, setUserData] = useContext(UserContext);
+
+    let userContent;
+    if (userData && userData.logged_in) {
+        userContent = (
+            <Link className='button' to='/account'>
+                🤡
+            </Link>
+        );
+    } else {
+        userContent = (
+            <>
+                <Link className='button fancy_button secondary' to='/login'>
+                    Log in
+                </Link>
+                <Link className='button fancy_button primary' to='/signup'>
+                    Sign up
+                </Link>
+            </>
+        );
+    }
+
+    return (
+        <nav id='top_nav'>
+            <Link id='home_link' className='button' to='/'><LogoSvg id='home_link_icon' /></Link>
+            <form id='search_form' onSubmit={(e) => {
+                e.preventDefault();
+                const url = new URL('/search', window.location.origin);
+                const searchParams = new URLSearchParams();
+                const actualSearchQuery = searchQuery.trim();
+                if (actualSearchQuery.length > 0) {
+                    searchParams.append('query', searchQuery.trim());
+                }
+                url.search = searchParams;
+                window.location.href = url.toString();
+            }}>
+                <input id='search_text_input' className='text_input' type='text' placeholder='Search' onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                }} />
+                <button id='search_button' className='button fancy_button secondary icon_button'>
+                    <SearchSvg />
+                </button>
+            </form>
+            {userContent}
+        </nav>
+    );
+}
+
+export default TopNav;

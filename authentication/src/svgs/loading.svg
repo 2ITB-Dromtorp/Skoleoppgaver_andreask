@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<svg class="loading_svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <path class="loading_bg_circle" d="M 5 50 A 45 45 0 0 0 50 95 A 45 45 0 0 0 95 50 A 45 45 0 0 0 50 5"></path>
+    <path class="loading_highlight_circle" d="M 50 5 A 45 45 0 0 0 5 50"></path>
+</svg>

@@ -9,10 +9,7 @@ const mysql = require('mysql2');
 
 const app = express();
 
-
 const saltRounds = 10;
-
-
 
 
 //doxxing myself 🤡🤡🤡
@@ -45,7 +42,7 @@ for (const name of Object.keys(nets)) {
 
 
 
-const IP = getOwnIP;
+const IP = '127.0.0.1';//getOwnIP;
 const PORT = 80;
 
 let dbConfig = {
@@ -68,7 +65,6 @@ const bannedIPs = [];
 function isIPBanned(req, res) {
     if (req.socket.remoteAddress in bannedIPs) {
         res.status(403).send('Your IP is blocked.');
-        res.end();
         return true;
     }
     return false;
@@ -115,10 +111,10 @@ const APIURLS = [
     getAPIURL('/signup'),
     getAPIURL('/login'),
     getAPIURL('/logout'),
-    getAPIURL('/only_logged_in_can_use_this'),
+    getAPIURL('/documents'),
 ];
 const verifyURLS = [
-    getAPIURL('/only_logged_in_can_use_this'),
+    getAPIURL('/documents'),
 ];
 
 
@@ -212,11 +208,11 @@ app.use((req, res, next) => {
             } else {
                 let matchedUser;
                 for (let i = 0; i < users.length; i++) {
-                    const user = users[i];
+                    const username = users[i];
 
                     let foundToken = false;
-                    for (let j = 0; j < user.sessions.length; j++) {
-                        const session = user.sessions[j];
+                    for (let j = 0; j < username.sessions.length; j++) {
+                        const session = username.sessions[j];
                         if (session.token === token) {
                             foundToken = true;
                             break;
@@ -224,14 +220,14 @@ app.use((req, res, next) => {
                     }
 
                     if (foundToken === true) {
-                        matchedUser = user;
+                        matchedUser = username;
                         break;
                     }
                 }
                 if (matchedUser !== undefined) {
                     next();
                 } else {
-                    res.status(400).send('No user with that token.');
+                    res.status(400).send('No username with that token.');
                 }
             }
         });
@@ -271,16 +267,21 @@ app.use((req, res, next) => {
 
 
 
+function hasNumber(str) {
+    return /\d/.test(str);
+}
+
+function hasLowerCaseLetters(str) {
+    return /[A-Z]/.test(str);
+}
+
+function hasUpperCaseLetters(str) {
+    return /[a-z]/.test(str);
+}
 
 
 
-
-
-
-//goofy ahh apis🤡
-
-
-
+//the apis
 
 
 
@@ -288,19 +289,39 @@ app.use((req, res, next) => {
 //sign up
 app.post(getAPIURL('/signup'), async (req, res) => {
     const q = req.body;
-    const user = q.username;
+    const username = q.username;
     const password = q.password;
 
-    if (user === undefined || user === null || password === undefined || password === null) {
+    if (username === undefined || username === null || password === undefined || password === null) {
         res.status(400).send(`User and/or password doesn't exist.`);
         return;
     }
-    if (typeof (user) !== 'string' || typeof (password) !== 'string') {
+    if (typeof (username) !== 'string' || typeof (password) !== 'string') {
         res.status(400).send(`User and/or password isn't of type 'String'.`);
         return;
     }
+    if (username.length < 3) {
+        res.status(400).send(`Username can't be shorter than 3 characters.`);
+        return;
+    }
+    if (password.length < 8) {
+        res.status(400).send(`Password can't be shorter than 8 characters.`);
+        return;
+    }
+    if (hasNumber(str) === false) {
+        res.status(400).send(`Password must include at least 1 number.`);
+        return;
+    }
+    if (hasLowerCaseLetters(str) === false) {
+        res.status(400).send(`Password must include at least 1 lower case letter.`);
+        return;
+    }
+    if (hasUpperCaseLetters(str) === false) {
+        res.status(400).send(`Password must include at least 1 upper case letter.`);
+        return;
+    }
 
-    pool.query('SELECT * FROM users WHERE username = ?', [user], async (err, users) => {
+    pool.query('SELECT * FROM users WHERE username = ?', [username], async (err, users) => {
         if (err) {
             console.error(err);
             res.status(400).send(err);
@@ -310,12 +331,11 @@ app.post(getAPIURL('/signup'), async (req, res) => {
             } else {
                 const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-                pool.query('INSERT INTO users (id, username, password) VALUES (?, ?, ?)', [null, username, hashedPassword], (err, baba) => {
+                pool.query('INSERT INTO users (id, username, password, sessions) VALUES (?, ?, ?, ?)', [null, username, hashedPassword, JSON.stringify([])], (err) => {
                     if (err) {
                         console.error(err);
                         res.status(400).send(err);
                     } else {
-                        console.log(err, baba);
                         res.status(200).send('Successfully signed up.');
                     }
                 });
@@ -324,33 +344,35 @@ app.post(getAPIURL('/signup'), async (req, res) => {
     });
 });
 
+
+
 //log in 🕵️🕵️🕵️🕵️
 app.post(getAPIURL('/login'), async (req, res) => {
     const q = req.body;
-    const user = q.username;
+    const username = q.username;
     const password = q.password;
 
-    if (user === undefined || user === null || password === undefined || password === null) {
+    if (username === undefined || username === null || password === undefined || password === null) {
         res.status(400).send(`User and/or password doesn't exist.`);
         return;
     }
-    if (typeof (user) !== 'string' || typeof (password) !== 'string') {
+    if (typeof (username) !== 'string' || typeof (password) !== 'string') {
         res.status(400).send(`User and/or password isn't of type 'String'.`);
         return;
     }
 
-    pool.query('SELECT * FROM users WHERE username = ?', [user], async (err, users) => {
+    pool.query('SELECT * FROM users WHERE username = ?', [username], async (err, users) => {
         if (err) {
             console.error(err);
             res.status(400).send(err);
         } else {
             if (users.length === 0) {
-                res.status(400).send('User not found');
+                res.status(400).send('User not found.');
             }
             for (let i = 0; i < users.length; i++) {
                 const user = users[i];
 
-                const success = await bcrypt.compare(password, user.userPassword);
+                const success = await bcrypt.compare(password, user.password);
 
                 if (success) {
                     const token = generateAuthToken();//🖥️🕵️
@@ -358,7 +380,7 @@ app.post(getAPIURL('/login'), async (req, res) => {
                         date: Date.now(),
                         token: token,
                     });
-                    pool.query('UPDATE users SET sessions = ? WHERE idUser = ?', [JSON.stringify(user.sessions), user.idUser], () => {//kys matheo😘😘😘
+                    pool.query('UPDATE users SET sessions = ? WHERE id = ?', [JSON.stringify(user.sessions), user.id], () => {//kys matheo😘😘😘
                         if (err) {
                             console.error(err);
                             res.status(400).send(err);
