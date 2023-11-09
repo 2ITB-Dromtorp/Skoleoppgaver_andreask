@@ -44,13 +44,13 @@ const Index = ({ ...props }) => {
             </section>
             <section id='cards_section'>
                 <LargeCard name='Popular among companies' desc='Used by all the major companies in NobodyVille. And when i say all the major i mean 100% of them.'>
-                    <img src='https://previews.123rf.com/images/ab7272/ab72722004/ab7272200400182/143862490-a-big-black-african-pig-with-a-dirty-face-looks-straight-at-the-camera-through-the-bars-the-concept.jpg' />
+                    <img className='home_card_image' src='https://previews.123rf.com/images/ab7272/ab72722004/ab7272200400182/143862490-a-big-black-african-pig-with-a-dirty-face-looks-straight-at-the-camera-through-the-bars-the-concept.jpg' />
                 </LargeCard>
                 <LargeCard name='Specialized for everybody' desc={`Specialized to fit every persons needs, whether you're a working privately or a businessman.`}>
-                    <img src='https://previews.123rf.com/images/ab7272/ab72722004/ab7272200400182/143862490-a-big-black-african-pig-with-a-dirty-face-looks-straight-at-the-camera-through-the-bars-the-concept.jpg' />
+                    <img className='home_card_image' src='https://previews.123rf.com/images/ab7272/ab72722004/ab7272200400182/143862490-a-big-black-african-pig-with-a-dirty-face-looks-straight-at-the-camera-through-the-bars-the-concept.jpg' />
                 </LargeCard>
                 <LargeCard name='Specialized for everybody' desc={`Specialized to fit every persons needs, whether you're a working privately or a businessman.`}>
-                    <img src='https://previews.123rf.com/images/ab7272/ab72722004/ab7272200400182/143862490-a-big-black-african-pig-with-a-dirty-face-looks-straight-at-the-camera-through-the-bars-the-concept.jpg' />
+                    <img className='home_card_image' src='https://previews.123rf.com/images/ab7272/ab72722004/ab7272200400182/143862490-a-big-black-african-pig-with-a-dirty-face-looks-straight-at-the-camera-through-the-bars-the-concept.jpg' />
                 </LargeCard>
                 <SmallCard name='Optimized' desc={`Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. `}>
 
