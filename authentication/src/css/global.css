@@ -186,7 +186,7 @@ input[type=number] {
     color: var(--button-text-col);
     border-radius: 10px;
     transition-property: background-color;
-    transition-duration: 0.05s;
+    transition-duration: 0.1s;
     transition-timing-function: ease-in-out;
 }
 
@@ -273,7 +273,7 @@ input[type=number] {
     outline-color: var(--focus-outline-col);
     outline-style: solid;
     transition-property: border-color, outline-width;
-    transition-duration: 0.05s;
+    transition-duration: 0.1s;
     transition-timing-function: ease-in-out;
 }
 
