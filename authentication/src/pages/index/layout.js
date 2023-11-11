@@ -9,13 +9,11 @@ import Popups from '../../components/popups.js';
 function Layout({ ...props }) {
     return (
         <>
-            <div id='main'>
+            <main id='main'>
                 <TopNav />
                 <Popups />
-                <main id='main_content'>
-                    <Outlet />
-                </main>
-            </div>
+                <Outlet />
+            </main>
         </>
     );
 }

@@ -6,8 +6,9 @@ nav {
 
 #top_nav {
     display: flex;
+    justify-content: center;
     background-color: rgb(0, 0, 0, 0.75);
-    border-bottom: 1px solid var(--input-border-col);
+    border-bottom: var(--nav-border-width) solid var(--input-border-col);
     backdrop-filter: blur(4px);
     width: 100%;
     height: var(--actual-nav-height);
@@ -15,8 +16,13 @@ nav {
     top: 0;
     box-shadow: var(--main-shadow);
     padding: var(--nav-horiz-pad) var(--nav-vert-pad) var(--nav-horiz-pad) var(--nav-vert-pad);
-    gap: 8px;
     box-sizing: border-box;
+}
+
+#top_nav_content {
+    display: flex;
+    width: var(--nav-content-width);
+    gap: 12px;
 }
 
 #home_link {
@@ -28,7 +34,7 @@ nav {
     --marg: 8px;
     height: calc(100% - (var(--marg) * 2));
     margin: var(--marg);
-    fill: var(--main-col);
+    fill: var(--main-bg-col);
 }
 
 /*nav search*/
@@ -45,7 +51,6 @@ nav {
     width: 100%;
     height: 100%;
     padding: 10px;
-    background-color: var(--main-bg-col);
     overflow: hidden;
 }
 
@@ -71,7 +76,7 @@ nav {
     position: absolute;
     stroke: var(--main-col);
     stroke-width: 1px;
-    fill: black;
+    fill: var(--main-bg-col);
     transition-property: transform;
     transition-duration: 0.25s;
     transition-timing-function: ease-out;

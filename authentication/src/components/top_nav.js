@@ -1,7 +1,6 @@
 import '../css/top_nav.css';
 
 import { ReactComponent as LogoSvg } from '../svgs/logo.svg';
-import { ReactComponent as SearchSvg } from '../svgs/search.svg';
 
 import { useContext, useEffect, useState } from 'react';
 
@@ -35,29 +34,28 @@ function TopNav() {
 
     return (
         <nav id='top_nav'>
-            <Link id='home_link' className='button' to='/'>
-                <LogoSvg id='home_link_icon' />
-                <LogoSvg id='home_link_icon_second' />
-            </Link>
-            <form id='search_form' onSubmit={(e) => {
-                e.preventDefault();
-                const url = new URL('/search', window.location.origin);
-                const searchParams = new URLSearchParams();
-                const actualSearchQuery = searchQuery.trim();
-                if (actualSearchQuery.length > 0) {
-                    searchParams.append('query', searchQuery.trim());
-                }
-                url.search = searchParams;
-                window.location.href = url.toString();
-            }}>
-                <input id='search_text_input' className='text_input' type='text' placeholder='Search' onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                }} />
-                <button id='search_button' className='button fancy_button secondary icon_button'>
-                    <SearchSvg />
-                </button>
-            </form>
-            {userContent}
+            <div id='top_nav_content'>
+                <Link id='home_link' className='button' to='/'>
+                    <LogoSvg id='home_link_icon' />
+                    <LogoSvg id='home_link_icon_second' />
+                </Link>
+                <form id='search_form' onSubmit={(e) => {
+                    e.preventDefault();
+                    const url = new URL('/search', window.location.origin);
+                    const searchParams = new URLSearchParams();
+                    const actualSearchQuery = searchQuery.trim();
+                    if (actualSearchQuery.length > 0) {
+                        searchParams.append('query', searchQuery.trim());
+                    }
+                    url.search = searchParams;
+                    window.location.href = url.toString();
+                }}>
+                    <input id='search_text_input' className='text_input' type='text' placeholder='Search' onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                    }} />
+                </form>
+                {userContent}
+            </div>
         </nav>
     );
 }

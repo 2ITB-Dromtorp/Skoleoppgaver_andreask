@@ -3,17 +3,17 @@ import './login.css';
 
 import { redirect } from 'react-router-dom';
 
-function Login({ isLogin, ...props }) {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+function UserForm({ isLogin, ...props }) {
+    const [usernameInput, setUsernameInput] = useState('');
+    const [passwordInput, setPasswordInput] = useState('');
 
     const loginFormSubmit = (e) => {
         e.preventDefault();
-        const actualUsername = username.trim();
+        const actualUsername = usernameInput.trim();
         if (actualUsername.length === 0) {
             return;
         }
-        const actualPassword = password.trim();
+        const actualPassword = passwordInput.trim();
         if (actualPassword.length === 0) {
             return;
         }
@@ -36,27 +36,45 @@ function Login({ isLogin, ...props }) {
     }
 
     const typeText = isLogin ? 'Log in' : 'Sign up';
+    const classType = isLogin ? 'login' : 'signup';
 
     return (
-        <>
-            <section id='login_section' className='floating_container'>
-                <h2>{typeText}</h2>
-                <form id='login_form' onSubmit={loginFormSubmit}>
-                    <div className='login_input_field_container'>
-                        <label className='standard_label' htmlFor='login_username_input'>Username</label>
-                        <input id='login_username_input' className='text_input' type='text' required onChange={(e) => {
-                            setUsername(e.target.value);
-                        }} />
+        <section id='user_section' className='main_content'>
+            <section id='user_section' className={'floating_container' + ' ' + classType}>
+                <h2 id='user_form_header'>{typeText}</h2>
+                <form id={classType + '_form'} className='user_form' onSubmit={loginFormSubmit}>
+                    <div id='user_input_fields'>
+                        <div className='user_input_field_container'>
+                            <label className='standard_label' htmlFor={classType + '_username_input'}>Username</label>
+                            <input id={classType + '_username_input'} className='text_input' type='text' autofill='off' required value={usernameInput} onChange={(e) => {
+                                setUsernameInput(e.target.value);
+                            }} />
+                        </div>
+                        <div className='user_input_field_container'>
+                            <label className='standard_label' htmlFor={classType + '_password_input'}>Password</label>
+                            <input id={classType + '_password_input'} className='text_input' type='password' autofill='off' required value={passwordInput} onChange={(e) => {
+                                setPasswordInput(e.target.value);
+                            }} />
+                        </div>
                     </div>
-                    <div className='login_input_field_container'>
-                        <label className='standard_label' htmlFor='login_password_input'>Password</label>
-                        <input id='login_password_input' className='text_input' type='password' required onChange={(e) => {
-                            setPassword(e.target.value);
-                        }} />
-                    </div>
-                    <button id='login_submit_button' className='button fancy_button primary' type='submit'>{typeText}</button>
+                    <button id='user_submit_button' className='button fancy_button primary' type='submit'>{typeText}</button>
                 </form>
             </section>
+        </section>
+    );
+}
+
+function Login({ isLogin, ...props }) {
+    /*
+    gotta do it like this cuz react thinks its the same component
+    as you can see we either insert {logincomponent} and {nocomponent}
+    or we insert {nocom} and {signupcomponent}
+    now react sees that our component was replaced and loads a fresh one
+    */
+    return (
+        <>
+            {isLogin && <UserForm isLogin={true} {...props} />}
+            {!isLogin && <UserForm isLogin={false} {...props} />}
         </>
     );
 }

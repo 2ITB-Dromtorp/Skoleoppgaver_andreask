@@ -1,0 +1,25 @@
+:root {
+    --page-bg-col: rgb(10, 10, 10);
+    --page-border-col: rgb(35, 35, 35);
+}
+
+#document {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    width: 100%;
+    margin: 128px 0 0 0;
+    min-height: var(--main-content-min-height);
+}
+
+.page {
+    --max-width: 800px;
+    max-width: var(--max-width);
+    padding: calc(var(--max-width) * 0.088) calc(var(--max-width) * 0.088) calc(var(--max-width) * 0.088) calc(var(--max-width) * 0.088);
+    width: 100%;
+    aspect-ratio: 1 / 1.41421356;
+    background-color: var(--page-bg-col);
+    border: 1px solid var(--page-border-col);
+    box-sizing: border-box;
+}
