@@ -6,6 +6,31 @@ import { useParams } from 'react-router-dom';
 
 import { DocumentsContext } from '../../../context';
 
+function createRichText(segments) {
+    const res = [];
+    for (let i = 0; i < segments.length; i++) {
+        const segment = segments[i];
+        res.push((
+            <span key={i} style={segment.style}>
+                {segment.text}
+            </span>
+        ));
+    }
+    return res;
+}
+
+function separateRichText(offset, length) {
+    for (let i = 0; i < length; i++) {
+        const textInd = offset + i;
+    }
+}
+
+window.addEventListener('keydown', (e) => {
+    if (e.code === 'KeyW') {
+        e.preventDefault();
+    }
+})
+
 function Document({ data, ...props }) {
     const { document: docId } = useParams();
 
@@ -29,7 +54,7 @@ function Document({ data, ...props }) {
                         }),
                     }).then((res) => {
                         if (res.status === 200) {
-                            
+
                         } else {
                             console.error(`Couldn't save document`, res);
                         }
@@ -66,9 +91,28 @@ function Document({ data, ...props }) {
 
     return (
         <section id='document'>
-            <textarea className='page'>
-                {documentContent}
-            </textarea>
+            <div className='page' contentEditable={true}>
+                {createRichText([
+                    {
+                        style: {
+                            color: 'red',
+                        },
+                        text: 'i am red',
+                    },
+                    {
+                        style: {
+                            color: 'rgb(0, 255, 0)',
+                        },
+                        text: 'i am green',
+                    },
+                    {
+                        style: {
+                            color: 'rebeccapurple',
+                        },
+                        text: 'i am REBECCAPURPLE',
+                    },
+                ])}
+            </div>
         </section>
     );
 }
