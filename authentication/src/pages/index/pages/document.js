@@ -15,14 +15,12 @@ EFFORTLESSLY
 ELEGANTLY
 MAJESTICALLY
 */
-function createRichText(segments, selectStart, selectEnd, selectStartRef, selectEndRef, onInput) {
+function createRichText(segments, selectStart, selectEnd, selectStartRef, selectEndRef) {
     const res = [];
     for (let i = 0; i < segments.length; i++) {
         const segment = segments[i];
         res.push((
-            <span key={i} data-text-id={i} style={segment.style} ref={selectStart === i ? selectStartRef : selectEnd === i ? selectEndRef : undefined} contentEditable='true' onInput={(e) => {
-                onInput(e, segment);
-            }}>
+            <span key={i} data-text-id={i} style={segment.style} ref={selectStart === i ? selectStartRef : selectEnd === i ? selectEndRef : undefined}>
                 {segment.text}
             </span>
         ));
@@ -222,30 +220,49 @@ function copyObject(obj, deep) {
 
 
 
-function PanelSelectDropdown({ children, ...props }) {
+function PanelSearchDropdown({ children, ...props }) {
     return (
-        <div className='panel_button'>
+        <div className='panel_search'>
             {children}
         </div>
     );
 }
 
-function PanelButton({ children, ...props }) {
+function PanelButton({ onClick, children, ...props }) {
     return (
-        <div className='panel_button'>
+        <button className='panel_button button' onClick={onClick}>
             {children}
-        </div>
+        </button>
     );
 }
 
-function Panel({ id, children, panelName, ...props }) {
+function Panel({ sections, selectedSectionName, setSelectedName, ...props }) {
+    let selectedSection;
+    let selectedSectionInd;
+    for (let i = 0; i < sections.length; i++) {
+        const section = sections[i];
+        if (section.name === selectedSectionName) {
+            selectedSection = section;
+            selectedSectionInd = i;
+            break;
+        }
+    }
     return (
-        <div id={id} className='panel'>
-            <div className='panel_name'>
-                {panelName}
+        <div id='panel'>
+            <div id='panel_section_buttons'>
+                <div id='panel_section_highlight' style={{ '--button-index': selectedSectionInd }}></div>
+                {sections.map((section) => {
+                    return (
+                        <button className='panel_section_button button' onClick={(e) => {
+                            setSelectedName(section.name);
+                        }}>
+                            {section.name}
+                        </button>
+                    );
+                })}
             </div>
-            <div className='panel_content'>
-                {children}
+            <div id='panel_content'>
+                {selectedSection.content}
             </div>
         </div>
     );
@@ -262,6 +279,8 @@ function Document({ data, ...props }) {
 
     const selectionStartRef = useRef();
     const selectionEndRef = useRef();
+
+    const [selectedSection, setSelectedSection] = useState('Home');
 
     const [documentContent, setDocumentContent] = useState([
         {
@@ -287,6 +306,18 @@ function Document({ data, ...props }) {
         },
     ]);
 
+    const styleSelection = (selection, func) => {
+        const newContent = copyObject(documentContent, true);
+        const affectedSegments = seperateRichText(newContent, selection);
+        for (let i = 0; i < affectedSegments.length; i++) {
+            const segment = affectedSegments[i];
+            func(segment);
+        }
+        setDocumentContent(newContent);
+        setSelectStart(newContent.indexOf(affectedSegments[0]));
+        setSelectEnd(newContent.indexOf(affectedSegments[affectedSegments.length - 1]));
+    }
+
     useEffect(() => {
         if (selectStart && selectEnd) {
             let endRef;
@@ -303,16 +334,10 @@ function Document({ data, ...props }) {
             if (selection.type === 'Range') {
                 if (e.code === 'KeyW') {
                     e.preventDefault();
-                    const newContent = copyObject(documentContent, true);
-                    const affectedSegments = seperateRichText(newContent, selection);
-                    for (let i = 0; i < affectedSegments.length; i++) {
-                        const segment = affectedSegments[i];
+                    styleSelection(selection, (segment) => {
                         const prevFontSize = segment.style.fontSize;
                         segment.style.fontSize = (prevFontSize || 0) + 1;
-                    }
-                    setDocumentContent(newContent);
-                    setSelectStart(newContent.indexOf(affectedSegments[0]));
-                    setSelectEnd(newContent.indexOf(affectedSegments[affectedSegments.length - 1]));
+                    });
                 }
             }
             if (e.ctrlKey) {
@@ -338,8 +363,10 @@ function Document({ data, ...props }) {
             }
         };
         const warnLeaveListener = (e) => {
+            /*
             e.preventDefault();
             e.returnValue = '';//idk why but i "should" have this
+            */
         }
         window.addEventListener('beforeunload', warnLeaveListener);
         document.addEventListener('keydown', keyDownListener);
@@ -370,22 +397,75 @@ function Document({ data, ...props }) {
         });
     }, []);
 
-    const pageInput = (e, segment) => {
+    const pageInput = (e) => {
         const newContent = copyObject(documentContent, true);
-        newContent[documentContent.indexOf(segment)].text = e.target.innerText;
+        //newContent[documentContent.indexOf(segment)].text = e.target.innerText;
         setDocumentContent(newContent);
     }
 
     return (
         <>
-            <div id='panels'>
-                <Panel id='text_panel' panelName='Text'>
-                    <PanelButton text='' />
-                </Panel>
-            </div>
+            <Panel id='text_panel' selectedSectionName={selectedSection} setSelectedName={setSelectedSection} sections={[
+                {
+                    name: 'File',
+                    content: (
+                        <>
+                            
+                        </>
+                    ),
+                },
+                {
+                    name: 'Home',
+                    content: (
+                        <>
+                            <PanelButton onClick={(e) => {
+                                styleSelection(document.getSelection(), (segment) => {
+                                    segment.style.fontSize = (segment.style.fontSize || 0) + 1;
+                                });
+                            }}>
+                                A
+                            </PanelButton>
+                            <PanelButton onClick={(e) => {
+                                styleSelection(document.getSelection(), (segment) => {
+                                    segment.style.fontSize = Math.max((segment.style.fontSize || 0) - 1, 1);
+                                });
+                            }}>
+                                a
+                            </PanelButton>
+                            <PanelSearchDropdown onInput={(e) => {
+
+                            }} />
+                        </>
+                    ),
+                },
+                {
+                    name: 'Text',
+                    content: (
+                        <>
+                            
+                        </>
+                    ),
+                },
+                {
+                    name: 'Insert',
+                    content: (
+                        <>
+                            
+                        </>
+                    ),
+                },
+                {
+                    name: 'Setup',
+                    content: (
+                        <>
+                            
+                        </>
+                    ),
+                },
+            ]} />
             <section id='document'>
-                <div className='page'>
-                    {createRichText(documentContent, selectStart, selectEnd, selectionStartRef, selectionEndRef, pageInput)}
+                <div className='page' contentEditable='true' onInput={pageInput}>
+                    {createRichText(documentContent, selectStart, selectEnd, selectionStartRef, selectionEndRef)}
                 </div>
             </section>
         </>
