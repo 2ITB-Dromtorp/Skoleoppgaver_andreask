@@ -41,7 +41,7 @@ const SectionsContent = [
     {
         name: 'Home',
         Content: () => {
-            const [colorInput, setColorInput] = useState();
+            const [colorInput, setColorInput] = useState('#ffffff');
             const styleSelection = useContext(StyleSelectionContext);
             return (
                 <>
@@ -396,11 +396,7 @@ function Panel({ selectedSectionName, setSelectedName, ...props }) {
     );
 }
 
-function Document({ data, ...props }) {
-    const { document: docId } = useParams();
-
-    const [documentData, setDocumentData] = useState({});
-
+function DocumentEditor({ docId }) {
     const [selectStart, setSelectStart] = useState();
     const [selectEnd, setSelectEnd] = useState();
 
@@ -408,6 +404,8 @@ function Document({ data, ...props }) {
     const selectionEndRef = useRef();
 
     const [selectedSection, setSelectedSection] = useState('Home');
+
+    const [documentData, setDocumentData] = useState({});
 
     const [documentContent, setDocumentContent] = useState([
         {
@@ -539,6 +537,63 @@ function Document({ data, ...props }) {
                 </div>
             </section>
         </StyleSelectionContext.Provider>
+    );
+}
+
+function NoAccess({ status }) {
+    return (
+        <div>
+            <p>Couldn't load document.</p>
+            <p>Possible reasons are that you do not have access to this document or there is no document</p>
+            <p>Status: {status}</p>
+        </div>
+    );
+}
+
+function Document({ data, ...props }) {
+    const { document: docId } = useParams();
+    const [accessStatus, setAccessStatus] = useState(false);
+
+    useEffect(() => {
+        const url = new URL('/api/document', window.location.origin);
+        const searchParams = new URLSearchParams();
+        searchParams.append('id', docId);
+        url.search = searchParams;
+        fetch(url.toString(), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((res) => {
+            if (res.status === 200) {
+                setAccessStatus(200);
+            } else {
+                console.error(`Couldn't fetch documents`, res);
+            }
+        });
+    }, []);
+
+    let content;
+    if (accessStatus === false) {
+        content = (
+            <NoAccess status={accessStatus} />
+        );
+    } else {
+        if (accessStatus === 200) {
+            content = (
+                <DocumentEditor docId={docId} {...props} />
+            );
+        } else {
+            content = (
+                <NoAccess status={accessStatus} />
+            );
+        }
+    }
+
+    return (
+        <>
+            {content}
+        </>
     );
 }
 

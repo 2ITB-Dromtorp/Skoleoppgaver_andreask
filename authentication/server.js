@@ -609,6 +609,10 @@ app.get(getAPIURL('/document'), (req, res) => {
         return;
     }
     const docId = Number(docIdStr);
+    if (isNaN(docId)) {
+        res.status(400).send(`Parsed document id is NaN.`);
+        return;
+    }
     if (typeof (docId) !== 'number') {
         res.status(400).send(`Parsed document id is not of type 'Number'.`);
         return;
