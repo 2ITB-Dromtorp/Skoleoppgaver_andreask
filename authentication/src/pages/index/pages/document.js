@@ -379,7 +379,7 @@ function Panel({ selectedSectionName, setSelectedName, ...props }) {
         <div id='panel'>
             <div id='panel_section_buttons'>
                 <div id='panel_section_highlight' style={{ '--button-index': selectedSectionInd }}></div>
-                {SectionsContent.map((section, i) => {
+                {SectionsContent.map((section) => {
                     return (
                         <button key={section.name} className='panel_section_button button' onClick={(e) => {
                             setSelectedName(section.name);

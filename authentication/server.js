@@ -657,11 +657,50 @@ app.get(getAPIURL('/document'), (req, res) => {
                 });
             }
         }
-    })
+    });
 });
 
 
 //documents
 app.get(getAPIURL('/documents'), (req, res) => {
+    pool.query('SELECT * FROM documents', async (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send(err);
+        } else {
+            const documentsToSend = [];
 
+            let triedToVerify = false;
+            let user;
+            for (let i = 0; i < data.length; i++) {
+                const doc = data[i];
+
+                if (doc.isPublic) {
+                    documentsToSend.push(doc);
+                    return;
+                } else {
+                    if (triedToVerify === false) {
+                        user = await verifyRequest(req);
+                    } else {
+                        if (user === undefined) {
+                            continue;
+                        }
+                    }
+                    const userRights = doc.user_rights;
+                    let matchedRights;
+                    for (let i = 0; i < userRights.length; i++) {
+                        const rights = userRights[i];
+                        if (rights.user_id === user.id) {
+                            matchedRights = rights;
+                        }
+                    }
+
+                    if (matchedRights) {
+                        documentsToSend.push(doc);
+                    }
+                }
+            }
+            res.status(200).send(documentsToSend);
+        }
+    });
 });

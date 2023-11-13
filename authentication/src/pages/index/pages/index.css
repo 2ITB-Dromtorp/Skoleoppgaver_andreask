@@ -6,7 +6,7 @@
     --card-border-radius: 16px;
 }
 
-.main_content {
+#home_section {
     display: flex;
     flex-direction: column;
     align-items: center;

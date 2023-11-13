@@ -1,3 +1,11 @@
+:root {
+    --document-border-col: rgb(35, 35, 35);
+}
+
+#documents_section {
+
+}
+
 #documents {
     display: flex;
     flex-wrap: wrap;
@@ -8,6 +16,14 @@
     flex-direction: column;
     gap: 4px;
     width: 100%;
+}
+
+.document {
+    border-top: 1px solid var(--document-border-col);
+}
+
+.document:last-child {
+    border-bottom: 1px solid var(--document-border-col);
 }
 
 .document_link_name {

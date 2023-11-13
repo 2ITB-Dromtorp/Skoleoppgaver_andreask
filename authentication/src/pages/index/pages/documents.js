@@ -1,6 +1,6 @@
 import './documents.css';
 
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -22,6 +22,25 @@ function DocumentLink(data) {
 function Documents() {
     const [documents, setDocuments] = useContext(DocumentsContext);
     const navigate = useNavigate();
+    useEffect(() => {
+        const url = new URL('/api/documents', window.location.origin);
+        const searchParams = new URLSearchParams();
+        url.search = searchParams;
+        fetch(url.toString(), {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((res) => {
+            if (res.status === 200) {
+                res.json().then((data) => {
+                    setDocuments(data);
+                });
+            } else {
+                console.log("fail")
+            }
+        });
+    }, []);
     return (
         <section id='documents_section' className='main_content'>
             <div id='documents_container'>
@@ -40,7 +59,7 @@ function Documents() {
                                 navigate(`/document/${data.id}`);
                             });
                         }
-                    })
+                    });
                 }}>
                     Create Document
                 </button>
