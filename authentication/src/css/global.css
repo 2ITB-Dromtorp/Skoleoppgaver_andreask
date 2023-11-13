@@ -2,7 +2,7 @@
 :root {
     --nav-height: 32px;
     --nav-horiz-pad: 15px;
-    --nav-vert-pad: 20px;
+    --nav-vert-pad: 15px;
     --nav-border-width: 1px;
     --actual-nav-height: calc(var(--nav-height) + (var(--nav-horiz-pad) * 2) + var(--nav-border-width));
     --nav-content-width: 1400px;
@@ -46,6 +46,7 @@
     font-kerning: auto;
     font-optical-sizing: auto;
     font-stretch: 100%;
+    color: var(--main-col);
 }
 
 /*

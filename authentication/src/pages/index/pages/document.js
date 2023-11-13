@@ -6,6 +6,22 @@ import { useParams } from 'react-router-dom';
 
 import { DocumentsContext } from '../../../context';
 
+const globalFonts = [
+    'Arial',
+    'Arial Black',
+    'Verdana',
+    'Tahoma',
+    'Trebuchet MS',
+    'Impact',
+    'Gill Sans',
+    'Times New Roman',
+    'Georgia',
+    'Garamond',
+    'Palatino',
+    'Baskerville',
+    'Courier',
+    'Comic Sans MS',
+];
 
 
 /*
@@ -220,12 +236,19 @@ function copyObject(obj, deep) {
 
 
 
-function PanelSearchDropdown({ children, ...props }) {
+function PanelSearchDropdown({ options, onInput, ...props }) {
     return (
-        <div className='panel_search'>
+        <select className='panel_search_dropdown' onChange={onInput}>
+            {options}
+        </select>
+    );
+    /*
+    return (
+        <div className='panel_search_dropdown'>
             {children}
         </div>
     );
+    */
 }
 
 function PanelButton({ onClick, children, ...props }) {
@@ -307,15 +330,17 @@ function Document({ data, ...props }) {
     ]);
 
     const styleSelection = (selection, func) => {
-        const newContent = copyObject(documentContent, true);
-        const affectedSegments = seperateRichText(newContent, selection);
-        for (let i = 0; i < affectedSegments.length; i++) {
-            const segment = affectedSegments[i];
-            func(segment);
+        if (selection.type === 'Range') {
+            const newContent = copyObject(documentContent, true);
+            const affectedSegments = seperateRichText(newContent, selection);
+            for (let i = 0; i < affectedSegments.length; i++) {
+                const segment = affectedSegments[i];
+                func(segment);
+            }
+            setDocumentContent(newContent);
+            setSelectStart(newContent.indexOf(affectedSegments[0]));
+            setSelectEnd(newContent.indexOf(affectedSegments[affectedSegments.length - 1]));
         }
-        setDocumentContent(newContent);
-        setSelectStart(newContent.indexOf(affectedSegments[0]));
-        setSelectEnd(newContent.indexOf(affectedSegments[affectedSegments.length - 1]));
     }
 
     useEffect(() => {
@@ -410,7 +435,7 @@ function Document({ data, ...props }) {
                     name: 'File',
                     content: (
                         <>
-                            
+
                         </>
                     ),
                 },
@@ -432,8 +457,17 @@ function Document({ data, ...props }) {
                             }}>
                                 a
                             </PanelButton>
-                            <PanelSearchDropdown onInput={(e) => {
-
+                            <PanelSearchDropdown options={globalFonts.map((font) => {
+                                return (
+                                    <option value={font} style={{ fontFamily: font }}>
+                                        {font}
+                                    </option>
+                                );
+                            })} onInput={(e) => {
+                                const font = e.target.value;
+                                styleSelection(document.getSelection(), (segment) => {
+                                    segment.style.fontFamily = font;
+                                });
                             }} />
                         </>
                     ),
@@ -442,7 +476,7 @@ function Document({ data, ...props }) {
                     name: 'Text',
                     content: (
                         <>
-                            
+
                         </>
                     ),
                 },
@@ -450,7 +484,7 @@ function Document({ data, ...props }) {
                     name: 'Insert',
                     content: (
                         <>
-                            
+
                         </>
                     ),
                 },
@@ -458,7 +492,7 @@ function Document({ data, ...props }) {
                     name: 'Setup',
                     content: (
                         <>
-                            
+
                         </>
                     ),
                 },

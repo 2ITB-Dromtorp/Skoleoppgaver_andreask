@@ -69,7 +69,7 @@ const Index = ({ ...props }) => {
                 <LargeCard name='Simplifies the daily life' desc={`Made to be easy to use and uncomplicated while still performing complicated tasks effortlessly.`}>
                     <img className='home_card_image' src='https://previews.123rf.com/images/ab7272/ab72722004/ab7272200400182/143862490-a-big-black-african-pig-with-a-dirty-face-looks-straight-at-the-camera-through-the-bars-the-concept.jpg' />
                 </LargeCard>
-                <SmallCard name='Optimized' desc={`Optimized to run optimal on 2012 androids. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. `}>
+                <SmallCard name='Optimized' desc={`Optimized to run optimally on Blackberries. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. `}>
 
                 </SmallCard>
                 <SmallCard name='Developed by the best' desc={`Developed by me obviously. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`}>

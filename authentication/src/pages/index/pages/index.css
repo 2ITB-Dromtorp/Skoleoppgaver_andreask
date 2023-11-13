@@ -6,11 +6,10 @@
     --card-border-radius: 16px;
 }
 
-#main_content {
+.main_content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0px 64px 0px 64px;
 }
 
 #top_section {
@@ -18,8 +17,10 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 125px 0px 400px 0px;
+    padding: 0px min(64px, 5vw);
+    box-sizing: border-box;
 }
 
 /*top section stuff*/
@@ -72,38 +73,46 @@
     justify-content: center;
     align-items: flex-end;
     gap: 24px;
-    margin: 24px 0 24px 0;
+    padding: 24px;
 }
 
 #card_section_header {
+    width: calc(100% / 3);
     font-size: 32px;
     margin: 0;
 }
 
 #card_section_desc {
+    width: calc(100% / 1.5);
     font-size: 20px;
     margin: 0;
 }
 
 #card_section {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    width: 100%;
+    width: auto;
     max-width: 1200px;
     gap: 16px;
-    margin: 0px min(128px, 10vw) 0px min(128px, 10vw);
 }
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 768px) {
     #card_section {
         grid-template-columns: 1fr;
+        margin: 0px min(64px, 10vw);
     }
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (min-width: 768px) {
     #card_section {
         grid-template-columns: 1fr 1fr;
-        margin: 0;
+        margin: 0px min(64px, 10vw);
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    #card_section {
+        grid-template-columns: 1fr 1fr 1fr;
+        margin: 0px min(128px, 10vw);
     }
 }
 

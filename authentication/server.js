@@ -426,9 +426,8 @@ app.post(getAPIURL('/login'), async (req, res) => {
                             console.error(err);
                             res.status(400).send(err);
                         } else {
-                            const now = Date.now();
                             res.cookie('auth', token, {
-                                expires: now + maxAuthCookieAge,
+                                maxAge: maxAuthCookieAge,
                                 httpOnly: true,
                                 secure: true,
                                 sameSite: 'lax',
