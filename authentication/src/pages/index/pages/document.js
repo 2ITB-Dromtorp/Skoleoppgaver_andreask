@@ -33,7 +33,7 @@ const SectionsContent = [
         Content: () => {
             return (
                 <>
-
+                    <input type='text' className='text_input' />
                 </>
             );
         },
@@ -47,7 +47,7 @@ const SectionsContent = [
                 <>
                     <PanelSearchDropdown key={0} options={globalFonts.map((font, i) => {
                         return (
-                            <option key={i} value={font} style={{ fontFamily: font }}>
+                            <option key={i} value={font} style={{ fontFamily: font }} className='select_option'>
                                 {font}
                             </option>
                         );
@@ -168,7 +168,7 @@ function getAffectedSegments(segments, offset, length) {
     return [affectedSegments, startInd, endInd];
 }
 
-function separateRichTextSegments(segments, offset, length) {
+function separateRichTextSegments(segments, offset, length, pushNew) {
     const newSegments = [];
     const affectedSegments = [];
     let total = 0;
@@ -179,20 +179,25 @@ function separateRichTextSegments(segments, offset, length) {
         let newTexts = [];
         const notFirst = i > 0;
         const notLast = i < segments.length - 1;
+        const pushText = (textData) => {
+            if (textData.isNew === false || pushNew) {
+                newTexts.push(textData);
+            }
+        }
         if (notFirst) {
             if (notLast) {
                 //middle segments
-                newTexts.push({
+                pushText({
                     isNew: true,
                     text: segText,
                 });
             } else {
                 //last segment
-                newTexts.push({
+                pushText({
                     isNew: true,
                     text: segText.substring(0, (offset + length) - total),
                 });
-                newTexts.push({
+                pushText({
                     isNew: false,
                     text: segText.substring((offset + length) - total, segText.length),
                 });
@@ -200,25 +205,25 @@ function separateRichTextSegments(segments, offset, length) {
         } else {
             if (notLast) {
                 //first segment
-                newTexts.push({
+                pushText({
                     isNew: false,
                     text: segText.substring(0, offset),
                 });
-                newTexts.push({
+                pushText({
                     isNew: true,
                     text: segText.substring(offset, segText.length),
                 });
             } else {
                 //inside (only 1 element)
-                newTexts.push({
+                pushText({
                     isNew: false,
                     text: segText.substring(0, offset),
                 });
-                newTexts.push({
+                pushText({
                     isNew: true,
                     text: segText.substring(offset, offset + length),
                 });
-                newTexts.push({
+                pushText({
                     isNew: false,
                     text: segText.substring(offset + length, segText.length),
                 });
@@ -260,17 +265,17 @@ function getAbsoluteSelection(segments, baseStart, baseEnd, selection) {
     const getParentTextId = (node) => {
         return Number(node.parentElement.dataset.textId);
     }
-    if (selection.baseNode === selection.focusNode) {
+    if (selection.anchorNode === selection.focusNode) {
         //same text node
         const isForward = baseStart < baseEnd;
         offset = Math.min(baseStart, baseEnd);
-        offset += getOffsetFromStart(segments, getParentTextId(isForward ? selection.focusNode : selection.baseNode));
+        offset += getOffsetFromStart(segments, getParentTextId(isForward ? selection.focusNode : selection.anchorNode));
     } else {
         //NOT same text node
-        if (selection.baseNode.compareDocumentPosition(selection.focusNode) & Node.DOCUMENT_POSITION_FOLLOWING) {
+        if (selection.anchorNode.compareDocumentPosition(selection.focusNode) & Node.DOCUMENT_POSITION_FOLLOWING) {
             //normal, non-psychopathic sane selection
             offset = baseStart;
-            offset += getOffsetFromStart(segments, getParentTextId(selection.baseNode));
+            offset += getOffsetFromStart(segments, getParentTextId(selection.anchorNode));
         } else {
             //backwards psychopathic insane selection
             offset = baseEnd;
@@ -281,11 +286,11 @@ function getAbsoluteSelection(segments, baseStart, baseEnd, selection) {
     return offset;
 }
 
-function seperateRichText(segments, selection) {
-    const absStart = getAbsoluteSelection(segments, selection.baseOffset, selection.focusOffset, selection);
+function separateRichText(segments, selection, pushNew) {
+    const absStart = getAbsoluteSelection(segments, selection.anchorOffset, selection.focusOffset, selection);
     const length = selection.toString().length;
     const [affectedSegments, startInd, endInd] = getAffectedSegments(segments, absStart, length);
-    const [newSegments, newAffectedSegments] = separateRichTextSegments(affectedSegments, absStart - getOffsetFromStart(segments, startInd), length);
+    const [newSegments, newAffectedSegments] = separateRichTextSegments(affectedSegments, absStart - getOffsetFromStart(segments, startInd), length, pushNew);
     const itAmount = endInd - startInd;
     let curInd = 0;
     for (let segInd = 0; segInd <= itAmount; segInd++) {
@@ -342,7 +347,7 @@ function copyObject(obj, deep) {
 
 function PanelSearchDropdown({ options, onInput, ...props }) {
     return (
-        <select className='panel_search_dropdown' onChange={onInput}>
+        <select className='panel_search_dropdown text_input' onChange={onInput}>
             {options}
         </select>
     );
@@ -396,7 +401,11 @@ function Panel({ selectedSectionName, setSelectedName, ...props }) {
     );
 }
 
-function DocumentEditor({ docId }) {
+export function DocumentEditor({ isNew, ...props }) {
+    const [isDocumentCreated, setIsDocumentCreated] = useState(isNew === false);
+
+    const [docId, setDocId] = useState(isNew ? undefined : props.docId);
+
     const [selectStart, setSelectStart] = useState();
     const [selectEnd, setSelectEnd] = useState();
 
@@ -434,7 +443,7 @@ function DocumentEditor({ docId }) {
     const styleSelection = (selection, func) => {
         if (selection.type === 'Range') {
             const newContent = copyObject(documentContent, true);
-            const affectedSegments = seperateRichText(newContent, selection);
+            const affectedSegments = separateRichText(newContent, selection, true);
             for (let i = 0; i < affectedSegments.length; i++) {
                 const segment = affectedSegments[i];
                 func(segment);
@@ -463,22 +472,41 @@ function DocumentEditor({ docId }) {
             if (e.ctrlKey) {
                 if (e.code === 'KeyS') {
                     e.preventDefault();
-                    fetch('/api/savedocument', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            id: docId,
-                            content: documentContent,
-                        }),
-                    }).then((res) => {
-                        if (res.status === 200) {
+                    if (isDocumentCreated) {
+                        fetch('/api/savedocument', {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                id: docId,
+                                content: documentContent,
+                            }),
+                        }).then((res) => {
+                            if (res.status === 200) {
 
-                        } else {
-                            console.error(`Couldn't save document`, res);
-                        }
-                    });
+                            } else {
+                                console.error(`Couldn't save document`, res);
+                            }
+                        });
+                    } else {
+                        fetch('/api/createdocument', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                name: 'zaza',
+                            }),
+                        }).then((res) => {
+                            if (res.status === 200) {
+                                res.json().then((data) => {
+                                    setIsDocumentCreated(true);
+                                    setDocId(data.id);
+                                });
+                            }
+                        });
+                    }
                 }
             }
         };
@@ -497,30 +525,37 @@ function DocumentEditor({ docId }) {
     }, [documentContent]);
 
     useEffect(() => {
-        const url = new URL('/api/document', window.location.origin);
-        const searchParams = new URLSearchParams();
-        searchParams.append('id', docId);
-        url.search = searchParams;
-        fetch(url.toString(), {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then((res) => {
-            if (res.status === 200) {
-                res.json().then((data) => {
-                    setDocumentData(data);
-                });
-            } else {
-                console.error(`Couldn't fetch documents`, res);
-            }
-        });
+        if (isNew === false) {
+            const url = new URL('/api/document', window.location.origin);
+            const searchParams = new URLSearchParams();
+            searchParams.append('id', docId);
+            url.search = searchParams;
+            fetch(url.toString(), {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then((res) => {
+                if (res.status === 200) {
+                    res.json().then((data) => {
+                        setDocumentData(data);
+                    });
+                } else {
+                    console.error(`Couldn't fetch documents`, res);
+                }
+            });
+        }
     }, []);
 
     const pageInput = (e) => {
+        e.preventDefault();
         const selection = document.getSelection();
-        //console.log(selection.anchorOffset, selection.focusOffset);
+        console.log(selection.anchorOffset, selection.focusOffset, selection.anchorNode, selection.focusNode, e);
         const newContent = copyObject(documentContent, true);
+
+        separateRichText(newContent, selection, false);
+
+        //const affectedSegments = getAffectedSegments(newContent, )
 
         //newContent[documentContent.indexOf(segment)].text = e.target.innerText;
         setDocumentContent(newContent);
@@ -532,7 +567,7 @@ function DocumentEditor({ docId }) {
             <section id='document'>
                 <div className='page' contentEditable='true' onDragOver={(e) => {
                     console.log('drag droppy', e)
-                }} onInput={pageInput}>
+                }} onBeforeInput={pageInput}>
                     {createRichText(documentContent, selectStart, selectEnd, selectionStartRef, selectionEndRef)}
                 </div>
             </section>
@@ -540,9 +575,17 @@ function DocumentEditor({ docId }) {
     );
 }
 
-function NoAccess({ status }) {
+function LoadingDocument() {
     return (
-        <div>
+        <div id='document_loading_container'>
+            <p>Loading document...</p>
+        </div>
+    );
+}
+
+function NoDocumentAccess({ status }) {
+    return (
+        <div id='document_failed_container'>
             <p>Couldn't load document.</p>
             <p>Possible reasons are that you do not have access to this document or there is no document</p>
             <p>Status: {status}</p>
@@ -550,8 +593,8 @@ function NoAccess({ status }) {
     );
 }
 
-function Document({ data, ...props }) {
-    const { document: docId } = useParams();
+export function Document() {
+    const { docId } = useParams();
     const [accessStatus, setAccessStatus] = useState(false);
 
     useEffect(() => {
@@ -565,8 +608,9 @@ function Document({ data, ...props }) {
                 'Content-Type': 'application/json',
             },
         }).then((res) => {
+            setAccessStatus(res.status);
             if (res.status === 200) {
-                setAccessStatus(200);
+
             } else {
                 console.error(`Couldn't fetch documents`, res);
             }
@@ -576,16 +620,16 @@ function Document({ data, ...props }) {
     let content;
     if (accessStatus === false) {
         content = (
-            <NoAccess status={accessStatus} />
+            <LoadingDocument />
         );
     } else {
         if (accessStatus === 200) {
             content = (
-                <DocumentEditor docId={docId} {...props} />
+                <DocumentEditor docId={docId} />
             );
         } else {
             content = (
-                <NoAccess status={accessStatus} />
+                <NoDocumentAccess status={accessStatus} />
             );
         }
     }
@@ -596,5 +640,3 @@ function Document({ data, ...props }) {
         </>
     );
 }
-
-export default Document;

@@ -511,7 +511,7 @@ app.post(getAPIURL('/createdocument'), (req, res) => {
 });
 
 //save document
-app.post(getAPIURL('/savedocument'), (req, res) => {
+app.put(getAPIURL('/savedocument'), (req, res) => {
     const body = req.body;
     const docId = body.id;
     if (docIdStr === undefined) {

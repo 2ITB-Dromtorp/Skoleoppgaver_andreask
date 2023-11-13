@@ -44,7 +44,7 @@ const Index = ({ ...props }) => {
     return (
         <section id='home_section' className='main_content'>
             <section id='top_section'>
-                <h1 id='top_header'>The Best Document Editor made with React</h1>
+                <h1 id='top_header' className='main_header'>The Best Document Editor made with React</h1>
                 <p id='top_desc'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                 <div id='top_section_buttons'>
                     <Link className='button fancy_button secondary' to='/login'>Login</Link>

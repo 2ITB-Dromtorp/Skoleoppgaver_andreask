@@ -6,14 +6,35 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { DocumentsContext } from '../../../context';
 
-function DocumentLink(data) {
+const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+
+function getDayFromIndex(i) {
+    return dayNames[i];
+}
+
+function capitalizeFirstCharacter(str) {
+    return str[0].toUpperCase() + str.substring(1, str.length);
+}
+
+function stringifyDate(date) {
+    return `${capitalizeFirstCharacter(getDayFromIndex(date.getDay()))} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()} ${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+}
+
+function DocumentLink({ data }) {
+    const date = new Date();
     return (
-        <Link to={`/document/${data.id}`}>
+        <Link className='document_link button_link' to={`/document/${data.id}`}>
             <div className='document_link_name'>
                 {data.name}
             </div>
-            <div className='document_link_last_edited'>
-                {new Date().toString()}
+            <div className='document_link_details'>
+                <div className='document_link_detail'>
+                    Edited: {stringifyDate(date)}
+                </div>
+                &nbsp;
+                <div className='document_link_detail'>
+                    Created: {stringifyDate(date)}
+                </div>
             </div>
         </Link>
     );
@@ -43,31 +64,16 @@ function Documents() {
     }, []);
     return (
         <section id='documents_section' className='main_content'>
-            <div id='documents_container'>
-                <button className='button fancy_button primary' onClick={(e) => {
-                    fetch('/api/createdocument', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            name: 'zaza',
-                        }),
-                    }).then((res) => {
-                        if (res.status === 200) {
-                            res.json().then((data) => {
-                                navigate(`/document/${data.id}`);
-                            });
-                        }
-                    });
-                }}>
-                    Create Document
-                </button>
-                <div id='documents'>
-                    {documents.map((data) => {
-                        return <DocumentLink data={data} />
-                    })}
-                </div>
+            <h1 className='main_header'>Documents</h1>
+            <button id='create_document_button' className='button fancy_button primary' onClick={(e) => {
+                navigate('/newdocument');
+            }}>
+                Create Document
+            </button>
+            <div id='documents'>
+                {documents.map((data) => {
+                    return <DocumentLink data={data} />
+                })}
             </div>
         </section>
     )

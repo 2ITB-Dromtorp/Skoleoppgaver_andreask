@@ -1,5 +1,5 @@
 :root {
-    --panel-content-height: 24px;
+    --panel-content-height: 26px;
     --panel-content-pad: 6px;
     --page-bg-col: rgb(10, 10, 10);
     --page-border-col: rgb(35, 35, 35);
@@ -86,6 +86,10 @@
     padding: var(--panel-content-pad);
 }
 
+#panel_content > .text_input {
+    height: 100%;
+}
+
 .panel_name {
     text-align: center;
     border-bottom: 1px solid var(--panel-border-col);
@@ -98,4 +102,48 @@
     align-items: center;
     height: var(--panel-content-height);
     width: var(--panel-content-height);
+}
+
+
+
+
+
+/*loading*/
+#document_loading_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: var(--main-content-min-height);
+}
+
+
+
+
+/*failed to load*/
+#document_failed_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: var(--main-content-min-height);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*this is just for now, create dropdowns later*/
+.panel_search_dropdown {
+    color: var(--main-col);
+}
+
+.select_option {
+    color: var(--main-col);
 }

@@ -16,7 +16,7 @@ import Index from './pages/index/pages/index';
 import Login from './pages/index/pages/login';
 import Account from './pages/index/pages/account';
 import Documents from './pages/index/pages/documents';
-import Document from './pages/index/pages/document';
+import { Document, DocumentEditor } from './pages/index/pages/document';
 
 function App() {
     const [userData, setUserData] = useContext(UserContext);
@@ -49,7 +49,8 @@ function App() {
                 <Route path='/' element={<Layout />}>
                     <Route index element={indexContent} />
                     <Route path='documents' element={<Documents />} />
-                    <Route path='document/:document' element={<Document />} />
+                    <Route path='newdocument' element={<DocumentEditor isNew={true} />} />
+                    <Route path='document/:docId' element={<Document isNew={false} />} />
                     <Route path='signup' element={<Login isLogin={false} />} />
                     <Route path='login' element={<Login isLogin={true} />} />
                     <Route path='account' element={<Account />} />
