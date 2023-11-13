@@ -148,6 +148,18 @@ function createRichText(segments, selectStart, selectEnd, selectStartRef, select
     return res;
 }
 
+function getSegmentAtIndex(segments, index) {
+    let total = 0;
+    for (let i = 0; i < segments.length; i++) {
+        const seg = segments[i];
+        const newTotal = total + seg.text.length;
+        if (newTotal > index) {
+            return [seg, total];
+        }
+        total = newTotal;
+    }
+}
+
 function getAffectedSegments(segments, offset, length) {
     const affectedSegments = [];
     let total = 0;
@@ -297,7 +309,7 @@ function separateRichText(segments, selection, pushNew) {
         segments.splice(startInd + curInd, 1, ...newSegments[segInd]);
         curInd += newSegments[segInd].length;
     }
-    return newAffectedSegments;
+    return [absStart, newAffectedSegments];
 }
 
 /*
@@ -406,6 +418,8 @@ export function DocumentEditor({ isNew, ...props }) {
 
     const [docId, setDocId] = useState(isNew ? undefined : props.docId);
 
+    const [selectMode, setSelectMode] = useState();
+
     const [selectStart, setSelectStart] = useState();
     const [selectEnd, setSelectEnd] = useState();
 
@@ -443,29 +457,35 @@ export function DocumentEditor({ isNew, ...props }) {
     const styleSelection = (selection, func) => {
         if (selection.type === 'Range') {
             const newContent = copyObject(documentContent, true);
-            const affectedSegments = separateRichText(newContent, selection, true);
+            const [absStart, affectedSegments] = separateRichText(newContent, selection, true);
             for (let i = 0; i < affectedSegments.length; i++) {
                 const segment = affectedSegments[i];
                 func(segment);
             }
             setDocumentContent(newContent);
+
+            setSelectMode('Range');
             setSelectStart(newContent.indexOf(affectedSegments[0]));
             setSelectEnd(newContent.indexOf(affectedSegments[affectedSegments.length - 1]));
         }
     }
 
     useEffect(() => {
-        if (selectionStartRef.current) {
-            let endRef;
-            if (selectStart === selectEnd) {
-                endRef = selectionStartRef;
-            } else {
-                endRef = selectionEndRef;
-            }
+        if (selectMode !== undefined) {
+            console.log(selectMode, selectStart, selectEnd)
             const selection = document.getSelection();
-            selection.setBaseAndExtent(selectionStartRef.current.childNodes[0], 0, endRef.current.childNodes[0], endRef.current.childNodes[0].length);
-            selectionStartRef.current = undefined;
-            selectionEndRef.current = undefined;
+            if (selectMode === 'Caret') {
+                selection.setPosition(selectionStartRef.current.childNodes[0], selectionStartRef.current.childNodes[0].length);//0//offset 0 if backwards
+            } else if (selectMode === 'Range') {
+                let endRef;
+                if (selectStart === selectEnd || selectEnd === undefined) {
+                    endRef = selectionStartRef;
+                } else {
+                    endRef = selectionEndRef;
+                }
+                selection.setBaseAndExtent(selectionStartRef.current.childNodes[0], 0, endRef.current.childNodes[0], endRef.current.childNodes[0].length);
+            }
+            setSelectMode(undefined);
         }
         const keyDownListener = (e) => {
             const selection = document.getSelection();
@@ -547,17 +567,20 @@ export function DocumentEditor({ isNew, ...props }) {
         }
     }, []);
 
-    const pageInput = (e) => {
+    const pageInput = (e, addText) => {
         e.preventDefault();
         const selection = document.getSelection();
-        console.log(selection.anchorOffset, selection.focusOffset, selection.anchorNode, selection.focusNode, e);
         const newContent = copyObject(documentContent, true);
+        const [absStart, affectedSegments] = separateRichText(newContent, selection, false);
+        const [insertSeg, segStart] = getSegmentAtIndex(newContent, absStart - 1);
 
-        separateRichText(newContent, selection, false);
+        insertSeg.text += addText;//insertSeg.text = addText + insertSeg.text;//if inserting backwards
 
-        //const affectedSegments = getAffectedSegments(newContent, )
+        console.log("RAAAAAAAAAAAAAAAAAAAAAAAAH", addText)
 
-        //newContent[documentContent.indexOf(segment)].text = e.target.innerText;
+        setSelectMode('Caret');
+        setSelectStart(newContent.indexOf(insertSeg));
+
         setDocumentContent(newContent);
     }
 
@@ -567,7 +590,11 @@ export function DocumentEditor({ isNew, ...props }) {
             <section id='document'>
                 <div className='page' contentEditable='true' onDragOver={(e) => {
                     console.log('drag droppy', e)
-                }} onBeforeInput={pageInput}>
+                }} onBeforeInput={(e) => {
+                    pageInput(e, e.data);
+                }} onPaste={(e) => {
+                    pageInput(e, e.clipboardData.getData('Text'));
+                }}>
                     {createRichText(documentContent, selectStart, selectEnd, selectionStartRef, selectionEndRef)}
                 </div>
             </section>
