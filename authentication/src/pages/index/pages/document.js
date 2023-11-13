@@ -160,6 +160,18 @@ function getSegmentAtIndex(segments, index) {
     }
 }
 
+function clearEmptySegments(segments) {
+    if (segments > 1) {
+        for (let j = 0; j < segments.length; j++) {
+            const seg = segments[j];
+            if (seg.text === '') {
+                segments.splice(j, 1);
+                j -= 1;
+            }
+        }
+    }
+}
+
 function getAffectedSegments(segments, offset, length) {
     const affectedSegments = [];
     let total = 0;
@@ -244,9 +256,6 @@ function separateRichTextSegments(segments, offset, length, pushNew) {
         const replaceTexts = [];
         for (let j = 0; j < newTexts.length; j++) {
             const newText = newTexts[j];
-            if (newText.text === '') {
-                continue;
-            }
             const newSeg = {
                 style: Object.assign({}, segment.style),
                 text: newText.text,
@@ -275,7 +284,13 @@ function getAbsoluteSelection(segments, baseStart, baseEnd, selection) {
     let offset;
     //yk selection index is from the element that was selected not all of the spans so we need to get the total
     const getParentTextId = (node) => {
-        return Number(node.parentElement.dataset.textId);
+        let par;
+        if (node.nodeName === '#text') {
+            par = node.parentElement;
+        } else {
+            par = node;
+        }
+        return Number(par.dataset.textId);
     }
     if (selection.anchorNode === selection.focusNode) {
         //same text node
@@ -298,11 +313,16 @@ function getAbsoluteSelection(segments, baseStart, baseEnd, selection) {
     return offset;
 }
 
+function getAbsoluteSelectionFromSelection(segments, selection) {
+    return getAbsoluteSelection(segments, selection.anchorOffset, selection.focusOffset, selection);
+}
+
 function separateRichText(segments, selection, pushNew) {
-    const absStart = getAbsoluteSelection(segments, selection.anchorOffset, selection.focusOffset, selection);
+    const absStart = getAbsoluteSelectionFromSelection(segments, selection);
     const length = selection.toString().length;
     const [affectedSegments, startInd, endInd] = getAffectedSegments(segments, absStart, length);
     const [newSegments, newAffectedSegments] = separateRichTextSegments(affectedSegments, absStart - getOffsetFromStart(segments, startInd), length, pushNew);
+    clearEmptySegments(newSegments);
     const itAmount = endInd - startInd;
     let curInd = 0;
     for (let segInd = 0; segInd <= itAmount; segInd++) {
@@ -420,6 +440,9 @@ export function DocumentEditor({ isNew, ...props }) {
 
     const [selectMode, setSelectMode] = useState();
 
+    const [selectStartOffset, setSelectStartOffset] = useState();
+    const [selectEndOffset, setSelectEndOffset] = useState();
+
     const [selectStart, setSelectStart] = useState();
     const [selectEnd, setSelectEnd] = useState();
 
@@ -433,24 +456,10 @@ export function DocumentEditor({ isNew, ...props }) {
     const [documentContent, setDocumentContent] = useState([
         {
             style: {
-                color: 'red',
+                color: '#ffffff',
                 fontSize: 16,
             },
-            text: 'i am red',
-        },
-        {
-            style: {
-                color: 'rgb(0, 255, 0)',
-                fontSize: 16,
-            },
-            text: 'i am green',
-        },
-        {
-            style: {
-                color: 'rebeccapurple',
-                fontSize: 16,
-            },
-            text: 'i am REBECCAPURPLE',
+            text: '',
         },
     ]);
 
@@ -472,10 +481,9 @@ export function DocumentEditor({ isNew, ...props }) {
 
     useEffect(() => {
         if (selectMode !== undefined) {
-            console.log(selectMode, selectStart, selectEnd)
             const selection = document.getSelection();
             if (selectMode === 'Caret') {
-                selection.setPosition(selectionStartRef.current.childNodes[0], selectionStartRef.current.childNodes[0].length);//0//offset 0 if backwards
+                selection.setPosition(selectionStartRef.current.childNodes[0] || selectionStartRef.current, selectStartOffset);//0//offset 0 if backwards
             } else if (selectMode === 'Range') {
                 let endRef;
                 if (selectStart === selectEnd || selectEnd === undefined) {
@@ -486,6 +494,10 @@ export function DocumentEditor({ isNew, ...props }) {
                 selection.setBaseAndExtent(selectionStartRef.current.childNodes[0], 0, endRef.current.childNodes[0], endRef.current.childNodes[0].length);
             }
             setSelectMode(undefined);
+            setSelectStart(0);
+            setSelectEnd(0);
+            setSelectStartOffset(0);
+            setSelectEndOffset(0);
         }
         const keyDownListener = (e) => {
             const selection = document.getSelection();
@@ -576,10 +588,32 @@ export function DocumentEditor({ isNew, ...props }) {
 
         insertSeg.text += addText;//insertSeg.text = addText + insertSeg.text;//if inserting backwards
 
-        console.log("RAAAAAAAAAAAAAAAAAAAAAAAAH", addText)
+        setSelectMode('Caret');
+        setSelectStart(newContent.indexOf(insertSeg));
+        setSelectStartOffset(insertSeg.text.length);
+
+        setDocumentContent(newContent);
+    }
+
+    const pageDelete = (e) => {
+        e.preventDefault();
+        const selection = document.getSelection();
+        const newContent = copyObject(documentContent, true);
+        const absStart = getAbsoluteSelectionFromSelection(newContent, selection);
+        const [insertSeg, segStart] = getSegmentAtIndex(newContent, absStart - 1);
+        
+        const startInd = absStart - segStart - 1;
+        if (startInd === -1) {
+            console.log("cant delete")
+            return;
+        }
+        insertSeg.text = insertSeg.text.substring(0, startInd) + insertSeg.text.substring(absStart - segStart, insertSeg.text.length);
+
+        clearEmptySegments(newContent);
 
         setSelectMode('Caret');
         setSelectStart(newContent.indexOf(insertSeg));
+        setSelectStartOffset(startInd);
 
         setDocumentContent(newContent);
     }
@@ -589,11 +623,16 @@ export function DocumentEditor({ isNew, ...props }) {
             <Panel id='text_panel' selectedSectionName={selectedSection} setSelectedName={setSelectedSection} styleSelection={styleSelection} />
             <section id='document'>
                 <div className='page' contentEditable='true' onDragOver={(e) => {
+                    e.preventDefault();
                     console.log('drag droppy', e)
                 }} onBeforeInput={(e) => {
                     pageInput(e, e.data);
                 }} onPaste={(e) => {
                     pageInput(e, e.clipboardData.getData('Text'));
+                }} onKeyDown={(e) => {
+                    if (e.code === 'Backspace' || e.code === 'Delete') {
+                        pageDelete(e);
+                    }
                 }}>
                     {createRichText(documentContent, selectStart, selectEnd, selectionStartRef, selectionEndRef)}
                 </div>

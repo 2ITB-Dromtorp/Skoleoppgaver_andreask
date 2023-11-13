@@ -5,7 +5,6 @@
     --nav-vert-pad: 15px;
     --nav-border-width: 1px;
     --actual-nav-height: calc(var(--nav-height) + (var(--nav-horiz-pad) * 2) + var(--nav-border-width));
-    --nav-content-width: 1400px;
     --theme-col: rgb(0, 255, 174);
     --main-col: rgb(255, 255, 255);
     --main-subtle-col: rgb(136, 136, 136);
