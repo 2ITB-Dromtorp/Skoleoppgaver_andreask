@@ -1,6 +1,6 @@
 import './document.css';
 
-import { useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
 
@@ -22,6 +22,110 @@ const globalFonts = [
     'Courier',
     'Comic Sans MS',
 ];
+
+
+const StyleSelectionContext = createContext();
+
+
+const SectionsContent = [
+    {
+        name: 'File',
+        Content: () => {
+            return (
+                <>
+
+                </>
+            );
+        },
+    },
+    {
+        name: 'Home',
+        Content: () => {
+            const [colorInput, setColorInput] = useState();
+            const styleSelection = useContext(StyleSelectionContext);
+            return (
+                <>
+                    <PanelSearchDropdown key={0} options={globalFonts.map((font, i) => {
+                        return (
+                            <option key={i} value={font} style={{ fontFamily: font }}>
+                                {font}
+                            </option>
+                        );
+                    })} onInput={(e) => {
+                        const font = e.target.value;
+                        e.target.style.fontFamily = font;
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.style.fontFamily = font;
+                        });
+                    }} />
+                    <PanelButton key={1} onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.style.fontSize = (segment.style.fontSize || 0) + 1;
+                        });
+                    }}>
+                        A
+                    </PanelButton>
+                    <PanelButton key={2} onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.style.fontSize = Math.max((segment.style.fontSize || 0) - 1, 1);
+                        });
+                    }}>
+                        a
+                    </PanelButton>
+                    <div key={3} className='panel_button' style={{ position: 'relative' }}>
+                        <input style={{ position: 'absolute', width: '100%', height: '100%', opacity: '0' }} type='color' onChange={(e) => {
+                            setColorInput(e.target.value);
+                            styleSelection(document.getSelection(), (segment) => {
+                                segment.style.color = e.target.value;
+                            });
+                        }} />
+                        <div style={{ textDecoration: `2px ${colorInput} underline` }}>
+                            A
+                        </div>
+                    </div>
+                    <PanelButton key={4} onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.style.fontSize = Math.max((segment.style.fontSize || 0) - 1, 1);
+                        });
+                    }}>
+                        a
+                    </PanelButton>
+                </>
+            );
+        },
+    },
+    {
+        name: 'Text',
+        Content: () => {
+            return (
+                <>
+
+                </>
+            );
+        },
+    },
+    {
+        name: 'Insert',
+        Content: () => {
+            return (
+                <>
+
+                </>
+            );
+        },
+    },
+    {
+        name: 'Setup',
+        Content: () => {
+            return (
+                <>
+
+                </>
+            );
+        },
+    },
+];
+
 
 
 /*
@@ -259,24 +363,25 @@ function PanelButton({ onClick, children, ...props }) {
     );
 }
 
-function Panel({ sections, selectedSectionName, setSelectedName, ...props }) {
+function Panel({ selectedSectionName, setSelectedName, ...props }) {
     let selectedSection;
     let selectedSectionInd;
-    for (let i = 0; i < sections.length; i++) {
-        const section = sections[i];
+    for (let i = 0; i < SectionsContent.length; i++) {
+        const section = SectionsContent[i];
         if (section.name === selectedSectionName) {
             selectedSection = section;
             selectedSectionInd = i;
             break;
         }
     }
+    const Content = selectedSection.Content;
     return (
         <div id='panel'>
             <div id='panel_section_buttons'>
                 <div id='panel_section_highlight' style={{ '--button-index': selectedSectionInd }}></div>
-                {sections.map((section) => {
+                {SectionsContent.map((section, i) => {
                     return (
-                        <button className='panel_section_button button' onClick={(e) => {
+                        <button key={section.name} className='panel_section_button button' onClick={(e) => {
                             setSelectedName(section.name);
                         }}>
                             {section.name}
@@ -285,12 +390,11 @@ function Panel({ sections, selectedSectionName, setSelectedName, ...props }) {
                 })}
             </div>
             <div id='panel_content'>
-                {selectedSection.content}
+                <Content />
             </div>
         </div>
     );
 }
-
 
 function Document({ data, ...props }) {
     const { document: docId } = useParams();
@@ -344,7 +448,7 @@ function Document({ data, ...props }) {
     }
 
     useEffect(() => {
-        if (selectStart && selectEnd) {
+        if (selectionStartRef.current) {
             let endRef;
             if (selectStart === selectEnd) {
                 endRef = selectionStartRef;
@@ -353,18 +457,11 @@ function Document({ data, ...props }) {
             }
             const selection = document.getSelection();
             selection.setBaseAndExtent(selectionStartRef.current.childNodes[0], 0, endRef.current.childNodes[0], endRef.current.childNodes[0].length);
+            selectionStartRef.current = undefined;
+            selectionEndRef.current = undefined;
         }
         const keyDownListener = (e) => {
             const selection = document.getSelection();
-            if (selection.type === 'Range') {
-                if (e.code === 'KeyW') {
-                    e.preventDefault();
-                    styleSelection(selection, (segment) => {
-                        const prevFontSize = segment.style.fontSize;
-                        segment.style.fontSize = (prevFontSize || 0) + 1;
-                    });
-                }
-            }
             if (e.ctrlKey) {
                 if (e.code === 'KeyS') {
                     e.preventDefault();
@@ -423,86 +520,25 @@ function Document({ data, ...props }) {
     }, []);
 
     const pageInput = (e) => {
+        const selection = document.getSelection();
+        //console.log(selection.anchorOffset, selection.focusOffset);
         const newContent = copyObject(documentContent, true);
+
         //newContent[documentContent.indexOf(segment)].text = e.target.innerText;
         setDocumentContent(newContent);
     }
 
     return (
-        <>
-            <Panel id='text_panel' selectedSectionName={selectedSection} setSelectedName={setSelectedSection} sections={[
-                {
-                    name: 'File',
-                    content: (
-                        <>
-
-                        </>
-                    ),
-                },
-                {
-                    name: 'Home',
-                    content: (
-                        <>
-                            <PanelButton onClick={(e) => {
-                                styleSelection(document.getSelection(), (segment) => {
-                                    segment.style.fontSize = (segment.style.fontSize || 0) + 1;
-                                });
-                            }}>
-                                A
-                            </PanelButton>
-                            <PanelButton onClick={(e) => {
-                                styleSelection(document.getSelection(), (segment) => {
-                                    segment.style.fontSize = Math.max((segment.style.fontSize || 0) - 1, 1);
-                                });
-                            }}>
-                                a
-                            </PanelButton>
-                            <PanelSearchDropdown options={globalFonts.map((font) => {
-                                return (
-                                    <option value={font} style={{ fontFamily: font }}>
-                                        {font}
-                                    </option>
-                                );
-                            })} onInput={(e) => {
-                                const font = e.target.value;
-                                styleSelection(document.getSelection(), (segment) => {
-                                    segment.style.fontFamily = font;
-                                });
-                            }} />
-                        </>
-                    ),
-                },
-                {
-                    name: 'Text',
-                    content: (
-                        <>
-
-                        </>
-                    ),
-                },
-                {
-                    name: 'Insert',
-                    content: (
-                        <>
-
-                        </>
-                    ),
-                },
-                {
-                    name: 'Setup',
-                    content: (
-                        <>
-
-                        </>
-                    ),
-                },
-            ]} />
+        <StyleSelectionContext.Provider value={styleSelection}>
+            <Panel id='text_panel' selectedSectionName={selectedSection} setSelectedName={setSelectedSection} styleSelection={styleSelection} />
             <section id='document'>
-                <div className='page' contentEditable='true' onInput={pageInput}>
+                <div className='page' contentEditable='true' onDragOver={(e) => {
+                    console.log('drag droppy', e)
+                }} onInput={pageInput}>
                     {createRichText(documentContent, selectStart, selectEnd, selectionStartRef, selectionEndRef)}
                 </div>
             </section>
-        </>
+        </StyleSelectionContext.Provider>
     );
 }
 
