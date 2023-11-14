@@ -91,6 +91,16 @@ server.listen(PORT, IP, () => console.log(`Server listening to: http://${IP}:${P
 
 
 
+function isValidJSONString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+
 
 
 
@@ -490,6 +500,26 @@ app.post(getAPIURL('/createdocument'), (req, res) => {
         res.status(400).send(`Name isn't of type 'String'.`);
         return;
     }
+    const content = body.content;
+    if (content === undefined) {
+        res.status(400).send(`Content is undefined.`);
+        return;
+    }
+    if (content === null) {
+        res.status(400).send(`Content is null.`);
+        return;
+    }
+    if (typeof (content) !== 'string') {
+        res.status(400).send(`Content isn't of type 'String'.`);
+        return;
+    }
+    if (isValidJSONString(content) === false) {
+        res.status(400).send(`Content isn't valid JSON string.`);
+        return;
+    }
+
+    console.log(content)
+
     const userRights = [
         {
             user_id: req.user.id,
@@ -498,7 +528,7 @@ app.post(getAPIURL('/createdocument'), (req, res) => {
             ],
         },
     ];
-    pool.query('INSERT INTO documents (id, name, content, user_rights) VALUES (?, ?, ?, ?)', [null, name, JSON.stringify([]), JSON.stringify(userRights)], (err, sqlRes) => {
+    pool.query('INSERT INTO documents (id, name, content, user_rights) VALUES (?, ?, ?, ?)', [null, name, content, JSON.stringify(userRights)], (err, sqlRes) => {
         if (err) {
             console.error(err);
             res.status(500).send(err);

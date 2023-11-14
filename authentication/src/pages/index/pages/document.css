@@ -77,11 +77,9 @@
 }
 
 #panel_content {
-    display: grid;
-    grid-template-rows: 1fr;
-    grid-auto-flow: column;
-    justify-content: flex-start;
+    display: flex;
     width: 100%;
+    gap: 8px;
     height: var(--panel-content-height);
     padding: var(--panel-content-pad);
 }
@@ -104,6 +102,14 @@
     width: var(--panel-content-height);
 }
 
+/*specific sizes in panel*/
+#font_family_input {
+    width: 200px;
+}
+
+#font_size_input {
+    width: 40px;
+}
 
 
 

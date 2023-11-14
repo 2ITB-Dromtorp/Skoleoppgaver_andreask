@@ -42,10 +42,11 @@ const SectionsContent = [
         name: 'Home',
         Content: () => {
             const [colorInput, setColorInput] = useState('#ffffff');
+            const [fontSizeInput, setFontSizeInput] = useState(16);
             const styleSelection = useContext(StyleSelectionContext);
             return (
                 <>
-                    <PanelSearchDropdown key={0} options={globalFonts.map((font, i) => {
+                    <PanelSearchDropdown key={0} id='font_family_input' options={globalFonts.map((font, i) => {
                         return (
                             <option key={i} value={font} style={{ fontFamily: font }} className='select_option'>
                                 {font}
@@ -58,6 +59,13 @@ const SectionsContent = [
                             segment.style.fontFamily = font;
                         });
                     }} />
+                    <input type='number' id='font_size_input' className='text_input' value={fontSizeInput} onInput={(e) => {
+                        const fontSize = Number(e.target.value);
+                        setFontSizeInput(fontSize);
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.style.fontSize = fontSize;
+                        });
+                    }}/>
                     <PanelButton key={1} onClick={(e) => {
                         styleSelection(document.getSelection(), (segment) => {
                             segment.style.fontSize = (segment.style.fontSize || 0) + 1;
@@ -377,19 +385,12 @@ function copyObject(obj, deep) {
 
 
 
-function PanelSearchDropdown({ options, onInput, ...props }) {
+function PanelSearchDropdown({ id, options, onInput, ...props }) {
     return (
-        <select className='panel_search_dropdown text_input' onChange={onInput}>
+        <select id={id} className='panel_search_dropdown text_input' onChange={onInput}>
             {options}
         </select>
     );
-    /*
-    return (
-        <div className='panel_search_dropdown'>
-            {children}
-        </div>
-    );
-    */
 }
 
 function PanelButton({ onClick, children, ...props }) {
@@ -499,12 +500,26 @@ export function DocumentEditor({ isNew, ...props }) {
             setSelectStartOffset(0);
             setSelectEndOffset(0);
         }
+        const warnLeaveListener = (e) => {
+            /*
+            e.preventDefault();
+            e.returnValue = '';//idk why but i "should" have this
+            */
+        }
+        window.addEventListener('beforeunload', warnLeaveListener);
+        return () => {
+            window.removeEventListener('beforeunload', warnLeaveListener);
+        }
+    }, [documentContent]);
+
+    useEffect(() => {
         const keyDownListener = (e) => {
             const selection = document.getSelection();
             if (e.ctrlKey) {
                 if (e.code === 'KeyS') {
                     e.preventDefault();
                     if (isDocumentCreated) {
+                        console.log("save document")
                         fetch('/api/savedocument', {
                             method: 'PUT',
                             headers: {
@@ -522,6 +537,7 @@ export function DocumentEditor({ isNew, ...props }) {
                             }
                         });
                     } else {
+                        console.log("create document")
                         fetch('/api/createdocument', {
                             method: 'POST',
                             headers: {
@@ -529,6 +545,7 @@ export function DocumentEditor({ isNew, ...props }) {
                             },
                             body: JSON.stringify({
                                 name: 'zaza',
+                                content: documentContent,
                             }),
                         }).then((res) => {
                             if (res.status === 200) {
@@ -541,20 +558,23 @@ export function DocumentEditor({ isNew, ...props }) {
                     }
                 }
             }
-        };
-        const warnLeaveListener = (e) => {
+        }
+
+        const mouseDownListener = (e) => {
             /*
-            e.preventDefault();
-            e.returnValue = '';//idk why but i "should" have this
+            if (e.which === 1) {
+                e.preventDefault();
+            }
             */
         }
-        window.addEventListener('beforeunload', warnLeaveListener);
+
         document.addEventListener('keydown', keyDownListener);
+        document.addEventListener('mousedown', mouseDownListener);
         return () => {
-            window.removeEventListener('beforeunload', warnLeaveListener);
             document.removeEventListener('keydown', keyDownListener);
+            document.removeEventListener('mousedown', mouseDownListener);
         }
-    }, [documentContent]);
+    }, []);
 
     useEffect(() => {
         if (isNew === false) {
