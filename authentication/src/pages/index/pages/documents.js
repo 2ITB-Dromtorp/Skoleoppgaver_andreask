@@ -1,6 +1,6 @@
 import './documents.css';
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -61,18 +61,18 @@ function Documents() {
                 console.log("fail")
             }
         });
-    }, []);
+    }, [setDocuments]);
     return (
         <section id='documents_section' className='main_content'>
-            <h1 className='main_header'>Documents</h1>
+            <h1 className='fancy_header'>Documents</h1>
             <button id='create_document_button' className='button fancy_button primary' onClick={(e) => {
                 navigate('/newdocument');
             }}>
                 Create Document
             </button>
             <div id='document_links'>
-                {documents.map((data) => {
-                    return <DocumentLink data={data} />
+                {documents.map((data, i) => {
+                    return <DocumentLink key={i} data={data} />
                 })}
             </div>
         </section>

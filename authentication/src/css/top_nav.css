@@ -38,6 +38,7 @@ nav {
 }
 
 /*nav search*/
+/*
 #search_form {
     display: flex;
     width: 200px;
@@ -46,6 +47,7 @@ nav {
     gap: 8px;
     overflow: visible;
 }
+
 
 #search_text_input {
     width: 100%;
@@ -65,6 +67,7 @@ nav {
     flex-shrink: 0;
     box-sizing: border-box;
 }
+*/
 
 
 
@@ -113,12 +116,22 @@ nav {
 }
 
 
+
+/*login / signup buttons*/
+#login_button {
+    margin-left: auto;
+}
+
+
+
+
 /*profile*/
 #profile_button {
     width: var(--nav-height);
     height: var(--nav-height);
     border-radius: calc(var(--nav-height) * 0.5);
     overflow: hidden;
+    margin-left: auto;
 }
 
 #profile_image {

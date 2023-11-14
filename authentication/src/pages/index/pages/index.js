@@ -2,7 +2,7 @@ import './index.css';
 
 import { Link } from 'react-router-dom';
 
-function Card({ type, className, name, desc, children, ...props }) {
+function Card({ type, className, name, desc, children }) {
     let content;
     if (type === 'large') {
         content = (
@@ -40,11 +40,11 @@ function SmallCard({ children, ...props }) {
     );
 }
 
-const Index = ({ ...props }) => {
+const Index = () => {
     return (
         <section id='home_section' className='main_content'>
             <section id='top_section'>
-                <h1 id='top_header' className='main_header'>The Best Document Editor made with React</h1>
+                <h1 id='top_header' className='fancy_header'>The Best Document Editor made with React</h1>
                 <p id='top_desc'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                 <div id='top_section_buttons'>
                     <Link className='button fancy_button secondary' to='/login'>Login</Link>
@@ -61,13 +61,13 @@ const Index = ({ ...props }) => {
             </div>
             <section id='card_section'>
                 <LargeCard name='Popular among companies' desc='Used by all the major companies in NobodyVille. And when i say all the major i mean 100% of them.'>
-                    <img className='home_card_image' src='https://previews.123rf.com/images/ab7272/ab72722004/ab7272200400182/143862490-a-big-black-african-pig-with-a-dirty-face-looks-straight-at-the-camera-through-the-bars-the-concept.jpg' />
+                    <img className='home_card_image' src='https://previews.123rf.com/images/ab7272/ab72722004/ab7272200400182/143862490-a-big-black-african-pig-with-a-dirty-face-looks-straight-at-the-camera-through-the-bars-the-concept.jpg' alt='card_image' />
                 </LargeCard>
                 <LargeCard name='Specialized for anybody' desc={`Specialized to fit any persons needs, whether you're working privately or a businessman.`}>
-                    <img className='home_card_image' src='https://previews.123rf.com/images/ab7272/ab72722004/ab7272200400182/143862490-a-big-black-african-pig-with-a-dirty-face-looks-straight-at-the-camera-through-the-bars-the-concept.jpg' />
+                    <img className='home_card_image' src='https://previews.123rf.com/images/ab7272/ab72722004/ab7272200400182/143862490-a-big-black-african-pig-with-a-dirty-face-looks-straight-at-the-camera-through-the-bars-the-concept.jpg' alt='card_image' />
                 </LargeCard>
                 <LargeCard name='Simplifies the daily life' desc={`Made to be easy to use and uncomplicated while still performing complicated tasks effortlessly.`}>
-                    <img className='home_card_image' src='https://previews.123rf.com/images/ab7272/ab72722004/ab7272200400182/143862490-a-big-black-african-pig-with-a-dirty-face-looks-straight-at-the-camera-through-the-bars-the-concept.jpg' />
+                    <img className='home_card_image' src='https://previews.123rf.com/images/ab7272/ab72722004/ab7272200400182/143862490-a-big-black-african-pig-with-a-dirty-face-looks-straight-at-the-camera-through-the-bars-the-concept.jpg' alt='card_image' />
                 </LargeCard>
                 <SmallCard name='Optimized' desc={`Optimized to run optimally on Blackberries. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. `}>
 

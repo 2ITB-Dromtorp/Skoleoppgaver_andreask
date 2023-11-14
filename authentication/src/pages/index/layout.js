@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom';
 import TopNav from '../../components/top_nav.js';
 import Popups from '../../components/popups.js';
 
-function Layout({ ...props }) {
+function Layout() {
     return (
         <>
             <main id='main'>

@@ -122,8 +122,10 @@ const APIURLS = [
     getAPIURL('/document'),
     getAPIURL('/getsession'),
     getAPIURL('/createdocument'),
+    getAPIURL('/authorizedfordocument'),
 ];
 const verifyURLS = [
+    getAPIURL('/logout'),
     getAPIURL('/documents'),
     getAPIURL('/createdocument'),
 ];
@@ -455,28 +457,25 @@ app.post(getAPIURL('/login'), async (req, res) => {
 
 //logout
 app.post(getAPIURL('/logout'), (req, res) => {
-    res.cookie('auth', undefined, {
-        expires: 0,
-        httpOnly: true,
-        secure: true,
-        sameSite: 'lax',
-    });
+    res.clearCookie('auth');
     res.status(200).send('Successfully logged out');
 });
 
 //session
 app.get(getAPIURL('/getsession'), (req, res) => {
-    if (req.cookies.auth) {
-        res.status(200);
-        res.send({
-            logged_in: true,
-        });
-    } else {
-        res.status(200);
-        res.send({
-            logged_in: false,
-        });
-    }
+    verifyRequest(req).then((user) => {
+        if (user) {
+            res.status(200);
+            res.send({
+                logged_in: true,
+            });
+        } else {
+            res.status(200);
+            res.send({
+                logged_in: false,
+            });
+        }
+    });
 });
 
 
@@ -609,7 +608,7 @@ app.put(getAPIURL('/savedocument'), (req, res) => {
             } else {
                 verifyRequest(req).then((user) => {
                     if (user === undefined) {
-                        res.status(403).send(`You are not authorized to view this document.`);
+                        res.status(401).send(`You are unauthorized.`);
                         return;
                     }
 
@@ -635,6 +634,85 @@ app.put(getAPIURL('/savedocument'), (req, res) => {
     })
 });
 
+
+function userHasAccessToDocument(doc, user) {
+    const userRights = doc.user_rights;
+    let matchedRights;
+    for (let i = 0; i < userRights.length; i++) {
+        const rights = userRights[i];
+        if (rights.user_id === user.id) {
+            matchedRights = rights;
+            break;
+        }
+    }
+    return matchedRights;
+}
+
+
+//does user have rights to document
+app.get(getAPIURL('/authorizedfordocument'), (req, res) => {
+    const query = req.query;
+    const docIdStr = query.id;
+    if (docIdStr === undefined) {
+        res.status(400).send('Document id is undefined.');
+        return;
+    }
+    if (docIdStr === null) {
+        res.status(400).send('Document id is null.');
+        return;
+    }
+    if (typeof (docIdStr) !== 'string') {
+        res.status(400).send(`Document id is not of type 'String'.`);
+        return;
+    }
+    const docId = Number(docIdStr);
+    if (isNaN(docId)) {
+        res.status(400).send(`Parsed document id is NaN.`);
+        return;
+    }
+    if (typeof (docId) !== 'number') {
+        res.status(400).send(`Parsed document id is not of type 'Number'.`);
+        return;
+    }
+    pool.query('SELECT * FROM documents WHERE id = ?', [docId], (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send(err);
+        } else {
+            if (data.length === 0) {
+                res.status(404).send('No document with requested id.');
+                return;
+            }
+
+            const doc = data[0];
+
+            const sendSuccessfulResponse = () => {
+                res.status(200).send();
+            }
+
+            if (doc.isPublic) {
+                sendSuccessfulResponse();
+                return;
+            } else {
+                verifyRequest(req).then((user) => {
+                    if (user === undefined) {
+                        res.status(401).send(`You are unauthorized.`);
+                        return;
+                    }
+
+                    const matchedRights = userHasAccessToDocument(doc, user);
+
+                    if (matchedRights) {
+                        sendSuccessfulResponse();
+                    } else {
+                        res.status(403).send(`You are not authorized to view this document.`);
+                        return;
+                    }
+                });
+            }
+        }
+    });
+});
 
 //document
 app.get(getAPIURL('/document'), (req, res) => {
@@ -683,18 +761,11 @@ app.get(getAPIURL('/document'), (req, res) => {
             } else {
                 verifyRequest(req).then((user) => {
                     if (user === undefined) {
-                        res.status(403).send(`You are not authorized to view this document.`);
+                        res.status(401).send(`You are unauthorized.`);
                         return;
                     }
 
-                    const userRights = doc.user_rights;
-                    let matchedRights;
-                    for (let i = 0; i < userRights.length; i++) {
-                        const rights = userRights[i];
-                        if (rights.user_id === user.id) {
-                            matchedRights = rights;
-                        }
-                    }
+                    const matchedRights = userHasAccessToDocument(doc, user);
 
                     if (matchedRights) {
                         sendDocument();
@@ -734,14 +805,8 @@ app.get(getAPIURL('/documents'), (req, res) => {
                             continue;
                         }
                     }
-                    const userRights = doc.user_rights;
-                    let matchedRights;
-                    for (let i = 0; i < userRights.length; i++) {
-                        const rights = userRights[i];
-                        if (rights.user_id === user.id) {
-                            matchedRights = rights;
-                        }
-                    }
+
+                    const matchedRights = userHasAccessToDocument(doc, user);
 
                     if (matchedRights) {
                         documentsToSend.push(doc);

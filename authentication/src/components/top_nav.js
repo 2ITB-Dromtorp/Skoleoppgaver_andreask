@@ -2,30 +2,30 @@ import '../css/top_nav.css';
 
 import { ReactComponent as LogoSvg } from '../svgs/logo.svg';
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 
 import { UserContext } from '../context';
 
 import { Link } from 'react-router-dom';
 
 function TopNav() {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [userData, setUserData] = useContext(UserContext);
+    //const [searchQuery, setSearchQuery] = useState('');
+    const { 0: userData } = useContext(UserContext);
 
     let userContent;
     if (userData && userData.logged_in) {
         userContent = (
             <Link id='profile_button' className='button' to='/account'>
-                <img id='profile_image' src='https://i.pinimg.com/originals/b3/19/3e/b3193e0e568e2553f94943471b7e3bc8.gif'/>
+                <img id='profile_image' src='https://i.pinimg.com/originals/b3/19/3e/b3193e0e568e2553f94943471b7e3bc8.gif' alt='profile_picture' />
             </Link>
         );
     } else {
         userContent = (
             <>
-                <Link className='button fancy_button secondary' to='/login'>
+                <Link id='login_button' className='button fancy_button secondary' to='/login'>
                     Log in
                 </Link>
-                <Link className='button fancy_button primary' to='/signup'>
+                <Link id='signup_button' className='button fancy_button primary' to='/signup'>
                     Sign up
                 </Link>
             </>
@@ -39,6 +39,7 @@ function TopNav() {
                     <LogoSvg id='home_link_icon' />
                     <LogoSvg id='home_link_icon_second' />
                 </Link>
+                {/*
                 <form id='search_form' onSubmit={(e) => {
                     e.preventDefault();
                     const url = new URL('/search', window.location.origin);
@@ -54,6 +55,7 @@ function TopNav() {
                         setSearchQuery(e.target.value);
                     }} />
                 </form>
+                */}
                 {userContent}
             </div>
         </nav>

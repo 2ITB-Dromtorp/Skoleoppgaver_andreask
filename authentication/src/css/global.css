@@ -67,11 +67,6 @@ textarea {
     all: unset;
 }
 
-/*availability*/
-:is(button, input[type=button]):focus {
-    outline: none;
-}
-
 /*overriding styles*/
 input[type=checkbox] {
     appearance: auto;
@@ -99,7 +94,7 @@ h1 {
     font-weight: 800;
 }
 
-.main_header {
+.fancy_header {
     --text-gradient: linear-gradient(180deg, rgb(255, 255, 255), rgb(173, 173, 173));
     background: var(--text-gradient);
     background-clip: text;
@@ -153,7 +148,20 @@ input[type=number] {
 
 /*custom buttons*/
 .button {
-    
+    border-style: solid;
+    border-width: 0px;
+    border-color: var(--focus-border-col);
+    outline-width: 0px;
+    outline-color: var(--focus-outline-col);
+    outline-style: solid;
+    transition-property: border-color, outline-width;
+    transition-duration: 0.1s;
+    transition-timing-function: ease-in-out;
+}
+
+.button:focus-visible {
+    border-width: 1px;
+    outline-width: 4px !important;
 }
 
 .button.button_waiting {

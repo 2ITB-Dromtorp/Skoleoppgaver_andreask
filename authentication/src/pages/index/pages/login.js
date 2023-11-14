@@ -3,7 +3,7 @@ import './login.css';
 
 import { redirect } from 'react-router-dom';
 
-function UserForm({ isLogin, ...props }) {
+function UserForm({ isLogin }) {
     const [usernameInput, setUsernameInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
 
@@ -40,7 +40,7 @@ function UserForm({ isLogin, ...props }) {
 
     return (
         <section id='user_section' className='main_content'>
-            <section id='user_section' className={'floating_container' + ' ' + classType}>
+            <section id='user_section' className={`floating_container ${classType}`}>
                 <h2 id='user_form_header'>{typeText}</h2>
                 <form id={classType + '_form'} className='user_form' onSubmit={loginFormSubmit}>
                     <div id='user_input_fields'>

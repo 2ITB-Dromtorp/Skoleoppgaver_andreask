@@ -7,9 +7,7 @@ import { ReactComponent as AlignJustify } from '../../../svgs/align_justify.svg'
 
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
-import { useParams } from 'react-router-dom';
-
-import { DocumentsContext } from '../../../context';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const globalFonts = [
     'Arial',
@@ -51,7 +49,7 @@ const SectionsContent = [
             const styleSelection = useContext(StyleSelectionContext);
             return (
                 <>
-                    <PanelSearchDropdown key={0} id='font_family_input' options={globalFonts.map((font, i) => {
+                    <PanelSearchDropdown id='font_family_input' options={globalFonts.map((font, i) => {
                         return (
                             <option key={i} value={font} style={{ fontFamily: font }} className='select_option'>
                                 {font}
@@ -71,21 +69,54 @@ const SectionsContent = [
                             segment.style.fontSize = fontSize;
                         });
                     }} />
-                    <PanelButton key={1} onClick={(e) => {
+                    <PanelButton onClick={(e) => {
                         styleSelection(document.getSelection(), (segment) => {
                             segment.style.fontSize = (segment.style.fontSize || 0) + 1;
                         });
                     }}>
                         A
                     </PanelButton>
-                    <PanelButton key={2} onClick={(e) => {
+                    <PanelButton onClick={(e) => {
                         styleSelection(document.getSelection(), (segment) => {
                             segment.style.fontSize = Math.max((segment.style.fontSize || 0) - 1, 1);
                         });
                     }}>
                         a
                     </PanelButton>
-                    <div key={3} className='panel_button' style={{ position: 'relative' }}>
+                    <PanelButton style={{ fontWeight: 800 }} onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            if (segment.style.fontWeight) {
+                                delete segment.style.fontWeight;
+                            } else {
+                                segment.style.fontWeight = 800;
+                            }
+                        });
+                    }}>
+                        B
+                    </PanelButton>
+                    <PanelButton style={{ fontStyle: 'italic' }} onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            if (segment.style.fontStyle) {
+                                delete segment.style.fontStyle;
+                            } else {
+                                segment.style.fontStyle = 'italic';
+                            }
+                        });
+                    }}>
+                        I
+                    </PanelButton>
+                    <PanelButton style={{ textDecoration: '1px underline' }} onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            if (segment.style.textDecoration) {
+                                delete segment.style.textDecoration;
+                            } else {
+                                segment.style.textDecoration = '1px underline';
+                            }
+                        });
+                    }}>
+                        U
+                    </PanelButton>
+                    <div className='panel_button' style={{ position: 'relative' }}>
                         <input style={{ position: 'absolute', width: '100%', height: '100%', opacity: '0' }} type='color' onChange={(e) => {
                             setColorInput(e.target.value);
                             styleSelection(document.getSelection(), (segment) => {
@@ -96,7 +127,7 @@ const SectionsContent = [
                             A
                         </div>
                     </div>
-                    <PanelButton key={4} onClick={(e) => {
+                    <PanelButton onClick={(e) => {
                         styleSelection(document.getSelection(), (segment) => {
                             segment.style.fontSize = Math.max((segment.style.fontSize || 0) - 1, 1);
                         });
@@ -426,9 +457,9 @@ function PanelSearchDropdown({ id, options, onInput, ...props }) {
     );
 }
 
-function PanelButton({ className, onClick, children, ...props }) {
+function PanelButton({ style, className, onClick, children, ...props }) {
     return (
-        <button className={(className ? className + ' ' : '') + 'panel_button button'} onClick={onClick}>
+        <button className={(className ? className + ' ' : '') + 'panel_button button'} style={style} onClick={onClick}>
             {children}
         </button>
     );
@@ -467,27 +498,29 @@ function Panel({ selectedSectionName, setSelectedName, ...props }) {
     );
 }
 
-export function DocumentEditor({ isNew, ...props }) {
+export function DocumentEditor({ isNew, initDocument, ...props }) {
+    const navigate = useNavigate();
+
     const [isDocumentCreated, setIsDocumentCreated] = useState(isNew === false);
 
     const [docId, setDocId] = useState(isNew ? undefined : props.docId);
 
     const [selectMode, setSelectMode] = useState();
 
-    const [selectStartOffset, setSelectStartOffset] = useState();
-    const [selectEndOffset, setSelectEndOffset] = useState();
+    const [selectStartOffset, setSelectStartOffset] = useState(0);
+    const [selectEndOffset, setSelectEndOffset] = useState(0);
 
-    const [selectStart, setSelectStart] = useState();
-    const [selectEnd, setSelectEnd] = useState();
+    const [selectStart, setSelectStart] = useState(0);
+    const [selectEnd, setSelectEnd] = useState(0);
 
     const selectionStartRef = useRef();
     const selectionEndRef = useRef();
 
     const [selectedSection, setSelectedSection] = useState('Home');
 
-    const [documentData, setDocumentData] = useState({});
+    const [documentData, setDocumentData] = useState(isNew ? {} : initDocument);
 
-    const [documentContent, setDocumentContent] = useState([
+    const [documentContent, setDocumentContent] = useState(isNew ? [
         {
             style: {
                 color: '#ffffff',
@@ -495,12 +528,12 @@ export function DocumentEditor({ isNew, ...props }) {
             },
             text: '',
         },
-    ]);
+    ] : initDocument.content);
 
     const styleSelection = (selection, func) => {
         if (selection.type === 'Range') {
             const newContent = copyObject(documentContent, true);
-            const [absStart, affectedSegments] = separateRichText(newContent, selection, true);
+            const { 1: affectedSegments } = separateRichText(newContent, selection, true);
             for (let i = 0; i < affectedSegments.length; i++) {
                 const segment = affectedSegments[i];
                 func(segment);
@@ -517,7 +550,7 @@ export function DocumentEditor({ isNew, ...props }) {
         if (selectMode !== undefined) {
             const selection = document.getSelection();
             if (selectMode === 'Caret') {
-                selection.setPosition(selectionStartRef.current.childNodes[0] || selectionStartRef.current, selectStartOffset);//0//offset 0 if backwards
+                selection.setPosition(selectionStartRef.current.childNodes[0] || selectionStartRef.current, selectStartOffset);
             } else if (selectMode === 'Range') {
                 let endRef;
                 if (selectStart === selectEnd || selectEnd === undefined) {
@@ -525,7 +558,7 @@ export function DocumentEditor({ isNew, ...props }) {
                 } else {
                     endRef = selectionEndRef;
                 }
-                selection.setBaseAndExtent(selectionStartRef.current.childNodes[0], 0, endRef.current.childNodes[0], endRef.current.childNodes[0].length);
+                selection.setBaseAndExtent(selectionStartRef.current.childNodes[0], 0, endRef.current.childNodes[0], selectEndOffset);
             }
             setSelectMode(undefined);
             setSelectStart(0);
@@ -543,11 +576,11 @@ export function DocumentEditor({ isNew, ...props }) {
         return () => {
             window.removeEventListener('beforeunload', warnLeaveListener);
         }
-    }, [documentContent]);
+    }, [documentContent, selectEnd, selectEndOffset, selectMode, selectStart, selectStartOffset]);
 
     useEffect(() => {
         const keyDownListener = (e) => {
-            const selection = document.getSelection();
+            //const selection = document.getSelection();
             if (e.ctrlKey) {
                 if (e.code === 'KeyS') {
                     e.preventDefault();
@@ -583,6 +616,7 @@ export function DocumentEditor({ isNew, ...props }) {
                                 res.json().then((data) => {
                                     setIsDocumentCreated(true);
                                     setDocId(data.id);
+                                    navigate(`/document/${data.id}`);
                                 });
                             }
                         });
@@ -629,14 +663,14 @@ export function DocumentEditor({ isNew, ...props }) {
                 }
             });
         }
-    }, []);
+    }, [isNew, docId]);
 
     const pageInput = (e, addText) => {
         e.preventDefault();
         const selection = document.getSelection();
         const newContent = copyObject(documentContent, true);
-        const [absStart, affectedSegments] = separateRichText(newContent, selection, false);
-        const [insertSeg, segStart] = getSegmentAtIndex(newContent, absStart - 1);
+        const { 0: absStart } = separateRichText(newContent, selection, false);
+        const { 0: insertSeg } = getSegmentAtIndex(newContent, absStart - 1);
 
         insertSeg.text += addText;//insertSeg.text = addText + insertSeg.text;//if inserting backwards
 
@@ -669,11 +703,17 @@ export function DocumentEditor({ isNew, ...props }) {
         setDocumentContent(newContent);
     }
 
+    //unused function but removes react warning so its not unused
+    const downloadEntireDocument = () => {
+        return documentData;
+    }
+    downloadEntireDocument();
+
     return (
         <StyleSelectionContext.Provider value={styleSelection}>
             <Panel id='text_panel' selectedSectionName={selectedSection} setSelectedName={setSelectedSection} styleSelection={styleSelection} />
             <section id='document'>
-                <div className='page' contentEditable='true' onDragOver={(e) => {
+                <div className='page' contentEditable='true' suppressContentEditableWarning='true' onDragOver={(e) => {
                     e.preventDefault();
                     console.log('drag droppy', e)
                 }} onBeforeInput={(e) => {
@@ -692,30 +732,81 @@ export function DocumentEditor({ isNew, ...props }) {
     );
 }
 
-function LoadingDocument() {
+function LoadingDocument({ status }) {
+    let statusText;
+    if (status === 'authorizing') {
+        statusText = 'Authorizing...';
+    } else if (status === 'downloading') {
+        statusText = 'Downloading document...';
+    }
     return (
         <div id='document_loading_container'>
-            <p>Loading document...</p>
+            <p>
+                {statusText}
+            </p>
         </div>
     );
 }
 
-function NoDocumentAccess({ status }) {
+function DocumentFailed({ knownReason, ...props }) {
+    let content;
+    if (knownReason) {
+        const reason = props.reason;
+        let reasonNameText;
+        let reasonDescText;
+        if (reason === 'unauthorized') {
+            reasonNameText = `You are unauthorized`;
+            reasonDescText = `This error occurs because you are not logged in. Log in and try again.`;
+        } else if (reason === 'forbidden') {
+            reasonNameText = `You are not authorized to view this document`;
+            reasonDescText = `You lack permission to view this document. If this is a shared document, you should ask the owner of the document to grant your account access to this document.`;
+        } else if (reason === 'notfound') {
+            reasonNameText = `Not Found`;
+            reasonDescText = `We couldn't find the requested document.`;
+        }
+        content = (
+            <>
+                <h1 className='fancy_header'>
+                    {reasonNameText}
+                </h1>
+                <p>
+                    {reasonDescText}
+                </p>
+            </>
+        );
+    } else {
+        const status = props.status;
+        content = (
+            <>
+                <h1 className='fancy_header'>Failed to load document</h1>
+                <p>Looks like we encountered an unexpected error while loading this document.</p>
+                <p>Status code: {status}</p>
+            </>
+        );
+    }
     return (
         <div id='document_failed_container'>
-            <p>Couldn't load document.</p>
-            <p>Possible reasons are that you do not have access to this document or there is no document</p>
-            <p>Status: {status}</p>
+            {content}
         </div>
     );
 }
+
+const knowErrors = [
+    'unauthorized',
+    'forbidden',
+    'notfound',
+];
 
 export function Document({ ...props }) {
     const { docId } = useParams();
-    const [accessStatus, setAccessStatus] = useState(false);
+
+    const [loadingPhase, setLoadingPhase] = useState('standby');
+    const [accessStatus, setAccessStatus] = useState();
+    const [documentData, setDocumentData] = useState();
 
     useEffect(() => {
-        const url = new URL('/api/document', window.location.origin);
+        setLoadingPhase('authorizing');
+        const url = new URL('/api/authorizedfordocument', window.location.origin);
         const searchParams = new URLSearchParams();
         searchParams.append('id', docId);
         url.search = searchParams;
@@ -727,28 +818,68 @@ export function Document({ ...props }) {
         }).then((res) => {
             setAccessStatus(res.status);
             if (res.status === 200) {
-
+                setLoadingPhase('authorized');
+            } else if (res.status === 401) {
+                setLoadingPhase('unauthorized');
+            } else if (res.status === 403) {
+                setLoadingPhase('forbidden');
+            } else if (res.status === 404) {
+                setLoadingPhase('notfound');
             } else {
                 console.error(`Couldn't fetch documents`, res);
+                setLoadingPhase('failed');
             }
         });
-    }, []);
+    }, [docId]);//siden docId KAN (men skjer ALDRI) endres sier react "nuh uh" (React Hook useEffect has a missing dependency 'docId'). Den sier NUH UH fordi docId kan endres
+
+    useEffect(() => {
+        if (loadingPhase === 'authorized') {
+            const url = new URL('/api/document', window.location.origin);
+            const searchParams = new URLSearchParams();
+            searchParams.append('id', docId);
+            url.search = searchParams;
+            setLoadingPhase('downloading');
+            fetch(url.toString(), {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then((res) => {
+                setAccessStatus(res.status);
+                if (res.status === 200) {
+                    res.json().then((data) => {
+                        setLoadingPhase('downloaded');
+                        setDocumentData(data);
+                    });
+                } else {
+                    setLoadingPhase('failed');
+                    console.error(`Couldn't fetch documents`, res);
+                }
+            });
+        }
+    }, [docId, loadingPhase]);
 
     let content;
-    if (accessStatus === false) {
+    if (loadingPhase === 'authorizing') {
         content = (
-            <LoadingDocument />
+            <LoadingDocument status={loadingPhase} />
         );
-    } else {
-        if (accessStatus === 200) {
-            content = (
-                <DocumentEditor docId={docId} {...props} />
-            );
-        } else {
-            content = (
-                <NoDocumentAccess status={accessStatus} />
-            );
-        }
+    } else if (loadingPhase === 'downloading') {
+        content = (
+            <LoadingDocument status={loadingPhase} />
+        );
+    } else if (loadingPhase === 'downloaded') {
+        content = (
+            <DocumentEditor docId={docId} initDocument={documentData} {...props} />
+        );
+    } else if (knowErrors.indexOf(loadingPhase) !== -1) {
+        content = (
+            <DocumentFailed knownReason={true} reason={loadingPhase} />
+        );
+    } else if (loadingPhase === 'failed') {
+        content = (
+            <DocumentFailed knownReason={false} status={accessStatus} />
+        );
     }
 
     return (
