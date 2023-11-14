@@ -1,5 +1,10 @@
 import './document.css';
 
+import { ReactComponent as AlignLeft} from '../../../svgs/align_left.svg';
+import { ReactComponent as AlignCenter} from '../../../svgs/align_center.svg';
+import { ReactComponent as AlignRight} from '../../../svgs/align_right.svg';
+import { ReactComponent as AlignJustify} from '../../../svgs/align_justify.svg';
+
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
 import { useParams } from 'react-router-dom';
@@ -97,6 +102,26 @@ const SectionsContent = [
                         });
                     }}>
                         a
+                    </PanelButton>
+                    <PanelButton className='align_button' onClick={(e) => {
+
+                    }}>
+                        <AlignLeft/>
+                    </PanelButton>
+                    <PanelButton className='align_button' onClick={(e) => {
+                        
+                    }}>
+                        <AlignCenter/>
+                    </PanelButton>
+                    <PanelButton className='align_button' onClick={(e) => {
+                        
+                    }}>
+                        <AlignRight/>
+                    </PanelButton>
+                    <PanelButton className='align_button' onClick={(e) => {
+                        
+                    }}>
+                        <AlignJustify/>
                     </PanelButton>
                 </>
             );
@@ -393,9 +418,9 @@ function PanelSearchDropdown({ id, options, onInput, ...props }) {
     );
 }
 
-function PanelButton({ onClick, children, ...props }) {
+function PanelButton({ className, onClick, children, ...props }) {
     return (
-        <button className='panel_button button' onClick={onClick}>
+        <button className={(className ? className + ' ' : '') + 'panel_button button'} onClick={onClick}>
             {children}
         </button>
     );

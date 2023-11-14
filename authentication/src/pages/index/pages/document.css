@@ -100,6 +100,7 @@
     align-items: center;
     height: var(--panel-content-height);
     width: var(--panel-content-height);
+    box-sizing: border-box;
 }
 
 /*specific sizes in panel*/
@@ -152,4 +153,10 @@
 
 .select_option {
     color: var(--main-col);
+}
+
+
+
+.align_button {
+    padding: 3px;
 }

@@ -435,6 +435,12 @@ input[type=number] {
 
 
 
+/*align icons*/
+.align_icon {
+    fill: var(--main-col);
+}
+
+
 
 
 
