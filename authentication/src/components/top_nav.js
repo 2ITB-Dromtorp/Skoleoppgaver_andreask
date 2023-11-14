@@ -15,8 +15,8 @@ function TopNav() {
     let userContent;
     if (userData && userData.logged_in) {
         userContent = (
-            <Link className='button' to='/account'>
-                🤡
+            <Link id='profile_button' className='button' to='/account'>
+                <img id='profile_image' src='https://i.pinimg.com/originals/b3/19/3e/b3193e0e568e2553f94943471b7e3bc8.gif'/>
             </Link>
         );
     } else {

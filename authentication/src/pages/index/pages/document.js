@@ -1,9 +1,9 @@
 import './document.css';
 
-import { ReactComponent as AlignLeft} from '../../../svgs/align_left.svg';
-import { ReactComponent as AlignCenter} from '../../../svgs/align_center.svg';
-import { ReactComponent as AlignRight} from '../../../svgs/align_right.svg';
-import { ReactComponent as AlignJustify} from '../../../svgs/align_justify.svg';
+import { ReactComponent as AlignLeft } from '../../../svgs/align_left.svg';
+import { ReactComponent as AlignCenter } from '../../../svgs/align_center.svg';
+import { ReactComponent as AlignRight } from '../../../svgs/align_right.svg';
+import { ReactComponent as AlignJustify } from '../../../svgs/align_justify.svg';
 
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
@@ -104,24 +104,32 @@ const SectionsContent = [
                         a
                     </PanelButton>
                     <PanelButton className='align_button' onClick={(e) => {
-
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.style.textAlign = 'left';
+                        });
                     }}>
-                        <AlignLeft/>
+                        <AlignLeft />
                     </PanelButton>
                     <PanelButton className='align_button' onClick={(e) => {
-                        
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.style.textAlign = 'center';
+                        });
                     }}>
-                        <AlignCenter/>
+                        <AlignCenter />
                     </PanelButton>
                     <PanelButton className='align_button' onClick={(e) => {
-                        
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.style.textAlign = 'right';
+                        });
                     }}>
-                        <AlignRight/>
+                        <AlignRight />
                     </PanelButton>
                     <PanelButton className='align_button' onClick={(e) => {
-                        
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.style.textAlign = 'justify';
+                        });
                     }}>
-                        <AlignJustify/>
+                        <AlignJustify />
                     </PanelButton>
                 </>
             );
