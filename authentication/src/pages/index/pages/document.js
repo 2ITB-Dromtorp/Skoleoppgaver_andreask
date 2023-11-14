@@ -65,7 +65,7 @@ const SectionsContent = [
                         styleSelection(document.getSelection(), (segment) => {
                             segment.style.fontSize = fontSize;
                         });
-                    }}/>
+                    }} />
                     <PanelButton key={1} onClick={(e) => {
                         styleSelection(document.getSelection(), (segment) => {
                             segment.style.fontSize = (segment.style.fontSize || 0) + 1;
@@ -169,12 +169,12 @@ function getSegmentAtIndex(segments, index) {
 }
 
 function clearEmptySegments(segments) {
-    if (segments > 1) {
-        for (let j = 0; j < segments.length; j++) {
-            const seg = segments[j];
+    if (segments.length > 1) {
+        for (let i = 0; i < segments.length; i++) {
+            const seg = segments[i];
             if (seg.text === '') {
-                segments.splice(j, 1);
-                j -= 1;
+                segments.splice(i, 1);
+                i -= 1;
             }
         }
     }
@@ -330,13 +330,13 @@ function separateRichText(segments, selection, pushNew) {
     const length = selection.toString().length;
     const [affectedSegments, startInd, endInd] = getAffectedSegments(segments, absStart, length);
     const [newSegments, newAffectedSegments] = separateRichTextSegments(affectedSegments, absStart - getOffsetFromStart(segments, startInd), length, pushNew);
-    clearEmptySegments(newSegments);
     const itAmount = endInd - startInd;
     let curInd = 0;
     for (let segInd = 0; segInd <= itAmount; segInd++) {
         segments.splice(startInd + curInd, 1, ...newSegments[segInd]);
         curInd += newSegments[segInd].length;
     }
+    clearEmptySegments(segments);
     return [absStart, newAffectedSegments];
 }
 
@@ -519,7 +519,6 @@ export function DocumentEditor({ isNew, ...props }) {
                 if (e.code === 'KeyS') {
                     e.preventDefault();
                     if (isDocumentCreated) {
-                        console.log("save document")
                         fetch('/api/savedocument', {
                             method: 'PUT',
                             headers: {
@@ -537,7 +536,6 @@ export function DocumentEditor({ isNew, ...props }) {
                             }
                         });
                     } else {
-                        console.log("create document")
                         fetch('/api/createdocument', {
                             method: 'POST',
                             headers: {
@@ -574,7 +572,7 @@ export function DocumentEditor({ isNew, ...props }) {
             document.removeEventListener('keydown', keyDownListener);
             document.removeEventListener('mousedown', mouseDownListener);
         }
-    }, []);
+    });
 
     useEffect(() => {
         if (isNew === false) {
@@ -591,6 +589,7 @@ export function DocumentEditor({ isNew, ...props }) {
                 if (res.status === 200) {
                     res.json().then((data) => {
                         setDocumentData(data);
+                        setDocumentContent(data.content);
                     });
                 } else {
                     console.error(`Couldn't fetch documents`, res);
@@ -621,10 +620,9 @@ export function DocumentEditor({ isNew, ...props }) {
         const newContent = copyObject(documentContent, true);
         const absStart = getAbsoluteSelectionFromSelection(newContent, selection);
         const [insertSeg, segStart] = getSegmentAtIndex(newContent, absStart - 1);
-        
+
         const startInd = absStart - segStart - 1;
         if (startInd === -1) {
-            console.log("cant delete")
             return;
         }
         insertSeg.text = insertSeg.text.substring(0, startInd) + insertSeg.text.substring(absStart - segStart, insertSeg.text.length);
@@ -679,7 +677,7 @@ function NoDocumentAccess({ status }) {
     );
 }
 
-export function Document() {
+export function Document({ ...props }) {
     const { docId } = useParams();
     const [accessStatus, setAccessStatus] = useState(false);
 
@@ -711,7 +709,7 @@ export function Document() {
     } else {
         if (accessStatus === 200) {
             content = (
-                <DocumentEditor docId={docId} />
+                <DocumentEditor docId={docId} {...props} />
             );
         } else {
             content = (

@@ -70,7 +70,7 @@ function Documents() {
             }}>
                 Create Document
             </button>
-            <div id='documents'>
+            <div id='document_links'>
                 {documents.map((data) => {
                     return <DocumentLink data={data} />
                 })}

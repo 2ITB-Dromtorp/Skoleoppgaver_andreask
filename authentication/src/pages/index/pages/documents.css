@@ -1,5 +1,7 @@
 :root {
     --document-border-col: rgb(35, 35, 35);
+    --document-link-idle-col: rgb(0, 0, 0);
+    --document-link-hover-col: rgb(15, 15, 15);
 }
 
 #documents_section {
@@ -11,18 +13,25 @@
     margin: 32px 0px;
 }
 
-#documents {
+#document_links {
     display: flex;
     flex-direction: column;
-    width: 600px;
+    width: 100%;
 }
 
 .document_link {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    width: 100%;
+    gap: 8px;
     padding: 8px;
+    background-color: var(--document-link-idle-bg-col);
+    transition-property: background-color;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+}
+
+.document_link:hover {
+    background-color: var(--document-link-hover-col);
 }
 
 .document_link {

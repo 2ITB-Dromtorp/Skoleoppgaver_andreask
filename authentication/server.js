@@ -509,16 +509,14 @@ app.post(getAPIURL('/createdocument'), (req, res) => {
         res.status(400).send(`Content is null.`);
         return;
     }
-    if (typeof (content) !== 'string') {
-        res.status(400).send(`Content isn't of type 'String'.`);
+    if (typeof (content) !== 'object') {
+        res.status(400).send(`Content isn't of type 'Object'.`);
         return;
     }
-    if (isValidJSONString(content) === false) {
-        res.status(400).send(`Content isn't valid JSON string.`);
+    if (Array.isArray(content) === false) {
+        res.status(400).send(`Content is Object instead of Array.`);
         return;
     }
-
-    console.log(content)
 
     const userRights = [
         {
@@ -528,7 +526,7 @@ app.post(getAPIURL('/createdocument'), (req, res) => {
             ],
         },
     ];
-    pool.query('INSERT INTO documents (id, name, content, user_rights) VALUES (?, ?, ?, ?)', [null, name, content, JSON.stringify(userRights)], (err, sqlRes) => {
+    pool.query('INSERT INTO documents (id, name, content, user_rights) VALUES (?, ?, ?, ?)', [null, name, JSON.stringify(content), JSON.stringify(userRights)], (err, sqlRes) => {
         if (err) {
             console.error(err);
             res.status(500).send(err);
@@ -543,7 +541,7 @@ app.post(getAPIURL('/createdocument'), (req, res) => {
 //save document
 app.put(getAPIURL('/savedocument'), (req, res) => {
     const body = req.body;
-    const docId = body.id;
+    const docIdStr = body.id;
     if (docIdStr === undefined) {
         res.status(400).send('Document id is undefined.');
         return;
@@ -552,8 +550,17 @@ app.put(getAPIURL('/savedocument'), (req, res) => {
         res.status(400).send('Document id is null.');
         return;
     }
+    if (typeof (docIdStr) !== 'string') {
+        res.status(400).send(`Document id is not of type 'String'.`);
+        return;
+    }
+    const docId = Number(docIdStr);
+    if (isNaN(docId)) {
+        res.status(400).send(`Parsed document id is NaN.`);
+        return;
+    }
     if (typeof (docId) !== 'number') {
-        res.status(400).send(`Document id is not of type 'Number'.`);
+        res.status(400).send(`Parsed document id is not of type 'Number'.`);
         return;
     }
     const content = body.content;
@@ -585,12 +592,19 @@ app.put(getAPIURL('/savedocument'), (req, res) => {
 
             const doc = data[0];
 
-            const sendDocument = () => {
-                res.status(200).send(JSON.stringify(doc));
+            const saveDocument = () => {
+                pool.query('UPDATE documents SET content = ? WHERE id = ?', [JSON.stringify(content), docId], (err, data) => {
+                    if (err) {
+                        console.error(err);
+                        res.status(500).send(err);
+                    } else {
+                        res.status(200).send(`Successfully saved document.`);
+                    }
+                })
             }
 
             if (doc.isPublic) {
-                sendDocument();
+                saveDocument();
                 return;
             } else {
                 verifyRequest(req).then((user) => {
@@ -609,7 +623,7 @@ app.put(getAPIURL('/savedocument'), (req, res) => {
                     }
 
                     if (matchedRights) {
-                        sendDocument();
+                        saveDocument();
                     } else {
                         res.status(403).send(`You are not authorized to view this document.`);
                         return;
