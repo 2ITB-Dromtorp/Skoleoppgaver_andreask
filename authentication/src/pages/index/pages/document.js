@@ -244,6 +244,33 @@ function clearEmptySegments(segments) {
     }
 }
 
+function styleMatches(styleA, styleB) {
+    for (const [i, v] of Object.entries(styleA)) {
+        if ((i in styleB) === false) {
+            return false;
+        }
+        if (v !== styleB[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+function mergeIdenticalSegments(segments) {
+    if (segments.length > 1) {
+        let lastSeg = segments[0];
+        for (let i = 1; i < segments.length; i++) {
+            const seg = segments[i];
+            if (styleMatches(lastSeg.style, seg.style)) {
+                lastSeg.text += seg.text;
+                segments.splice(i, 1);
+                i -= 1;
+            }
+            lastSeg = seg;
+        }
+    }
+}
+
 function getAffectedSegments(segments, offset, length) {
     const affectedSegments = [];
     let total = 0;
@@ -538,11 +565,14 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
                 const segment = affectedSegments[i];
                 func(segment);
             }
+            mergeIdenticalSegments(newContent);
             setDocumentContent(newContent);
 
             setSelectMode('Range');
             setSelectStart(newContent.indexOf(affectedSegments[0]));
             setSelectEnd(newContent.indexOf(affectedSegments[affectedSegments.length - 1]));
+            setSelectStartOffset(0);
+            setSelectEndOffset(affectedSegments[affectedSegments.length - 1].text.length);
         }
     }
 

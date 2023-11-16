@@ -27,6 +27,7 @@
     border: 1px solid var(--page-border-col);
     box-sizing: border-box;
     white-space: break-spaces;
+    outline: none;
 }
 
 
