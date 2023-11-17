@@ -32,173 +32,6 @@ const globalFonts = [
 const StyleSelectionContext = createContext();
 
 
-const SectionsContent = [
-    {
-        name: 'File',
-        Content: () => {
-            return (
-                <>
-                    <input type='text' className='text_input' />
-                </>
-            );
-        },
-    },
-    {
-        name: 'Home',
-        Content: () => {
-            const [colorInput, setColorInput] = useState('#ffffff');
-            const [fontSizeInput, setFontSizeInput] = useState(16);
-            const styleSelection = useContext(StyleSelectionContext);
-            return (
-                <>
-                    <PanelSearchDropdown id='font_family_input' options={globalFonts.map((font, i) => {
-                        return (
-                            <option key={i} value={font} style={{ fontFamily: font }} className='select_option'>
-                                {font}
-                            </option>
-                        );
-                    })} onInput={(e) => {
-                        const font = e.target.value;
-                        e.target.style.fontFamily = font;
-                        styleSelection(document.getSelection(), (segment) => {
-                            segment.style.fontFamily = font;
-                        });
-                    }} />
-                    <input type='number' id='font_size_input' className='text_input' value={fontSizeInput} onInput={(e) => {
-                        const fontSize = Number(e.target.value);
-                        setFontSizeInput(fontSize);
-                        styleSelection(document.getSelection(), (segment) => {
-                            segment.style.fontSize = fontSize;
-                        });
-                    }} />
-                    <PanelButton onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
-                            segment.style.fontSize = (segment.style.fontSize || 0) + 1;
-                        });
-                    }}>
-                        A
-                    </PanelButton>
-                    <PanelButton onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
-                            segment.style.fontSize = Math.max((segment.style.fontSize || 0) - 1, 1);
-                        });
-                    }}>
-                        a
-                    </PanelButton>
-                    <PanelButton style={{ fontWeight: 800 }} onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
-                            if (segment.style.fontWeight) {
-                                delete segment.style.fontWeight;
-                            } else {
-                                segment.style.fontWeight = 800;
-                            }
-                        });
-                    }}>
-                        B
-                    </PanelButton>
-                    <PanelButton style={{ fontStyle: 'italic' }} onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
-                            if (segment.style.fontStyle) {
-                                delete segment.style.fontStyle;
-                            } else {
-                                segment.style.fontStyle = 'italic';
-                            }
-                        });
-                    }}>
-                        I
-                    </PanelButton>
-                    <PanelButton style={{ textDecoration: '1px underline' }} onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
-                            if (segment.style.textDecoration) {
-                                delete segment.style.textDecoration;
-                            } else {
-                                segment.style.textDecoration = '1px underline';
-                            }
-                        });
-                    }}>
-                        U
-                    </PanelButton>
-                    <div className='panel_button' style={{ position: 'relative' }}>
-                        <input style={{ position: 'absolute', width: '100%', height: '100%', opacity: '0' }} type='color' onChange={(e) => {
-                            setColorInput(e.target.value);
-                            styleSelection(document.getSelection(), (segment) => {
-                                segment.style.color = e.target.value;
-                            });
-                        }} />
-                        <div style={{ textDecoration: `2px ${colorInput} underline` }}>
-                            A
-                        </div>
-                    </div>
-                    <PanelButton onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
-                            segment.style.fontSize = Math.max((segment.style.fontSize || 0) - 1, 1);
-                        });
-                    }}>
-                        a
-                    </PanelButton>
-                    <PanelButton className='align_button' onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
-                            segment.style.textAlign = 'left';
-                        });
-                    }}>
-                        <AlignLeft />
-                    </PanelButton>
-                    <PanelButton className='align_button' onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
-                            segment.style.textAlign = 'center';
-                        });
-                    }}>
-                        <AlignCenter />
-                    </PanelButton>
-                    <PanelButton className='align_button' onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
-                            segment.style.textAlign = 'right';
-                        });
-                    }}>
-                        <AlignRight />
-                    </PanelButton>
-                    <PanelButton className='align_button' onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
-                            segment.style.textAlign = 'justify';
-                        });
-                    }}>
-                        <AlignJustify />
-                    </PanelButton>
-                </>
-            );
-        },
-    },
-    {
-        name: 'Text',
-        Content: () => {
-            return (
-                <>
-
-                </>
-            );
-        },
-    },
-    {
-        name: 'Insert',
-        Content: () => {
-            return (
-                <>
-
-                </>
-            );
-        },
-    },
-    {
-        name: 'Setup',
-        Content: () => {
-            return (
-                <>
-
-                </>
-            );
-        },
-    },
-];
 
 
 
@@ -214,7 +47,7 @@ function createRichText(segments, selectStart, selectEnd, selectStartRef, select
     for (let i = 0; i < segments.length; i++) {
         const segment = segments[i];
         res.push((
-            <span key={i} data-text-id={i} style={segment.style} ref={selectStart === i ? selectStartRef : selectEnd === i ? selectEndRef : undefined}>
+            <span key={i} data-text-id={i} style={Object.assign({}, { ...segment.textStyle, ...segment.editStyle })} ref={selectStart === i ? selectStartRef : selectEnd === i ? selectEndRef : undefined}>
                 {segment.text}
             </span>
         ));
@@ -263,7 +96,7 @@ function mergeIdenticalSegments(segments) {
         let lastSeg = segments[0];
         for (let i = 1; i < segments.length; i++) {
             const seg = segments[i];
-            if (styleMatches(lastSeg.style, seg.style)) {
+            if (styleMatches(lastSeg.textStyle, seg.textStyle)) {
                 lastSeg.text += seg.text;
                 segments.splice(i, 1);
                 i -= 1;
@@ -358,7 +191,8 @@ function separateRichTextSegments(segments, offset, length, pushNew) {
         for (let j = 0; j < newTexts.length; j++) {
             const newText = newTexts[j];
             const newSeg = {
-                style: Object.assign({}, segment.style),
+                textStyle: Object.assign({}, segment.textStyle),
+                editStyle: Object.assign({}, segment.editStyle),
                 text: newText.text,
             };
             if (newText.isNew) {
@@ -475,6 +309,18 @@ function copyObject(obj, deep) {
 
 
 
+function editContentToSendContent(content) {
+    const sendContent = [];
+    for (let i = 0; i < content.length; i++) {
+        const origSeg = content[i];
+        const seg = copyObject(origSeg, true);
+        delete seg.editStyle;
+        sendContent.push(seg);
+    }
+    return sendContent;
+}
+
+
 
 
 
@@ -494,11 +340,11 @@ function PanelButton({ style, className, onClick, children, ...props }) {
     );
 }
 
-function Panel({ selectedSectionName, setSelectedName, ...props }) {
+function Panel({ sectionsContent, selectedSectionName, setSelectedName, ...props }) {
     let selectedSection;
     let selectedSectionInd;
-    for (let i = 0; i < SectionsContent.length; i++) {
-        const section = SectionsContent[i];
+    for (let i = 0; i < sectionsContent.length; i++) {
+        const section = sectionsContent[i];
         if (section.name === selectedSectionName) {
             selectedSection = section;
             selectedSectionInd = i;
@@ -510,7 +356,7 @@ function Panel({ selectedSectionName, setSelectedName, ...props }) {
         <div id='panel'>
             <div id='panel_section_buttons'>
                 <div id='panel_section_highlight' style={{ '--button-index': selectedSectionInd }}></div>
-                {SectionsContent.map((section) => {
+                {sectionsContent.map((section) => {
                     return (
                         <button key={section.name} className='panel_section_button button' onClick={(e) => {
                             setSelectedName(section.name);
@@ -525,6 +371,17 @@ function Panel({ selectedSectionName, setSelectedName, ...props }) {
             </div>
         </div>
     );
+}
+
+function parseSavedContent(content) {
+    const newContent = [];
+    for (let i = 0; i < content.length; i++) {
+        const origSeg = content[i];
+        const newSeg = Object.assign({}, origSeg);
+        newSeg.editStyle = {};
+        newContent.push(newSeg);
+    }
+    return newContent;
 }
 
 export function DocumentEditor({ isNew, initDocument, ...props }) {
@@ -547,17 +404,18 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
 
     const [selectedSection, setSelectedSection] = useState('Home');
 
-    const [documentData, setDocumentData] = useState(isNew ? {} : initDocument);
+    const { 0: documentData } = useState(isNew ? {} : initDocument);
 
     const [documentContent, setDocumentContent] = useState(isNew ? [
         {
-            style: {
+            textStyle: {
                 color: '#ffffff',
                 fontSize: 16,
             },
+            editStyle: {},
             text: '',
         },
-    ] : initDocument.content);
+    ] : parseSavedContent(initDocument.content));
 
     const styleSelection = (selection, func) => {
         if (selection.type === 'Range') {
@@ -577,6 +435,173 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
             setSelectEndOffset(affectedSegments[affectedSegments.length - 1].text.length);
         }
     }
+
+    const sectionsContent = [
+        {
+            name: 'File',
+            Content: () => {
+                return (
+                    <>
+                        <input type='text' className='text_input' />
+                    </>
+                );
+            },
+        },
+        {
+            name: 'Home',
+            Content: () => {
+                const [colorInput, setColorInput] = useState('#ffffff');
+                const [fontSizeInput, setFontSizeInput] = useState(16);
+                return (
+                    <>
+                        <PanelSearchDropdown id='font_family_input' options={globalFonts.map((font, i) => {
+                            return (
+                                <option key={i} value={font} style={{ fontFamily: font }} className='select_option'>
+                                    {font}
+                                </option>
+                            );
+                        })} onInput={(e) => {
+                            const font = e.target.value;
+                            e.target.style.fontFamily = font;
+                            styleSelection(document.getSelection(), (segment) => {
+                                segment.textStyle.fontFamily = font;
+                            });
+                        }} />
+                        <input type='number' id='font_size_input' className='text_input' value={fontSizeInput} onInput={(e) => {
+                            const fontSize = Number(e.target.value);
+                            setFontSizeInput(fontSize);
+                            styleSelection(document.getSelection(), (segment) => {
+                                segment.textStyle.fontSize = fontSize;
+                            });
+                        }} />
+                        <PanelButton onClick={(e) => {
+                            styleSelection(document.getSelection(), (segment) => {
+                                segment.textStyle.fontSize = (segment.textStyle.fontSize || 0) + 1;
+                            });
+                        }}>
+                            A
+                        </PanelButton>
+                        <PanelButton onClick={(e) => {
+                            styleSelection(document.getSelection(), (segment) => {
+                                segment.textStyle.fontSize = Math.max((segment.textStyle.fontSize || 0) - 1, 1);
+                            });
+                        }}>
+                            a
+                        </PanelButton>
+                        <PanelButton style={{ fontWeight: 800 }} onClick={(e) => {
+                            styleSelection(document.getSelection(), (segment) => {
+                                if (segment.textStyle.fontWeight) {
+                                    delete segment.textStyle.fontWeight;
+                                } else {
+                                    segment.textStyle.fontWeight = 800;
+                                }
+                            });
+                        }}>
+                            B
+                        </PanelButton>
+                        <PanelButton style={{ fontStyle: 'italic' }} onClick={(e) => {
+                            styleSelection(document.getSelection(), (segment) => {
+                                if (segment.textStyle.fontStyle) {
+                                    delete segment.textStyle.fontStyle;
+                                } else {
+                                    segment.textStyle.fontStyle = 'italic';
+                                }
+                            });
+                        }}>
+                            I
+                        </PanelButton>
+                        <PanelButton style={{ textDecoration: '1px underline' }} onClick={(e) => {
+                            styleSelection(document.getSelection(), (segment) => {
+                                if (segment.textStyle.textDecoration) {
+                                    delete segment.textStyle.textDecoration;
+                                } else {
+                                    segment.textStyle.textDecoration = '1px underline';
+                                }
+                            });
+                        }}>
+                            U
+                        </PanelButton>
+                        <div className='panel_button' style={{ position: 'relative' }}>
+                            <input style={{ position: 'absolute', width: '100%', height: '100%', opacity: '0' }} type='color' onChange={(e) => {
+                                setColorInput(e.target.value);
+                                styleSelection(document.getSelection(), (segment) => {
+                                    segment.textStyle.color = e.target.value;
+                                });
+                            }} />
+                            <div style={{ textDecoration: `2px ${colorInput} underline` }}>
+                                A
+                            </div>
+                        </div>
+                        <PanelButton onClick={(e) => {
+                            styleSelection(document.getSelection(), (segment) => {
+                                segment.textStyle.fontSize = Math.max((segment.textStyle.fontSize || 0) - 1, 1);
+                            });
+                        }}>
+                            a
+                        </PanelButton>
+                        <PanelButton className='align_button' onClick={(e) => {
+                            styleSelection(document.getSelection(), (segment) => {
+                                segment.textStyle.textAlign = 'left';
+                            });
+                        }}>
+                            <AlignLeft />
+                        </PanelButton>
+                        <PanelButton className='align_button' onClick={(e) => {
+                            styleSelection(document.getSelection(), (segment) => {
+                                segment.textStyle.textAlign = 'center';
+                            });
+                        }}>
+                            <AlignCenter />
+                        </PanelButton>
+                        <PanelButton className='align_button' onClick={(e) => {
+                            styleSelection(document.getSelection(), (segment) => {
+                                segment.textStyle.textAlign = 'right';
+                            });
+                        }}>
+                            <AlignRight />
+                        </PanelButton>
+                        <PanelButton className='align_button' onClick={(e) => {
+                            styleSelection(document.getSelection(), (segment) => {
+                                segment.textStyle.textAlign = 'justify';
+                            });
+                        }}>
+                            <AlignJustify />
+                        </PanelButton>
+                    </>
+                );
+            },
+        },
+        {
+            name: 'Text',
+            Content: () => {
+                return (
+                    <>
+
+                    </>
+                );
+            },
+        },
+        {
+            name: 'Insert',
+            Content: () => {
+                return (
+                    <>
+
+                    </>
+                );
+            },
+        },
+        {
+            name: 'Setup',
+            Content: () => {
+                return (
+                    <>
+
+                    </>
+                );
+            },
+        },
+    ];
 
     useEffect(() => {
         if (selectMode !== undefined) {
@@ -617,6 +642,7 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
                 if (e.code === 'KeyS') {
                     e.preventDefault();
                     if (isDocumentCreated) {
+                        const sendContent = editContentToSendContent(documentContent);
                         fetch('/api/savedocument', {
                             method: 'PUT',
                             headers: {
@@ -624,7 +650,7 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
                             },
                             body: JSON.stringify({
                                 id: docId,
-                                content: documentContent,
+                                content: sendContent,
                             }),
                         }).then((res) => {
                             if (res.status === 200) {
@@ -634,6 +660,7 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
                             }
                         });
                     } else {
+                        const sendContent = editContentToSendContent(documentContent);
                         fetch('/api/createdocument', {
                             method: 'POST',
                             headers: {
@@ -641,7 +668,7 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
                             },
                             body: JSON.stringify({
                                 name: 'zaza',
-                                content: documentContent,
+                                content: sendContent,
                             }),
                         }).then((res) => {
                             if (res.status === 200) {
@@ -673,30 +700,6 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
         }
     });
 
-    useEffect(() => {
-        if (isNew === false) {
-            const url = new URL('/api/document', window.location.origin);
-            const searchParams = new URLSearchParams();
-            searchParams.append('id', docId);
-            url.search = searchParams;
-            fetch(url.toString(), {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }).then((res) => {
-                if (res.status === 200) {
-                    res.json().then((data) => {
-                        setDocumentData(data);
-                        setDocumentContent(data.content);
-                    });
-                } else {
-                    console.error(`Couldn't fetch documents`, res);
-                }
-            });
-        }
-    }, [isNew, docId]);
-
     const pageInput = (e, addText) => {
         e.preventDefault();
         const selection = document.getSelection();
@@ -717,21 +720,55 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
         e.preventDefault();
         const selection = document.getSelection();
         const newContent = copyObject(documentContent, true);
-        const absStart = getAbsoluteSelectionFromSelection(newContent, selection);
-        const [insertSeg, segStart] = getSegmentAtIndex(newContent, absStart - 1);
+        if (selection.type === 'Caret') {
+            const absStart = getAbsoluteSelectionFromSelection(newContent, selection);
+            const [insertSeg, segStart] = getSegmentAtIndex(newContent, absStart - 1);
 
-        const startInd = absStart - segStart - 1;
-        if (startInd === -1) {
-            return;
+            const deleteStartInd = absStart - segStart - 1;
+            if (deleteStartInd === -1) {
+                return;
+            }
+            insertSeg.text = insertSeg.text.substring(0, deleteStartInd) + insertSeg.text.substring(absStart - segStart, insertSeg.text.length);
+
+            let selectStartInd = newContent.indexOf(insertSeg);
+
+            let startInd;
+            if (insertSeg.text.length === 0) {
+                if (selectStartInd > 0) {
+                    selectStartInd -= 1;
+                    startInd = newContent[selectStartInd].text.length;
+                } else {
+                    startInd = 0;
+                }
+            } else {
+                startInd = deleteStartInd;
+            }
+
+            setSelectMode('Caret');
+            setSelectStart(selectStartInd);
+            setSelectStartOffset(startInd);
+
+            clearEmptySegments(newContent);
+        } else if (selection.type === 'Range') {
+            const startSeg = newContent[0];
+            const { 0: absStart } = separateRichText(newContent, selection, false);
+
+            if (newContent.length === 0) {
+                newContent[0] = {
+                    text: '',
+                    textStyle: startSeg.textStyle,
+                };
+            }
+            const [insertSeg, segStart] = getSegmentAtIndex(newContent, absStart - 1);
+
+            const startInd = absStart - segStart;
+
+            setSelectMode('Caret');
+            setSelectStart(newContent.indexOf(insertSeg));
+            setSelectStartOffset(startInd);
+
+            clearEmptySegments(newContent);
         }
-        insertSeg.text = insertSeg.text.substring(0, startInd) + insertSeg.text.substring(absStart - segStart, insertSeg.text.length);
-
-        clearEmptySegments(newContent);
-
-        setSelectMode('Caret');
-        setSelectStart(newContent.indexOf(insertSeg));
-        setSelectStartOffset(startInd);
-
         setDocumentContent(newContent);
     }
 
@@ -743,7 +780,7 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
 
     return (
         <StyleSelectionContext.Provider value={styleSelection}>
-            <Panel id='text_panel' selectedSectionName={selectedSection} setSelectedName={setSelectedSection} styleSelection={styleSelection} />
+            <Panel id='text_panel' sectionsContent={sectionsContent} selectedSectionName={selectedSection} setSelectedName={setSelectedSection} styleSelection={styleSelection} />
             <section id='document'>
                 <div className='page' contentEditable='true' suppressContentEditableWarning='true' onDragOver={(e) => {
                     e.preventDefault();
@@ -862,7 +899,7 @@ export function Document({ ...props }) {
                 setLoadingPhase('failed');
             }
         });
-    }, [docId]);//siden docId KAN (men skjer ALDRI) endres sier react "nuh uh" (React Hook useEffect has a missing dependency 'docId'). Den sier NUH UH fordi docId kan endres
+    }, [docId]);
 
     useEffect(() => {
         if (loadingPhase === 'authorized') {

@@ -10,7 +10,7 @@ const mysql = require('mysql2');
 
 const app = express();
 
-const saltRounds = 10;
+const saltRounds = 15;
 
 const maxAuthCookieAge = 30 * 24 * 60 * 60 * 1000;
 
@@ -385,7 +385,7 @@ app.post(getAPIURL('/signup'), async (req, res) => {
         return;
     }
 
-    mySqlConnection.query('SELECT * FROM users WHERE username = ?', [username], async (err, users) => {
+    mySqlConnection.query('SELECT * FROM users WHERE username = ?', [username], (err, users) => {
         if (err) {
             console.error(err);
             res.status(400).send(err);
@@ -393,15 +393,15 @@ app.post(getAPIURL('/signup'), async (req, res) => {
             if (users.length > 0) {
                 res.status(400).send('User already exists.');
             } else {
-                const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-                mySqlConnection.query('INSERT INTO users (id, username, password, sessions) VALUES (?, ?, ?, ?)', [null, username, hashedPassword, JSON.stringify([])], (err) => {
-                    if (err) {
-                        console.error(err);
-                        res.status(400).send(err);
-                    } else {
-                        res.status(200).send('Successfully signed up.');
-                    }
+                bcrypt.hash(password, saltRounds).then((hash) => {
+                    mySqlConnection.query('INSERT INTO users (id, username, password, sessions) VALUES (?, ?, ?, ?)', [null, username, hash, JSON.stringify([])], (err) => {
+                        if (err) {
+                            console.error(err);
+                            res.status(400).send(err);
+                        } else {
+                            res.status(200).send('Successfully signed up.');
+                        }
+                    });
                 });
             }
         }
@@ -425,7 +425,7 @@ app.post(getAPIURL('/login'), async (req, res) => {
         return;
     }
 
-    mySqlConnection.query('SELECT * FROM users WHERE username = ?', [username], async (err, users) => {
+    mySqlConnection.query('SELECT * FROM users WHERE username = ?', [username], (err, users) => {
         if (err) {
             console.error(err);
             res.status(400).send(err);
@@ -436,31 +436,31 @@ app.post(getAPIURL('/login'), async (req, res) => {
             for (let i = 0; i < users.length; i++) {
                 const user = users[i];
 
-                const success = await bcrypt.compare(password, user.password);
-
-                if (success) {
-                    const token = generateAuthToken();//🖥️🕵️
-                    user.sessions.push({
-                        date: Date.now(),
-                        token: token,
-                    });
-                    mySqlConnection.query('UPDATE users SET sessions = ? WHERE id = ?', [JSON.stringify(user.sessions), user.id], () => {
-                        if (err) {
-                            console.error(err);
-                            res.status(400).send(err);
-                        } else {
-                            res.cookie('auth', token, {
-                                maxAge: maxAuthCookieAge,
-                                httpOnly: true,
-                                secure: true,
-                                sameSite: 'lax',
-                            });
-                            res.status(200).send('Successfully logged in');
-                        }
-                    });
-                } else {
-                    res.status(400).send('Incorrect username or password.');
-                }
+                bcrypt.compare(password, user.password).then((success) => {
+                    if (success) {
+                        const token = generateAuthToken();//🖥️🕵️
+                        user.sessions.push({
+                            date: Date.now(),
+                            token: token,
+                        });
+                        mySqlConnection.query('UPDATE users SET sessions = ? WHERE id = ?', [JSON.stringify(user.sessions), user.id], () => {
+                            if (err) {
+                                console.error(err);
+                                res.status(400).send(err);
+                            } else {
+                                res.cookie('auth', token, {
+                                    maxAge: maxAuthCookieAge,
+                                    httpOnly: true,
+                                    secure: true,
+                                    sameSite: 'lax',
+                                });
+                                res.status(200).send('Successfully logged in');
+                            }
+                        });
+                    } else {
+                        res.status(400).send('Incorrect username or password.');
+                    }
+                });
             }
         }
     });
