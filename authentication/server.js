@@ -1,3 +1,5 @@
+console.log('Node server started');
+
 const http = require('http');
 const express = require('express');
 const cors = require('cors');
@@ -13,9 +15,8 @@ const saltRounds = 10;
 const maxAuthCookieAge = 30 * 24 * 60 * 60 * 1000;
 
 
-//doxxing myself 🤡🤡🤡
 
-
+//getting device IP (for running project on LAN)
 const os = require('os');
 
 const nets = os.networkInterfaces();
@@ -54,8 +55,15 @@ let dbConfig = {
     database: 'doctor',
 };
 
-const pool = mysql.createPool(dbConfig);
+const mySqlConnection = mysql.createConnection(dbConfig);
 
+mySqlConnection.connect((err) => {
+    if (err) {
+        console.error(err);
+    } else {
+        console.log('Node server connected to MySQL database.');
+    }
+});
 
 
 
@@ -86,11 +94,13 @@ function generateAuthToken() {
 const server = http.createServer(app);
 
 //listen🙉🙉🙉🙉
-server.listen(PORT, IP, () => console.log(`Server listening to: http://${IP}:${PORT}/`));
+server.listen(PORT, IP, () => {
+    console.log(`Node server listening to: http://${IP}:${PORT}/`);
+});
 
 
 
-
+/*
 function isValidJSONString(str) {
     try {
         JSON.parse(str);
@@ -99,6 +109,7 @@ function isValidJSONString(str) {
     }
     return true;
 }
+*/
 
 
 
@@ -155,7 +166,7 @@ function verifyRequestUser(req, user) {
 
 function verifyRequest(req) {
     return new Promise((resolve, reject) => {
-        pool.query('SELECT * FROM users', (err, users) => {
+        mySqlConnection.query('SELECT * FROM users', (err, users) => {
             if (err) {
                 console.error(err);
                 reject(err);
@@ -374,7 +385,7 @@ app.post(getAPIURL('/signup'), async (req, res) => {
         return;
     }
 
-    pool.query('SELECT * FROM users WHERE username = ?', [username], async (err, users) => {
+    mySqlConnection.query('SELECT * FROM users WHERE username = ?', [username], async (err, users) => {
         if (err) {
             console.error(err);
             res.status(400).send(err);
@@ -384,7 +395,7 @@ app.post(getAPIURL('/signup'), async (req, res) => {
             } else {
                 const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-                pool.query('INSERT INTO users (id, username, password, sessions) VALUES (?, ?, ?, ?)', [null, username, hashedPassword, JSON.stringify([])], (err) => {
+                mySqlConnection.query('INSERT INTO users (id, username, password, sessions) VALUES (?, ?, ?, ?)', [null, username, hashedPassword, JSON.stringify([])], (err) => {
                     if (err) {
                         console.error(err);
                         res.status(400).send(err);
@@ -414,7 +425,7 @@ app.post(getAPIURL('/login'), async (req, res) => {
         return;
     }
 
-    pool.query('SELECT * FROM users WHERE username = ?', [username], async (err, users) => {
+    mySqlConnection.query('SELECT * FROM users WHERE username = ?', [username], async (err, users) => {
         if (err) {
             console.error(err);
             res.status(400).send(err);
@@ -433,7 +444,7 @@ app.post(getAPIURL('/login'), async (req, res) => {
                         date: Date.now(),
                         token: token,
                     });
-                    pool.query('UPDATE users SET sessions = ? WHERE id = ?', [JSON.stringify(user.sessions), user.id], () => {
+                    mySqlConnection.query('UPDATE users SET sessions = ? WHERE id = ?', [JSON.stringify(user.sessions), user.id], () => {
                         if (err) {
                             console.error(err);
                             res.status(400).send(err);
@@ -525,7 +536,7 @@ app.post(getAPIURL('/createdocument'), (req, res) => {
             ],
         },
     ];
-    pool.query('INSERT INTO documents (id, name, content, user_rights) VALUES (?, ?, ?, ?)', [null, name, JSON.stringify(content), JSON.stringify(userRights)], (err, sqlRes) => {
+    mySqlConnection.query('INSERT INTO documents (id, name, content, user_rights) VALUES (?, ?, ?, ?)', [null, name, JSON.stringify(content), JSON.stringify(userRights)], (err, sqlRes) => {
         if (err) {
             console.error(err);
             res.status(500).send(err);
@@ -579,7 +590,7 @@ app.put(getAPIURL('/savedocument'), (req, res) => {
         res.status(400).send(`Content is not array.`);
         return;
     }
-    pool.query('SELECT * FROM documents WHERE id = ?', [docId], (err, data) => {
+    mySqlConnection.query('SELECT * FROM documents WHERE id = ?', [docId], (err, data) => {
         if (err) {
             console.error(err);
             res.status(500).send(err);
@@ -592,7 +603,7 @@ app.put(getAPIURL('/savedocument'), (req, res) => {
             const doc = data[0];
 
             const saveDocument = () => {
-                pool.query('UPDATE documents SET content = ? WHERE id = ?', [JSON.stringify(content), docId], (err, data) => {
+                mySqlConnection.query('UPDATE documents SET content = ? WHERE id = ?', [JSON.stringify(content), docId], (err, data) => {
                     if (err) {
                         console.error(err);
                         res.status(500).send(err);
@@ -674,7 +685,7 @@ app.get(getAPIURL('/authorizedfordocument'), (req, res) => {
         res.status(400).send(`Parsed document id is not of type 'Number'.`);
         return;
     }
-    pool.query('SELECT * FROM documents WHERE id = ?', [docId], (err, data) => {
+    mySqlConnection.query('SELECT * FROM documents WHERE id = ?', [docId], (err, data) => {
         if (err) {
             console.error(err);
             res.status(500).send(err);
@@ -739,7 +750,7 @@ app.get(getAPIURL('/document'), (req, res) => {
         res.status(400).send(`Parsed document id is not of type 'Number'.`);
         return;
     }
-    pool.query('SELECT * FROM documents WHERE id = ?', [docId], (err, data) => {
+    mySqlConnection.query('SELECT * FROM documents WHERE id = ?', [docId], (err, data) => {
         if (err) {
             console.error(err);
             res.status(500).send(err);
@@ -782,7 +793,7 @@ app.get(getAPIURL('/document'), (req, res) => {
 
 //documents
 app.get(getAPIURL('/documents'), (req, res) => {
-    pool.query('SELECT * FROM documents', async (err, data) => {
+    mySqlConnection.query('SELECT * FROM documents', async (err, data) => {
         if (err) {
             console.error(err);
             res.status(500).send(err);
