@@ -7,7 +7,9 @@ import { ReactComponent as AlignJustify } from '../../../../svgs/align_justify.s
 
 import { LoadingContainer, LoadingFailedContainer } from '../../../../components/loading';
 
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+
+import { TextInput } from '../../../../components/input';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -30,7 +32,179 @@ const globalFonts = [
 
 
 const StyleSelectionContext = createContext();
+const DocumentContext = createContext();
 
+
+const sectionsContent = [
+    {
+        name: 'File',
+        Content: () => {
+            const [documentName, setDocumentName] = useContext(DocumentContext);
+            return (
+                <>
+                    <TextInput type='text' value={documentName} onChange={(e) => {
+                        setDocumentName(e.target.value);
+                    }} />
+                </>
+            );
+        },
+    },
+    {
+        name: 'Home',
+        Content: () => {
+            const styleSelection = useContext(StyleSelectionContext);
+            const [colorInput, setColorInput] = useState('#ffffff');
+            const [fontSizeInput, setFontSizeInput] = useState(16);
+            return (
+                <>
+                    <PanelSearchDropdown id='font_family_input' options={globalFonts.map((font, i) => {
+                        return (
+                            <option key={i} value={font} style={{ fontFamily: font }} className='select_option'>
+                                {font}
+                            </option>
+                        );
+                    })} onInput={(e) => {
+                        const font = e.target.value;
+                        e.target.style.fontFamily = font;
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.textStyle.fontFamily = font;
+                        });
+                    }} />
+                    <input type='number' id='font_size_input' className='text_input' value={fontSizeInput} onInput={(e) => {
+                        const fontSize = Number(e.target.value);
+                        setFontSizeInput(fontSize);
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.textStyle.fontSize = fontSize;
+                        });
+                    }} />
+                    <PanelButton onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.textStyle.fontSize = (segment.textStyle.fontSize || 0) + 1;
+                        });
+                    }}>
+                        A
+                    </PanelButton>
+                    <PanelButton onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.textStyle.fontSize = Math.max((segment.textStyle.fontSize || 0) - 1, 1);
+                        });
+                    }}>
+                        a
+                    </PanelButton>
+                    <PanelButton style={{ fontWeight: 800 }} onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            if (segment.textStyle.fontWeight) {
+                                delete segment.textStyle.fontWeight;
+                            } else {
+                                segment.textStyle.fontWeight = 800;
+                            }
+                        });
+                    }}>
+                        B
+                    </PanelButton>
+                    <PanelButton style={{ fontStyle: 'italic' }} onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            if (segment.textStyle.fontStyle) {
+                                delete segment.textStyle.fontStyle;
+                            } else {
+                                segment.textStyle.fontStyle = 'italic';
+                            }
+                        });
+                    }}>
+                        I
+                    </PanelButton>
+                    <PanelButton style={{ textDecoration: '1px underline' }} onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            if (segment.textStyle.textDecoration) {
+                                delete segment.textStyle.textDecoration;
+                            } else {
+                                segment.textStyle.textDecoration = '1px underline';
+                            }
+                        });
+                    }}>
+                        U
+                    </PanelButton>
+                    <div className='panel_button' style={{ position: 'relative' }}>
+                        <input style={{ position: 'absolute', width: '100%', height: '100%', opacity: '0' }} type='color' onChange={(e) => {
+                            setColorInput(e.target.value);
+                            styleSelection(document.getSelection(), (segment) => {
+                                segment.textStyle.color = e.target.value;
+                            });
+                        }} />
+                        <div style={{ textDecoration: `2px ${colorInput} underline` }}>
+                            A
+                        </div>
+                    </div>
+                    <PanelButton onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.textStyle.fontSize = Math.max((segment.textStyle.fontSize || 0) - 1, 1);
+                        });
+                    }}>
+                        a
+                    </PanelButton>
+                    <PanelButton className='align_button' onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.textStyle.textAlign = 'left';
+                        });
+                    }}>
+                        <AlignLeft />
+                    </PanelButton>
+                    <PanelButton className='align_button' onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.textStyle.textAlign = 'center';
+                        });
+                    }}>
+                        <AlignCenter />
+                    </PanelButton>
+                    <PanelButton className='align_button' onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.textStyle.textAlign = 'right';
+                        });
+                    }}>
+                        <AlignRight />
+                    </PanelButton>
+                    <PanelButton className='align_button' onClick={(e) => {
+                        styleSelection(document.getSelection(), (segment) => {
+                            segment.textStyle.textAlign = 'justify';
+                        });
+                    }}>
+                        <AlignJustify />
+                    </PanelButton>
+                </>
+            );
+        },
+    },
+    {
+        name: 'Text',
+        Content: () => {
+            return (
+                <>
+
+                </>
+            );
+        },
+    },
+    {
+        name: 'Insert',
+        Content: () => {
+            return (
+                <>
+
+                </>
+            );
+        },
+    },
+    {
+        name: 'Setup',
+        Content: () => {
+            return (
+                <>
+
+                </>
+            );
+        },
+    },
+];
 
 
 
@@ -80,6 +254,9 @@ function clearEmptySegments(segments) {
 }
 
 function styleMatches(styleA, styleB) {
+    if (Object.keys(styleA).length !== Object.keys(styleB).length) {
+        return false;
+    }
     for (const [i, v] of Object.entries(styleA)) {
         if ((i in styleB) === false) {
             return false;
@@ -340,7 +517,7 @@ function PanelButton({ style, className, onClick, children, ...props }) {
     );
 }
 
-function Panel({ sectionsContent, selectedSectionName, setSelectedName, ...props }) {
+function Panel({ selectedSectionName, setSelectedName, ...props }) {
     let selectedSection;
     let selectedSectionInd;
     for (let i = 0; i < sectionsContent.length; i++) {
@@ -351,7 +528,7 @@ function Panel({ sectionsContent, selectedSectionName, setSelectedName, ...props
             break;
         }
     }
-    const Content = selectedSection.Content;
+    const content = selectedSection.Content;
     return (
         <div id='panel'>
             <div id='panel_section_buttons'>
@@ -367,7 +544,7 @@ function Panel({ sectionsContent, selectedSectionName, setSelectedName, ...props
                 })}
             </div>
             <div id='panel_content'>
-                <Content />
+                {React.createElement(content)}
             </div>
         </div>
     );
@@ -406,6 +583,7 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
 
     const { 0: documentData } = useState(isNew ? {} : initDocument);
 
+    const [documentName, setDocumentName] = useState(isNew ? 'Untitled' : initDocument.name);
     const [documentContent, setDocumentContent] = useState(isNew ? [
         {
             textStyle: {
@@ -429,179 +607,13 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
             setDocumentContent(newContent);
 
             setSelectMode('Range');
+
             setSelectStart(newContent.indexOf(affectedSegments[0]));
             setSelectEnd(newContent.indexOf(affectedSegments[affectedSegments.length - 1]));
             setSelectStartOffset(0);
             setSelectEndOffset(affectedSegments[affectedSegments.length - 1].text.length);
         }
     }
-
-    const sectionsContent = [
-        {
-            name: 'File',
-            Content: () => {
-                return (
-                    <>
-                        <input type='text' className='text_input' />
-                    </>
-                );
-            },
-        },
-        {
-            name: 'Home',
-            Content: () => {
-                const [colorInput, setColorInput] = useState('#ffffff');
-                const [fontSizeInput, setFontSizeInput] = useState(16);
-                return (
-                    <>
-                        <PanelSearchDropdown id='font_family_input' options={globalFonts.map((font, i) => {
-                            return (
-                                <option key={i} value={font} style={{ fontFamily: font }} className='select_option'>
-                                    {font}
-                                </option>
-                            );
-                        })} onInput={(e) => {
-                            const font = e.target.value;
-                            e.target.style.fontFamily = font;
-                            styleSelection(document.getSelection(), (segment) => {
-                                segment.textStyle.fontFamily = font;
-                            });
-                        }} />
-                        <input type='number' id='font_size_input' className='text_input' value={fontSizeInput} onInput={(e) => {
-                            const fontSize = Number(e.target.value);
-                            setFontSizeInput(fontSize);
-                            styleSelection(document.getSelection(), (segment) => {
-                                segment.textStyle.fontSize = fontSize;
-                            });
-                        }} />
-                        <PanelButton onClick={(e) => {
-                            styleSelection(document.getSelection(), (segment) => {
-                                segment.textStyle.fontSize = (segment.textStyle.fontSize || 0) + 1;
-                            });
-                        }}>
-                            A
-                        </PanelButton>
-                        <PanelButton onClick={(e) => {
-                            styleSelection(document.getSelection(), (segment) => {
-                                segment.textStyle.fontSize = Math.max((segment.textStyle.fontSize || 0) - 1, 1);
-                            });
-                        }}>
-                            a
-                        </PanelButton>
-                        <PanelButton style={{ fontWeight: 800 }} onClick={(e) => {
-                            styleSelection(document.getSelection(), (segment) => {
-                                if (segment.textStyle.fontWeight) {
-                                    delete segment.textStyle.fontWeight;
-                                } else {
-                                    segment.textStyle.fontWeight = 800;
-                                }
-                            });
-                        }}>
-                            B
-                        </PanelButton>
-                        <PanelButton style={{ fontStyle: 'italic' }} onClick={(e) => {
-                            styleSelection(document.getSelection(), (segment) => {
-                                if (segment.textStyle.fontStyle) {
-                                    delete segment.textStyle.fontStyle;
-                                } else {
-                                    segment.textStyle.fontStyle = 'italic';
-                                }
-                            });
-                        }}>
-                            I
-                        </PanelButton>
-                        <PanelButton style={{ textDecoration: '1px underline' }} onClick={(e) => {
-                            styleSelection(document.getSelection(), (segment) => {
-                                if (segment.textStyle.textDecoration) {
-                                    delete segment.textStyle.textDecoration;
-                                } else {
-                                    segment.textStyle.textDecoration = '1px underline';
-                                }
-                            });
-                        }}>
-                            U
-                        </PanelButton>
-                        <div className='panel_button' style={{ position: 'relative' }}>
-                            <input style={{ position: 'absolute', width: '100%', height: '100%', opacity: '0' }} type='color' onChange={(e) => {
-                                setColorInput(e.target.value);
-                                styleSelection(document.getSelection(), (segment) => {
-                                    segment.textStyle.color = e.target.value;
-                                });
-                            }} />
-                            <div style={{ textDecoration: `2px ${colorInput} underline` }}>
-                                A
-                            </div>
-                        </div>
-                        <PanelButton onClick={(e) => {
-                            styleSelection(document.getSelection(), (segment) => {
-                                segment.textStyle.fontSize = Math.max((segment.textStyle.fontSize || 0) - 1, 1);
-                            });
-                        }}>
-                            a
-                        </PanelButton>
-                        <PanelButton className='align_button' onClick={(e) => {
-                            styleSelection(document.getSelection(), (segment) => {
-                                segment.textStyle.textAlign = 'left';
-                            });
-                        }}>
-                            <AlignLeft />
-                        </PanelButton>
-                        <PanelButton className='align_button' onClick={(e) => {
-                            styleSelection(document.getSelection(), (segment) => {
-                                segment.textStyle.textAlign = 'center';
-                            });
-                        }}>
-                            <AlignCenter />
-                        </PanelButton>
-                        <PanelButton className='align_button' onClick={(e) => {
-                            styleSelection(document.getSelection(), (segment) => {
-                                segment.textStyle.textAlign = 'right';
-                            });
-                        }}>
-                            <AlignRight />
-                        </PanelButton>
-                        <PanelButton className='align_button' onClick={(e) => {
-                            styleSelection(document.getSelection(), (segment) => {
-                                segment.textStyle.textAlign = 'justify';
-                            });
-                        }}>
-                            <AlignJustify />
-                        </PanelButton>
-                    </>
-                );
-            },
-        },
-        {
-            name: 'Text',
-            Content: () => {
-                return (
-                    <>
-
-                    </>
-                );
-            },
-        },
-        {
-            name: 'Insert',
-            Content: () => {
-                return (
-                    <>
-
-                    </>
-                );
-            },
-        },
-        {
-            name: 'Setup',
-            Content: () => {
-                return (
-                    <>
-
-                    </>
-                );
-            },
-        },
-    ];
 
     useEffect(() => {
         if (selectMode !== undefined) {
@@ -650,6 +662,7 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
                             },
                             body: JSON.stringify({
                                 id: docId,
+                                name: documentName,
                                 content: sendContent,
                             }),
                         }).then((res) => {
@@ -667,7 +680,7 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                name: 'zaza',
+                                name: documentName,
                                 content: sendContent,
                             }),
                         }).then((res) => {
@@ -780,23 +793,25 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
 
     return (
         <StyleSelectionContext.Provider value={styleSelection}>
-            <Panel id='text_panel' sectionsContent={sectionsContent} selectedSectionName={selectedSection} setSelectedName={setSelectedSection} styleSelection={styleSelection} />
-            <section id='document'>
-                <div className='page' contentEditable='true' suppressContentEditableWarning='true' onDragOver={(e) => {
-                    e.preventDefault();
-                    console.log('drag droppy', e)
-                }} onBeforeInput={(e) => {
-                    pageInput(e, e.data);
-                }} onPaste={(e) => {
-                    pageInput(e, e.clipboardData.getData('Text'));
-                }} onKeyDown={(e) => {
-                    if (e.code === 'Backspace' || e.code === 'Delete') {
-                        pageDelete(e);
-                    }
-                }}>
-                    {createRichText(documentContent, selectStart, selectEnd, selectionStartRef, selectionEndRef)}
-                </div>
-            </section>
+            <DocumentContext.Provider value={[documentName, setDocumentName]}>
+                <Panel id='text_panel' selectedSectionName={selectedSection} setSelectedName={setSelectedSection} styleSelection={styleSelection} />
+                <section id='document'>
+                    <div className='page' contentEditable='true' suppressContentEditableWarning='true' onDragOver={(e) => {
+                        e.preventDefault();
+                        console.log('drag droppy', e)
+                    }} onBeforeInput={(e) => {
+                        pageInput(e, e.data);
+                    }} onPaste={(e) => {
+                        pageInput(e, e.clipboardData.getData('Text'));
+                    }} onKeyDown={(e) => {
+                        if (e.code === 'Backspace' || e.code === 'Delete') {
+                            pageDelete(e);
+                        }
+                    }}>
+                        {createRichText(documentContent, selectStart, selectEnd, selectionStartRef, selectionEndRef)}
+                    </div>
+                </section>
+            </DocumentContext.Provider>
         </StyleSelectionContext.Provider>
     );
 }

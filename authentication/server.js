@@ -590,6 +590,19 @@ app.put(getAPIURL('/savedocument'), (req, res) => {
         res.status(400).send(`Content is not array.`);
         return;
     }
+    const docName = body.name;
+    if (docName === undefined) {
+        res.status(400).send('Name is undefined.');
+        return;
+    }
+    if (docName === null) {
+        res.status(400).send('Name is null.');
+        return;
+    }
+    if (typeof (docName) !== 'string') {
+        res.status(400).send(`Name is not of type 'string'.`);
+        return;
+    }
     mySqlConnection.query('SELECT * FROM documents WHERE id = ?', [docId], (err, data) => {
         if (err) {
             console.error(err);
@@ -603,7 +616,7 @@ app.put(getAPIURL('/savedocument'), (req, res) => {
             const doc = data[0];
 
             const saveDocument = () => {
-                mySqlConnection.query('UPDATE documents SET content = ? WHERE id = ?', [JSON.stringify(content), docId], (err, data) => {
+                mySqlConnection.query('UPDATE documents SET name = ?, content = ? WHERE id = ?', [docName, JSON.stringify(content), docId], (err, data) => {
                     if (err) {
                         console.error(err);
                         res.status(500).send(err);
