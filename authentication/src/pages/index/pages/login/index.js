@@ -2,9 +2,11 @@ import './index.css';
 
 import { useState } from 'react';
 
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { useRefreshUserData } from '../../../../custom_hooks';
+
+import { FancyButton, TextInput } from '../../../../components/input';
 
 function UserForm({ isLogin }) {
     const refreshUserData = useRefreshUserData();
@@ -42,8 +44,24 @@ function UserForm({ isLogin }) {
         });
     }
 
-    const typeText = isLogin ? 'Log in' : 'Sign up';
-    const classType = isLogin ? 'login' : 'signup';
+    let typeText;
+    let classType;
+    let wrongPageText;
+    let wrongPageLinkText;
+    let wrongPagePath;
+    if (isLogin) {
+        typeText = 'Log in';
+        classType = 'login';
+        wrongPageText = `Don't have an account?`;
+        wrongPageLinkText = `Sign up`;
+        wrongPagePath = 'signup';
+    } else {
+        typeText = 'Sign up';
+        classType = 'signup';
+        wrongPageText = `Already have an account?`;
+        wrongPageLinkText = `Log in`;
+        wrongPagePath = 'login';
+    }
 
     return (
         <section id='user_section' className='main_content'>
@@ -53,20 +71,29 @@ function UserForm({ isLogin }) {
                     <div id='user_input_fields'>
                         <div className='user_input_field_container'>
                             <label className='standard_label' htmlFor={classType + '_username_input'}>Username</label>
-                            <input id={classType + '_username_input'} className='text_input' type='text' autofill='off' required value={usernameInput} onChange={(e) => {
+                            <TextInput id={classType + '_username_input'} type='text' autofill='off' required value={usernameInput} onChange={(e) => {
                                 setUsernameInput(e.target.value);
                             }} />
                         </div>
                         <div className='user_input_field_container'>
                             <label className='standard_label' htmlFor={classType + '_password_input'}>Password</label>
-                            <input id={classType + '_password_input'} className='text_input' type='password' autofill='off' required value={passwordInput} onChange={(e) => {
+                            <TextInput id={classType + '_username_input'} type='password' autofill='off' required value={passwordInput} onChange={(e) => {
                                 setPasswordInput(e.target.value);
                             }} />
                         </div>
                     </div>
-                    <button id='user_submit_button' className='button fancy_button primary' type='submit'>
+                    <div id='user_input_wrong_page'>
+                        <div id='user_input_wrong_page_text'>
+                            {wrongPageText}
+                        </div>
+                        &nbsp;
+                        <Link to={`/${wrongPagePath}`}>
+                            {wrongPageLinkText}
+                        </Link>
+                    </div>
+                    <FancyButton primary={true} id='user_submit_button' type='submit'>
                         {typeText}
-                    </button>
+                    </FancyButton>
                 </form>
             </section>
         </section>

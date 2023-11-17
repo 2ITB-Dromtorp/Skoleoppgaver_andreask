@@ -33,3 +33,11 @@
 #user_submit_button {
     
 }
+
+#user_input_wrong_page {
+    display: flex;
+}
+
+#user_input_wrong_page_text {
+    color: var(--main-subtle-col);
+}

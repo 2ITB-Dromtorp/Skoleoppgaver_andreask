@@ -8,7 +8,7 @@ import { UserDataContext } from '../context';
 
 import { Link } from 'react-router-dom';
 
-import { CustomFancyButton } from './input';
+import { CustomButton, CustomFancyButton } from './input';
 
 function TopNav() {
     //const [searchQuery, setSearchQuery] = useState('');
@@ -17,9 +17,9 @@ function TopNav() {
     let userContent;
     if (userData && userData.logged_in) {
         userContent = (
-            <Link id='profile_button' className='button' to='/account'>
+            <CustomButton element={Link} id='profile_button' to='/account'>
                 <img id='profile_image' src='https://i.pinimg.com/originals/b3/19/3e/b3193e0e568e2553f94943471b7e3bc8.gif' alt='profile_picture' />
-            </Link>
+            </CustomButton>
         );
     } else {
         userContent = (
