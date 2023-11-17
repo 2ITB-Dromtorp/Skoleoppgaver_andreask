@@ -2,7 +2,7 @@ import './App.css';
 
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import { useEffect, useContext, useState } from 'react';
+import { useEffect, useContext } from 'react';
 
 import { UserDataContext } from './context';
 import { useRefreshUserData } from './custom_hooks';
@@ -54,13 +54,11 @@ function IsLoggedInRedirect({ needsLogin, element }) {
 function App() {
     const { 0: userData } = useContext(UserDataContext);
     const refreshUserData = useRefreshUserData();
-    const [isFirstRender, setIsFirstRender] = useState(true);
     useEffect(() => {
-        if (isFirstRender) {
-            refreshUserData();
-            setIsFirstRender(false);
-        }
-    }, [isFirstRender, refreshUserData]);
+        refreshUserData();
+        //comment below disables meaningless warning
+        //eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const indexContent = userData.logged_in ? (
         <UserIndex />
