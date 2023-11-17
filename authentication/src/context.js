@@ -1,15 +1,15 @@
 import { createContext, useState } from 'react';
 
-export const UserContext = createContext();
-export function UserContextProvider({ children, ...props }) {
+export const UserDataContext = createContext();
+export function UserDataContextProvider({ children, ...props }) {
     const [userData, setUserData] = useState({});
 
     return (
-        <UserContext.Provider value={[userData, setUserData]}>
+        <UserDataContext.Provider value={[userData, setUserData]}>
             {children}
-        </UserContext.Provider>
+        </UserDataContext.Provider>
     );
-};
+}
 
 export const DocumentsContext = createContext();
 export function DocumentsContextProvider({ children, ...props }) {
@@ -20,4 +20,4 @@ export function DocumentsContextProvider({ children, ...props }) {
             {children}
         </DocumentsContext.Provider>
     );
-};
+}

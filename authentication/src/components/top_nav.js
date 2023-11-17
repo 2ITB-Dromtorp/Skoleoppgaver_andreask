@@ -4,13 +4,15 @@ import { ReactComponent as LogoSvg } from '../svgs/logo.svg';
 
 import { useContext } from 'react';
 
-import { UserContext } from '../context';
+import { UserDataContext } from '../context';
 
 import { Link } from 'react-router-dom';
 
+import { CustomFancyButton } from './input';
+
 function TopNav() {
     //const [searchQuery, setSearchQuery] = useState('');
-    const { 0: userData } = useContext(UserContext);
+    const { 0: userData } = useContext(UserDataContext);
 
     let userContent;
     if (userData && userData.logged_in) {
@@ -22,12 +24,12 @@ function TopNav() {
     } else {
         userContent = (
             <>
-                <Link id='login_button' className='button fancy_button secondary' to='/login'>
+                <CustomFancyButton primary={false} element={Link} id='login_button' to='/login'>
                     Log in
-                </Link>
-                <Link id='signup_button' className='button fancy_button primary' to='/signup'>
+                </CustomFancyButton>
+                <CustomFancyButton primary={true} element={Link} id='signup_button' to='/signup'>
                     Sign up
-                </Link>
+                </CustomFancyButton>
             </>
         );
     }

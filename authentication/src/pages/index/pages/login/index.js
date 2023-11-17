@@ -1,9 +1,15 @@
-import { useState } from 'react';
-import './login.css';
+import './index.css';
 
-import { redirect } from 'react-router-dom';
+import { useState } from 'react';
+
+import { useNavigate } from 'react-router-dom';
+
+import { useRefreshUserData } from '../../../../custom_hooks';
 
 function UserForm({ isLogin }) {
+    const refreshUserData = useRefreshUserData();
+    const navigate = useNavigate();
+
     const [usernameInput, setUsernameInput] = useState('');
     const [passwordInput, setPasswordInput] = useState('');
 
@@ -28,7 +34,8 @@ function UserForm({ isLogin }) {
             }),
         }).then((res) => {
             if (res.status === 200) {
-                redirect('/');
+                refreshUserData();
+                navigate('/');
             } else {
                 console.error(res);
             }
@@ -57,7 +64,9 @@ function UserForm({ isLogin }) {
                             }} />
                         </div>
                     </div>
-                    <button id='user_submit_button' className='button fancy_button primary' type='submit'>{typeText}</button>
+                    <button id='user_submit_button' className='button fancy_button primary' type='submit'>
+                        {typeText}
+                    </button>
                 </form>
             </section>
         </section>
@@ -68,7 +77,7 @@ function Login({ isLogin, ...props }) {
     /*
     gotta do it like this cuz react thinks its the same component
     as you can see we either insert {logincomponent} and {nocomponent}
-    or we insert {nocom} and {signupcomponent}
+    or we insert {nocomponent} and {signupcomponent}
     now react sees that our component was replaced and loads a fresh one
     */
     return (

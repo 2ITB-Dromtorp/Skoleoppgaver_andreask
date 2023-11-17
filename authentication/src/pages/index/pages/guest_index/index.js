@@ -2,6 +2,8 @@ import './index.css';
 
 import { Link } from 'react-router-dom';
 
+import { CustomFancyButton } from '../../../../components/input';
+
 function Card({ type, className, name, desc, children }) {
     let content;
     if (type === 'large') {
@@ -40,15 +42,19 @@ function SmallCard({ children, ...props }) {
     );
 }
 
-const Index = () => {
+const GuestIndex = () => {
     return (
         <section id='home_section' className='main_content'>
             <section id='top_section'>
                 <h1 id='top_header' className='fancy_header'>The Best Document Editor made with React</h1>
                 <p id='top_desc'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                 <div id='top_section_buttons'>
-                    <Link className='button fancy_button secondary' to='/login'>Login</Link>
-                    <Link className='button fancy_button primary' to='/documents'>Get started</Link>
+                    <CustomFancyButton primary={false} element={Link} to='/login'>
+                        Login
+                    </CustomFancyButton>
+                    <CustomFancyButton primary={true} element={Link} to='/documents'>
+                        Get started
+                    </CustomFancyButton>
                 </div>
             </section>
             <div id='card_section_intro'>
@@ -92,4 +98,4 @@ const Index = () => {
     );
 }
 
-export default Index;
+export default GuestIndex;

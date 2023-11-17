@@ -1,10 +1,13 @@
 import './App.css';
 
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 
-import { ContextProvider, UserContext } from './context';
+import { UserDataContext } from './context';
+import { useRefreshUserData } from './custom_hooks';
+
+import { LoadingContainer } from './components/loading';
 
 //stuff
 import NoPage from './pages/nopage';
@@ -12,35 +15,57 @@ import NoPage from './pages/nopage';
 //index
 import Layout from './pages/index/layout';
 
-import Index from './pages/index/pages/index';
-import Login from './pages/index/pages/login';
-import Account from './pages/index/pages/account';
-import Documents from './pages/index/pages/documents';
-import { Document, DocumentEditor } from './pages/index/pages/document';
+import UserIndex from './pages/index/pages/user_index/index';
+import GuestIndex from './pages/index/pages/guest_index/index';
+import Login from './pages/index/pages/login/index';
+import Account from './pages/index/pages/account/index';
+import Documents from './pages/index/pages/documents/index';
+import { Document, DocumentEditor } from './pages/index/pages/document/index';
+
+function IsLoggedInRedirect({ needsLogin, element }) {
+    const { 0: userData } = useContext(UserDataContext);
+    let newElement;
+    if ('logged_in' in userData === false) {
+        newElement = (
+            <LoadingContainer>
+                <p>Authorizing...</p>
+            </LoadingContainer>
+        );
+    } else if (userData.logged_in === needsLogin) {
+        newElement = (
+            <>
+                {element}
+            </>
+        );
+    } else {
+        newElement = (
+            <>
+                <LoadingContainer>
+                    <p>You are not logged in</p>
+                    <p>Redirecting to home page...</p>
+                </LoadingContainer>
+                <Navigate to='/' />
+            </>
+        );
+    }
+    return newElement;
+}
 
 function App() {
-    const [userData, setUserData] = useContext(UserContext);
-    //refreshing user data
+    const { 0: userData } = useContext(UserDataContext);
+    const refreshUserData = useRefreshUserData();
+    const [isFirstRender, setIsFirstRender] = useState(true);
     useEffect(() => {
-        fetch('/api/getsession', {
-            method: 'GET',
-        }).then((res) => {
-            if (res.status === 200) {
-                res.json().then((data) => {
-                    setUserData(data);
-                });
-            } else {
-                console.error(res);
-            }
-        });
-    }, []);
+        if (isFirstRender) {
+            refreshUserData();
+            setIsFirstRender(false);
+        }
+    }, [isFirstRender, refreshUserData]);
 
     const indexContent = userData.logged_in ? (
-        <>
-            <Link to='/documents'>go to documents sir pls this site doesnt exist yet</Link>
-        </>
+        <UserIndex />
     ) : (
-        <Index />
+        <GuestIndex />
     );
 
     return (
@@ -48,12 +73,12 @@ function App() {
             <Routes>
                 <Route path='/' element={<Layout />}>
                     <Route index element={indexContent} />
-                    <Route path='documents' element={<Documents />} />
+                    <Route path='documents' element={<IsLoggedInRedirect needsLogin={true} element={<Documents />} />} />
                     <Route path='newdocument' element={<DocumentEditor isNew={true} />} />
                     <Route path='document/:docId' element={<Document isNew={false} />} />
-                    <Route path='signup' element={<Login isLogin={false} />} />
-                    <Route path='login' element={<Login isLogin={true} />} />
-                    <Route path='account' element={<Account />} />
+                    <Route path='signup' element={<IsLoggedInRedirect needsLogin={false} element={<Login isLogin={false} />} />} />
+                    <Route path='login' element={<IsLoggedInRedirect needsLogin={false} element={<Login isLogin={true} />} />} />
+                    <Route path='account' element={<IsLoggedInRedirect needsLogin={true} element={<Account />} />} />
                     <Route path='*' element={<NoPage />} />
                 </Route>
             </Routes>

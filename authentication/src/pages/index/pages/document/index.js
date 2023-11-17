@@ -1,9 +1,11 @@
-import './document.css';
+import './index.css';
 
-import { ReactComponent as AlignLeft } from '../../../svgs/align_left.svg';
-import { ReactComponent as AlignCenter } from '../../../svgs/align_center.svg';
-import { ReactComponent as AlignRight } from '../../../svgs/align_right.svg';
-import { ReactComponent as AlignJustify } from '../../../svgs/align_justify.svg';
+import { ReactComponent as AlignLeft } from '../../../../svgs/align_left.svg';
+import { ReactComponent as AlignCenter } from '../../../../svgs/align_center.svg';
+import { ReactComponent as AlignRight } from '../../../../svgs/align_right.svg';
+import { ReactComponent as AlignJustify } from '../../../../svgs/align_justify.svg';
+
+import { LoadingContainer, LoadingFailedContainer } from '../../../../components/loading';
 
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
@@ -770,11 +772,11 @@ function LoadingDocument({ status }) {
         statusText = 'Downloading document...';
     }
     return (
-        <div id='document_loading_container'>
+        <LoadingContainer>
             <p>
                 {statusText}
             </p>
-        </div>
+        </LoadingContainer>
     );
 }
 
@@ -815,9 +817,9 @@ function DocumentFailed({ knownReason, ...props }) {
         );
     }
     return (
-        <div id='document_failed_container'>
+        <LoadingFailedContainer>
             {content}
-        </div>
+        </LoadingFailedContainer>
     );
 }
 

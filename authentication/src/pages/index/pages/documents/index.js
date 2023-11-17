@@ -1,10 +1,12 @@
-import './documents.css';
+import './index.css';
 
 import { useContext, useEffect } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 
-import { DocumentsContext } from '../../../context';
+import { DocumentsContext } from '../../../../context';
+
+import { FancyButton } from '../../../../components/input';
 
 const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
@@ -43,6 +45,7 @@ function DocumentLink({ data }) {
 function Documents() {
     const [documents, setDocuments] = useContext(DocumentsContext);
     const navigate = useNavigate();
+
     useEffect(() => {
         const url = new URL('/api/documents', window.location.origin);
         const searchParams = new URLSearchParams();
@@ -62,14 +65,15 @@ function Documents() {
             }
         });
     }, [setDocuments]);
+
     return (
         <section id='documents_section' className='main_content'>
             <h1 className='fancy_header'>Documents</h1>
-            <button id='create_document_button' className='button fancy_button primary' onClick={(e) => {
+            <FancyButton primary={true} id='create_document_button' onClick={(e) => {
                 navigate('/newdocument');
             }}>
                 Create Document
-            </button>
+            </FancyButton>
             <div id='document_links'>
                 {documents.map((data, i) => {
                     return <DocumentLink key={i} data={data} />
