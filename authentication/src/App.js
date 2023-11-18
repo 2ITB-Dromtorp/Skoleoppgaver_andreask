@@ -56,7 +56,13 @@ function App() {
     const refreshUserData = useRefreshUserData();
     useEffect(() => {
         refreshUserData();
-        //comment below disables meaningless warning
+        /*
+        this is a useEffect hook, and we use a custom hook: useRefreshUserData()
+        the point of this useEffect is to fetch if the user is logged in, and its data when the page loads
+        now useEffect is designed to run when something changes, but we only want it to run once, with an empty dependency array
+        react misunderstands our goals and creates a warning
+        comment below disables meaningless warning
+        */
         //eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

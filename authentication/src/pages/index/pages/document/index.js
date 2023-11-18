@@ -31,6 +31,7 @@ const globalFonts = [
 ];
 
 
+const DocumentSelectionContext = createContext();
 const StyleSelectionContext = createContext();
 const DocumentContext = createContext();
 
@@ -53,6 +54,7 @@ const sectionsContent = [
         name: 'Home',
         Content: () => {
             const styleSelection = useContext(StyleSelectionContext);
+            const [documentSelection, setDocumentSelection] = useContext(DocumentSelectionContext);
             const [colorInput, setColorInput] = useState('#ffffff');
             const [fontSizeInput, setFontSizeInput] = useState(16);
             return (
@@ -66,33 +68,33 @@ const sectionsContent = [
                     })} onInput={(e) => {
                         const font = e.target.value;
                         e.target.style.fontFamily = font;
-                        styleSelection(document.getSelection(), (segment) => {
+                        styleSelection(documentSelection, (segment) => {
                             segment.textStyle.fontFamily = font;
                         });
                     }} />
                     <input type='number' id='font_size_input' className='text_input' value={fontSizeInput} onInput={(e) => {
                         const fontSize = Number(e.target.value);
                         setFontSizeInput(fontSize);
-                        styleSelection(document.getSelection(), (segment) => {
+                        styleSelection(documentSelection, (segment) => {
                             segment.textStyle.fontSize = fontSize;
                         });
                     }} />
                     <PanelButton onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
+                        styleSelection(documentSelection, (segment) => {
                             segment.textStyle.fontSize = (segment.textStyle.fontSize || 0) + 1;
                         });
                     }}>
                         A
                     </PanelButton>
                     <PanelButton onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
+                        styleSelection(documentSelection, (segment) => {
                             segment.textStyle.fontSize = Math.max((segment.textStyle.fontSize || 0) - 1, 1);
                         });
                     }}>
                         a
                     </PanelButton>
                     <PanelButton style={{ fontWeight: 800 }} onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
+                        styleSelection(documentSelection, (segment) => {
                             if (segment.textStyle.fontWeight) {
                                 delete segment.textStyle.fontWeight;
                             } else {
@@ -103,7 +105,7 @@ const sectionsContent = [
                         B
                     </PanelButton>
                     <PanelButton style={{ fontStyle: 'italic' }} onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
+                        styleSelection(documentSelection, (segment) => {
                             if (segment.textStyle.fontStyle) {
                                 delete segment.textStyle.fontStyle;
                             } else {
@@ -114,7 +116,7 @@ const sectionsContent = [
                         I
                     </PanelButton>
                     <PanelButton style={{ textDecoration: '1px underline' }} onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
+                        styleSelection(documentSelection, (segment) => {
                             if (segment.textStyle.textDecoration) {
                                 delete segment.textStyle.textDecoration;
                             } else {
@@ -127,7 +129,7 @@ const sectionsContent = [
                     <div className='panel_button' style={{ position: 'relative' }}>
                         <input style={{ position: 'absolute', width: '100%', height: '100%', opacity: '0' }} type='color' onChange={(e) => {
                             setColorInput(e.target.value);
-                            styleSelection(document.getSelection(), (segment) => {
+                            styleSelection(documentSelection, (segment) => {
                                 segment.textStyle.color = e.target.value;
                             });
                         }} />
@@ -136,35 +138,35 @@ const sectionsContent = [
                         </div>
                     </div>
                     <PanelButton onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
+                        styleSelection(documentSelection, (segment) => {
                             segment.textStyle.fontSize = Math.max((segment.textStyle.fontSize || 0) - 1, 1);
                         });
                     }}>
                         a
                     </PanelButton>
                     <PanelButton className='align_button' onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
+                        styleSelection(documentSelection, (segment) => {
                             segment.textStyle.textAlign = 'left';
                         });
                     }}>
                         <AlignLeft />
                     </PanelButton>
                     <PanelButton className='align_button' onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
+                        styleSelection(documentSelection, (segment) => {
                             segment.textStyle.textAlign = 'center';
                         });
                     }}>
                         <AlignCenter />
                     </PanelButton>
                     <PanelButton className='align_button' onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
+                        styleSelection(documentSelection, (segment) => {
                             segment.textStyle.textAlign = 'right';
                         });
                     }}>
                         <AlignRight />
                     </PanelButton>
                     <PanelButton className='align_button' onClick={(e) => {
-                        styleSelection(document.getSelection(), (segment) => {
+                        styleSelection(documentSelection, (segment) => {
                             segment.textStyle.textAlign = 'justify';
                         });
                     }}>
@@ -216,12 +218,12 @@ EFFORTLESSLY
 ELEGANTLY
 MAJESTICALLY
 */
-function createRichText(segments, selectStart, selectEnd, selectStartRef, selectEndRef) {
+function createRichText(segments) {
     const res = [];
     for (let i = 0; i < segments.length; i++) {
         const segment = segments[i];
         res.push((
-            <span key={i} data-text-id={i} style={Object.assign({}, { ...segment.textStyle, ...segment.editStyle })} ref={selectStart === i ? selectStartRef : selectEnd === i ? selectEndRef : undefined}>
+            <span key={i} data-text-id={i} style={Object.assign({}, { ...segment.textStyle, ...segment.editStyle })}>
                 {segment.text}
             </span>
         ));
@@ -304,6 +306,7 @@ function getAffectedSegments(segments, offset, length) {
 }
 
 function separateRichTextSegments(segments, offset, length, pushNew) {
+    console.log("RAH", [...segments], offset, length)
     const newSegments = [];
     const affectedSegments = [];
     let total = 0;
@@ -391,46 +394,63 @@ function getOffsetFromStart(segments, endInd) {
     return total;
 }
 
-//"backward" selections break the algorithms so make it absolute (pain)
-function getAbsoluteSelection(segments, baseStart, baseEnd, selection) {
-    let offset;
-    //yk selection index is from the element that was selected not all of the spans so we need to get the total
-    const getParentTextId = (node) => {
-        let par;
-        if (node.nodeName === '#text') {
-            par = node.parentElement;
-        } else {
-            par = node;
-        }
-        return Number(par.dataset.textId);
-    }
-    if (selection.anchorNode === selection.focusNode) {
-        //same text node
-        const isForward = baseStart < baseEnd;
-        offset = Math.min(baseStart, baseEnd);
-        offset += getOffsetFromStart(segments, getParentTextId(isForward ? selection.focusNode : selection.anchorNode));
+const getTextId = (node) => {
+    let par;
+    if (node.nodeName === '#text') {
+        par = node.parentElement;
     } else {
-        //NOT same text node
-        if (selection.anchorNode.compareDocumentPosition(selection.focusNode) & Node.DOCUMENT_POSITION_FOLLOWING) {
-            //normal, non-psychopathic sane selection
-            offset = baseStart;
-            offset += getOffsetFromStart(segments, getParentTextId(selection.anchorNode));
-        } else {
-            //backwards psychopathic insane selection
-            offset = baseEnd;
-            offset += getOffsetFromStart(segments, getParentTextId(selection.focusNode));
-        }
+        par = node;
     }
-
-    return offset;
+    return Number(par.dataset.textId);
 }
 
-function getAbsoluteSelectionFromSelection(segments, selection) {
-    return getAbsoluteSelection(segments, selection.anchorOffset, selection.focusOffset, selection);
+//"backward" selections break the algorithms so make it absolute (pain)
+function getAbsoluteSelection(segments, selection) {
+    let startOffset;
+    let endOffset;
+    //yk selection index is from the element that was selected not all of the spans so we need to get the total
+    if (selection.startIndex === selection.endIndex) {
+        //same text node
+        const isForward = selection.startOffset < selection.endOffset;
+        startOffset = Math.min(selection.startOffset, selection.endOffset);
+        startOffset += getOffsetFromStart(segments, isForward ? selection.endIndex : selection.startIndex);
+        endOffset = Math.max(selection.startOffset, selection.endOffset);
+        endOffset += getOffsetFromStart(segments, isForward ? selection.startIndex : selection.endIndex);
+    } else {
+        //NOT same text node
+        if (selection.startIndex > selection.endIndex) {
+            //normal, non-psychopathic sane selection
+            startOffset = selection.startOffset;
+            startOffset += getOffsetFromStart(segments, selection.startIndex);
+            endOffset = selection.endOffset;
+            endOffset += getOffsetFromStart(segments, selection.endIndex);
+        } else {
+            //backwards psychopathic insane selection
+            startOffset = selection.endOffset;
+            startOffset += getOffsetFromStart(segments, selection.endIndex);
+            endOffset = selection.startOffset;
+            endOffset += getOffsetFromStart(segments, selection.startIndex);
+        }
+    }
+
+    return [startOffset, endOffset];
 }
 
 function separateRichText(segments, selection, pushNew) {
-    const absStart = getAbsoluteSelectionFromSelection(segments, selection);
+    const [absStart, absEnd] = getAbsoluteSelection(segments, selection);
+    const length = absEnd - absStart;
+    const [affectedSegments, startInd, endInd] = getAffectedSegments(segments, absStart, length);
+    const [newSegments, newAffectedSegments] = separateRichTextSegments(affectedSegments, absStart - getOffsetFromStart(segments, startInd), length, pushNew);
+    const itAmount = endInd - startInd;
+    let curInd = 0;
+    for (let segInd = 0; segInd <= itAmount; segInd++) {
+        segments.splice(startInd + curInd, 1, ...newSegments[segInd]);
+        curInd += newSegments[segInd].length;
+    }
+    clearEmptySegments(segments);
+    return [absStart, newAffectedSegments];
+    /*
+    const absStart = getAbsoluteSelection(segments, selection);
     const length = selection.toString().length;
     const [affectedSegments, startInd, endInd] = getAffectedSegments(segments, absStart, length);
     const [newSegments, newAffectedSegments] = separateRichTextSegments(affectedSegments, absStart - getOffsetFromStart(segments, startInd), length, pushNew);
@@ -442,6 +462,7 @@ function separateRichText(segments, selection, pushNew) {
     }
     clearEmptySegments(segments);
     return [absStart, newAffectedSegments];
+    */
 }
 
 /*
@@ -528,7 +549,7 @@ function Panel({ selectedSectionName, setSelectedName, ...props }) {
             break;
         }
     }
-    const content = selectedSection.Content;
+    const Content = selectedSection.Content;
     return (
         <div id='panel'>
             <div id='panel_section_buttons'>
@@ -544,7 +565,7 @@ function Panel({ selectedSectionName, setSelectedName, ...props }) {
                 })}
             </div>
             <div id='panel_content'>
-                {React.createElement(content)}
+                <Content />
             </div>
         </div>
     );
@@ -568,16 +589,22 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
 
     const [docId, setDocId] = useState(isNew ? undefined : props.docId);
 
-    const [selectMode, setSelectMode] = useState();
+    const pageRef = useRef();
 
-    const [selectStartOffset, setSelectStartOffset] = useState(0);
-    const [selectEndOffset, setSelectEndOffset] = useState(0);
+    const [documentSelection, setDocumentSelection] = useState({
+        type: 'Caret',
+        startIndex: 0,
+        startOffset: 0,
+        endIndex: 0,
+        endOffset: 0,
+    });
 
-    const [selectStart, setSelectStart] = useState(0);
-    const [selectEnd, setSelectEnd] = useState(0);
+    const selectedStartRef = useRef();
+    const selectedEndRef = useRef();
 
-    const selectionStartRef = useRef();
-    const selectionEndRef = useRef();
+    const [lastSelectedSegments, setLastSelectedSegments] = useState([]);
+
+    const [isSelecting, setIsSelecting] = useState(false);
 
     const [selectedSection, setSelectedSection] = useState('Home');
 
@@ -595,6 +622,22 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
         },
     ] : parseSavedContent(initDocument.content));
 
+    const passiveRefreshSelection = () => {
+        const selection = document.getSelection();
+        if (selection.focusNode) {  
+            console.log("yes focusnode", selection.anchorNode, selection.focusNode, selection.anchorOffset, selection.focusOffset, getTextId(selection.anchorNode), getTextId(selection.focusNode))
+            setDocumentSelection({
+                type: 'Range',
+                startIndex: getTextId(selection.anchorNode),
+                startOffset: selection.anchorOffset,
+                endIndex: getTextId(selection.focusNode),
+                endOffset: selection.focusOffset,
+            });
+        } else {
+            console.log("no focusnode")
+        }
+    }
+
     const styleSelection = (selection, func) => {
         if (selection.type === 'Range') {
             const newContent = copyObject(documentContent, true);
@@ -606,35 +649,44 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
             mergeIdenticalSegments(newContent);
             setDocumentContent(newContent);
 
-            setSelectMode('Range');
+            const startIndex = newContent.indexOf(affectedSegments[0]);
+            const startOffset = 0;
 
-            setSelectStart(newContent.indexOf(affectedSegments[0]));
-            setSelectEnd(newContent.indexOf(affectedSegments[affectedSegments.length - 1]));
-            setSelectStartOffset(0);
-            setSelectEndOffset(affectedSegments[affectedSegments.length - 1].text.length);
+            let type;
+            let endIndex;
+            let endOffset;
+            if (affectedSegments.length > 0) {
+                type = 'Range';
+                endIndex = newContent.indexOf(affectedSegments[affectedSegments.length - 1]);
+                endOffset = affectedSegments[affectedSegments.length - 1].text.length;
+            } else {
+                type = 'Caret';
+                endIndex = startIndex;
+                endOffset = startOffset;
+            }
+
+            setDocumentSelection({
+                type: type,
+                startIndex: startIndex,
+                startOffset: startOffset,
+                endIndex: endIndex,
+                endOffset: endOffset,
+            });
         }
     }
 
+    const styleDocumentSelection = (selection) => {
+        styleSelection(selection, (seg) => {
+            seg.editStyle.backgroundColor = 'rgb(0, 100, 255)';
+        });
+    }
+
     useEffect(() => {
-        if (selectMode !== undefined) {
-            const selection = document.getSelection();
-            if (selectMode === 'Caret') {
-                selection.setPosition(selectionStartRef.current.childNodes[0] || selectionStartRef.current, selectStartOffset);
-            } else if (selectMode === 'Range') {
-                let endRef;
-                if (selectStart === selectEnd || selectEnd === undefined) {
-                    endRef = selectionStartRef;
-                } else {
-                    endRef = selectionEndRef;
-                }
-                selection.setBaseAndExtent(selectionStartRef.current.childNodes[0], 0, endRef.current.childNodes[0], selectEndOffset);
-            }
-            setSelectMode(undefined);
-            setSelectStart(0);
-            setSelectEnd(0);
-            setSelectStartOffset(0);
-            setSelectEndOffset(0);
-        }
+        console.log("restyle")
+        //styleDocumentSelection(documentSelection);
+    }, [documentSelection]);
+
+    useEffect(() => {
         const warnLeaveListener = (e) => {
             /*
             e.preventDefault();
@@ -645,11 +697,11 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
         return () => {
             window.removeEventListener('beforeunload', warnLeaveListener);
         }
-    }, [documentContent, selectEnd, selectEndOffset, selectMode, selectStart, selectStartOffset]);
+    }, [documentContent]);
 
     useEffect(() => {
         const keyDownListener = (e) => {
-            //const selection = document.getSelection();
+            //const selection = documentSelection;
             if (e.ctrlKey) {
                 if (e.code === 'KeyS') {
                     e.preventDefault();
@@ -698,43 +750,63 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
         }
 
         const mouseDownListener = (e) => {
-            /*
-            if (e.which === 1) {
-                e.preventDefault();
-            }
-            */
+            setIsSelecting(true);
+            passiveRefreshSelection();
+        }
+
+        const mouseUpListener = (e) => {
+            setIsSelecting(false);
+        }
+
+        const mouseMoveListener = (e) => {
+
         }
 
         document.addEventListener('keydown', keyDownListener);
         document.addEventListener('mousedown', mouseDownListener);
+        document.addEventListener('mouseup', mouseUpListener);
+        if (isSelecting) {
+            document.addEventListener('mousemove', mouseMoveListener);
+        }
         return () => {
             document.removeEventListener('keydown', keyDownListener);
             document.removeEventListener('mousedown', mouseDownListener);
+            document.removeEventListener('mouseup', mouseUpListener);
+            if (isSelecting) {
+                document.removeEventListener('mousemove', mouseMoveListener);
+            }
         }
     });
 
     const pageInput = (e, addText) => {
         e.preventDefault();
-        const selection = document.getSelection();
         const newContent = copyObject(documentContent, true);
-        const { 0: absStart } = separateRichText(newContent, selection, false);
+        const { 0: absStart } = separateRichText(newContent, documentSelection, false);
+        if (newContent.length === 0) {
+            console.log("aaa", {...documentSelection})
+            return;
+        }
         const { 0: insertSeg } = getSegmentAtIndex(newContent, absStart - 1);
 
         insertSeg.text += addText;//insertSeg.text = addText + insertSeg.text;//if inserting backwards
 
-        setSelectMode('Caret');
-        setSelectStart(newContent.indexOf(insertSeg));
-        setSelectStartOffset(insertSeg.text.length);
+        setDocumentSelection({
+            type: 'Caret',
+            startIndex: newContent.indexOf(insertSeg),
+            startOffset: insertSeg.text.length,
+            endIndex: newContent.indexOf(insertSeg),
+            endOffset: insertSeg.text.length,
+        });
 
         setDocumentContent(newContent);
     }
 
     const pageDelete = (e) => {
         e.preventDefault();
-        const selection = document.getSelection();
+        const selection = documentSelection;
         const newContent = copyObject(documentContent, true);
         if (selection.type === 'Caret') {
-            const absStart = getAbsoluteSelectionFromSelection(newContent, selection);
+            const absStart = getAbsoluteSelection(newContent, selection);
             const [insertSeg, segStart] = getSegmentAtIndex(newContent, absStart - 1);
 
             const deleteStartInd = absStart - segStart - 1;
@@ -757,9 +829,13 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
                 startInd = deleteStartInd;
             }
 
-            setSelectMode('Caret');
-            setSelectStart(selectStartInd);
-            setSelectStartOffset(startInd);
+            setDocumentSelection({
+                type: 'Caret',
+                startIndex: selectStartInd,
+                startOffset: startInd,
+                endIndex: selectStartInd,
+                endOffset: startInd,
+            });
 
             clearEmptySegments(newContent);
         } else if (selection.type === 'Range') {
@@ -776,9 +852,13 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
 
             const startInd = absStart - segStart;
 
-            setSelectMode('Caret');
-            setSelectStart(newContent.indexOf(insertSeg));
-            setSelectStartOffset(startInd);
+            setDocumentSelection({
+                type: 'Caret',
+                startIndex: newContent.indexOf(insertSeg),
+                startOffset: startInd,
+                endIndex: newContent.indexOf(insertSeg),
+                endOffset: startInd,
+            });
 
             clearEmptySegments(newContent);
         }
@@ -792,27 +872,29 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
     downloadEntireDocument();
 
     return (
-        <StyleSelectionContext.Provider value={styleSelection}>
-            <DocumentContext.Provider value={[documentName, setDocumentName]}>
-                <Panel id='text_panel' selectedSectionName={selectedSection} setSelectedName={setSelectedSection} styleSelection={styleSelection} />
-                <section id='document'>
-                    <div className='page' contentEditable='true' suppressContentEditableWarning='true' onDragOver={(e) => {
-                        e.preventDefault();
-                        console.log('drag droppy', e)
-                    }} onBeforeInput={(e) => {
-                        pageInput(e, e.data);
-                    }} onPaste={(e) => {
-                        pageInput(e, e.clipboardData.getData('Text'));
-                    }} onKeyDown={(e) => {
-                        if (e.code === 'Backspace' || e.code === 'Delete') {
-                            pageDelete(e);
-                        }
-                    }}>
-                        {createRichText(documentContent, selectStart, selectEnd, selectionStartRef, selectionEndRef)}
-                    </div>
-                </section>
-            </DocumentContext.Provider>
-        </StyleSelectionContext.Provider>
+        <DocumentSelectionContext.Provider value={[documentSelection, setDocumentSelection]}>
+            <StyleSelectionContext.Provider value={styleSelection}>
+                <DocumentContext.Provider value={[documentName, setDocumentName]}>
+                    <Panel id='text_panel' selectedSectionName={selectedSection} setSelectedName={setSelectedSection} styleSelection={styleSelection} />
+                    <section id='document'>
+                        <div className='page' ref={pageRef} contentEditable='true' suppressContentEditableWarning='true' onDragOver={(e) => {
+                            e.preventDefault();
+                            console.log('drag droppy', e)
+                        }} onBeforeInput={(e) => {
+                            pageInput(e, e.data);
+                        }} onPaste={(e) => {
+                            pageInput(e, e.clipboardData.getData('Text'));
+                        }} onKeyDown={(e) => {
+                            if (e.code === 'Backspace' || e.code === 'Delete') {
+                                pageDelete(e);
+                            }
+                        }}>
+                            {createRichText(documentContent)}
+                        </div>
+                    </section>
+                </DocumentContext.Provider>
+            </StyleSelectionContext.Provider>
+        </DocumentSelectionContext.Provider>
     );
 }
 
