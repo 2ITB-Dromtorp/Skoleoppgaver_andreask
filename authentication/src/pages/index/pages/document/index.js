@@ -218,12 +218,24 @@ EFFORTLESSLY
 ELEGANTLY
 MAJESTICALLY
 */
-function createRichText(segments) {
+function createRichText(segments, selection, selectStartRef, selectEndRef) {
     const res = [];
     for (let i = 0; i < segments.length; i++) {
         const segment = segments[i];
+        let ref;
+        if (selection.type === 'Caret') {
+            if (i === selection.startIndex) {
+                ref = selectStartRef;
+            }
+        } else if (selection.type === 'Range') {
+            if (i === selection.startIndex) {
+                ref = selectStartRef;
+            } else if (i === selection.endIndex) {
+                ref = selectEndRef;
+            }
+        }
         res.push((
-            <span key={i} data-text-id={i} style={Object.assign({}, { ...segment.textStyle, ...segment.editStyle })}>
+            <span key={i} data-text-id={i} style={Object.assign({}, { ...segment.textStyle, ...segment.editStyle })} ref={ref}>
                 {segment.text}
             </span>
         ));
@@ -306,7 +318,6 @@ function getAffectedSegments(segments, offset, length) {
 }
 
 function separateRichTextSegments(segments, offset, length, pushNew) {
-    console.log("RAH", [...segments], offset, length)
     const newSegments = [];
     const affectedSegments = [];
     let total = 0;
@@ -418,7 +429,7 @@ function getAbsoluteSelection(segments, selection) {
         endOffset += getOffsetFromStart(segments, isForward ? selection.startIndex : selection.endIndex);
     } else {
         //NOT same text node
-        if (selection.startIndex > selection.endIndex) {
+        if (selection.startIndex < selection.endIndex) {
             //normal, non-psychopathic sane selection
             startOffset = selection.startOffset;
             startOffset += getOffsetFromStart(segments, selection.startIndex);
@@ -449,20 +460,6 @@ function separateRichText(segments, selection, pushNew) {
     }
     clearEmptySegments(segments);
     return [absStart, newAffectedSegments];
-    /*
-    const absStart = getAbsoluteSelection(segments, selection);
-    const length = selection.toString().length;
-    const [affectedSegments, startInd, endInd] = getAffectedSegments(segments, absStart, length);
-    const [newSegments, newAffectedSegments] = separateRichTextSegments(affectedSegments, absStart - getOffsetFromStart(segments, startInd), length, pushNew);
-    const itAmount = endInd - startInd;
-    let curInd = 0;
-    for (let segInd = 0; segInd <= itAmount; segInd++) {
-        segments.splice(startInd + curInd, 1, ...newSegments[segInd]);
-        curInd += newSegments[segInd].length;
-    }
-    clearEmptySegments(segments);
-    return [absStart, newAffectedSegments];
-    */
 }
 
 /*
@@ -599,10 +596,10 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
         endOffset: 0,
     });
 
-    const selectedStartRef = useRef();
-    const selectedEndRef = useRef();
+    const documentSelectStartRef = useRef();
+    const documentSelectEndRef = useRef();
 
-    const [lastSelectedSegments, setLastSelectedSegments] = useState([]);
+    //const [lastSelectedSegments, setLastSelectedSegments] = useState([]);
 
     const [isSelecting, setIsSelecting] = useState(false);
 
@@ -622,20 +619,15 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
         },
     ] : parseSavedContent(initDocument.content));
 
-    const passiveRefreshSelection = () => {
+    const autoSetCaretSelection = () => {
         const selection = document.getSelection();
-        if (selection.focusNode) {  
-            console.log("yes focusnode", selection.anchorNode, selection.focusNode, selection.anchorOffset, selection.focusOffset, getTextId(selection.anchorNode), getTextId(selection.focusNode))
-            setDocumentSelection({
-                type: 'Range',
-                startIndex: getTextId(selection.anchorNode),
-                startOffset: selection.anchorOffset,
-                endIndex: getTextId(selection.focusNode),
-                endOffset: selection.focusOffset,
-            });
-        } else {
-            console.log("no focusnode")
-        }
+        setDocumentSelection({
+            type: getTextId(selection.anchorNode) === getTextId(selection.focusNode) ? 'Caret' : 'Range',
+            startIndex: getTextId(selection.anchorNode),
+            startOffset: selection.anchorOffset,
+            endIndex: getTextId(selection.focusNode),
+            endOffset: selection.focusOffset,
+        });
     }
 
     const styleSelection = (selection, func) => {
@@ -682,7 +674,14 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
     }
 
     useEffect(() => {
-        console.log("restyle")
+        const selection = document.getSelection();
+        if (pageRef.current.contains(selection.anchorNode)) {
+            if (documentSelection.type === 'Caret') {
+                selection.setPosition(documentSelectStartRef.current.childNodes[0], documentSelection.startOffset);
+            } else if (documentSelection.type === 'Range') {
+                selection.setBaseAndExtent(documentSelectStartRef.current.childNodes[0], documentSelection.startOffset, documentSelectEndRef.current.childNodes[0], documentSelection.endOffset);
+            }
+        }
         //styleDocumentSelection(documentSelection);
     }, [documentSelection]);
 
@@ -749,22 +748,37 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
             }
         }
 
+        //using timeout to let other event handlers finish (selection calculation)
         const mouseDownListener = (e) => {
             setIsSelecting(true);
-            passiveRefreshSelection();
+            setTimeout(() => {
+                autoSetCaretSelection();
+            }, 0);
         }
 
         const mouseUpListener = (e) => {
             setIsSelecting(false);
+            setTimeout(() => {
+                autoSetCaretSelection();
+            }, 0);
         }
 
         const mouseMoveListener = (e) => {
-
+            setTimeout(() => {
+                const selection = document.getSelection();
+                setDocumentSelection({
+                    type: documentSelection.startIndex === getTextId(selection.focusNode) ? 'Caret' : 'Range',
+                    startIndex: documentSelection.startIndex,
+                    startOffset: documentSelection.startOffset,
+                    endIndex: getTextId(selection.focusNode),
+                    endOffset: selection.focusOffset,
+                });
+            }, 0);
         }
 
         document.addEventListener('keydown', keyDownListener);
-        document.addEventListener('mousedown', mouseDownListener);
-        document.addEventListener('mouseup', mouseUpListener);
+        document.addEventListener('mousedown', mouseDownListener, false);
+        document.addEventListener('mouseup', mouseUpListener, false);
         if (isSelecting) {
             document.addEventListener('mousemove', mouseMoveListener);
         }
@@ -782,10 +796,6 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
         e.preventDefault();
         const newContent = copyObject(documentContent, true);
         const { 0: absStart } = separateRichText(newContent, documentSelection, false);
-        if (newContent.length === 0) {
-            console.log("aaa", {...documentSelection})
-            return;
-        }
         const { 0: insertSeg } = getSegmentAtIndex(newContent, absStart - 1);
 
         insertSeg.text += addText;//insertSeg.text = addText + insertSeg.text;//if inserting backwards
@@ -889,7 +899,7 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
                                 pageDelete(e);
                             }
                         }}>
-                            {createRichText(documentContent)}
+                            {createRichText(documentContent, documentSelection, documentSelectStartRef, documentSelectEndRef)}
                         </div>
                     </section>
                 </DocumentContext.Provider>
