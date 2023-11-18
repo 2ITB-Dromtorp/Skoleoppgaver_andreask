@@ -139,6 +139,21 @@
 
 
 
+
+
+/*icons kinda large. add padding*/
+.highlight_button {
+    padding: 3px;
+}
+
+.clear_style_button {
+    padding: 3px;
+}
+
 .align_button {
+    padding: 3px;
+}
+
+.list_button {
     padding: 3px;
 }

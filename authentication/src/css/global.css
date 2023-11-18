@@ -5,7 +5,8 @@
     --nav-vert-pad: 15px;
     --nav-border-width: 1px;
     --actual-nav-height: calc(var(--nav-height) + (var(--nav-horiz-pad) * 2) + var(--nav-border-width));
-    --theme-col: rgb(0, 156, 255);/*rgb(0, 255, 174);*/
+    --theme-col: rgb(0, 156, 255);
+    /*rgb(0, 255, 174);*/
     --main-col: rgb(255, 255, 255);
     --main-subtle-col: rgb(136, 136, 136);
     --main-bg-col: rgb(0, 0, 0);
@@ -17,9 +18,11 @@
     --text-input-bg-col: rgb(25, 25, 25);
     --input-border-col: rgb(45, 45, 45);
 
-    --focus-border-col: rgb(0, 156, 255);/*rgb(0, 255, 174);*/
+    --focus-border-col: rgb(0, 156, 255);
+    /*rgb(0, 255, 174);*/
     /*rgb(0, 100, 255);*/
-    --focus-outline-col: rgba(0, 156, 255, 0.25);/*rgba(0, 255, 174, 0.25);*/
+    --focus-outline-col: rgba(0, 156, 255, 0.25);
+    /*rgba(0, 255, 174, 0.25);*/
     /*rgba(0, 100, 255, 0.25);*/
 
     --button-primary-col: rgb(0, 0, 0);
@@ -203,7 +206,7 @@ input[type=number] {
     text-decoration: none;
     text-align: center;
     box-sizing: border-box;
-    
+
     position: relative;
     height: var(--nav-height);
     padding: 0px 16px 0px 16px;
@@ -471,9 +474,41 @@ input[type=number] {
 
 
 
+/*some icons*/
+.clear_text_style_icon {
+    fill: var(--main-col);
+}
+
+/*super and sub script icons*/
+.super_script_icon {
+    fill: var(--main-col);
+}
+
+.sub_script_icon {
+    fill: var(--main-col);
+}
+
+/*highlight*/
+.highlight_icon {
+    fill: var(--main-col);
+}
+
+
 
 /*align icons*/
 .align_icon {
+    fill: var(--main-col);
+}
+
+
+
+
+/*list icons*/
+.unordered_list_icon {
+    fill: var(--main-col);
+}
+
+.ordered_list_icon {
     fill: var(--main-col);
 }
 

@@ -5,6 +5,16 @@ import { ReactComponent as AlignCenter } from '../../../../svgs/align_center.svg
 import { ReactComponent as AlignRight } from '../../../../svgs/align_right.svg';
 import { ReactComponent as AlignJustify } from '../../../../svgs/align_justify.svg';
 
+import { ReactComponent as SuperScript } from '../../../../svgs/superscript.svg';
+import { ReactComponent as SubScript } from '../../../../svgs/subscript.svg';
+
+import { ReactComponent as Highlight } from '../../../../svgs/highlight.svg';
+
+import { ReactComponent as ClearStyle } from '../../../../svgs/clear_text_style.svg';
+
+import { ReactComponent as UnorderedList } from '../../../../svgs/unordered_list.svg';
+import { ReactComponent as OrderedList } from '../../../../svgs/ordered_list.svg';
+
 import { LoadingContainer, LoadingFailedContainer } from '../../../../components/loading';
 
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
@@ -29,6 +39,11 @@ const globalFonts = [
     'Courier',
     'Comic Sans MS',
 ];
+
+const defaultTextStyle = {
+    color: '#ffffff',
+    fontSize: 16,
+};
 
 
 const DocumentSelectionContext = createContext();
@@ -137,12 +152,29 @@ const sectionsContent = [
                             A
                         </div>
                     </div>
-                    <PanelButton onClick={(e) => {
+                    <PanelButton className='highlight_button' onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
-                            segment.textStyle.fontSize = Math.max((segment.textStyle.fontSize || 0) - 1, 1);
+                            segment.textStyle.backgroundColor = e.target.value;
                         });
                     }}>
-                        a
+                        <Highlight />
+                    </PanelButton>
+                    <PanelButton className='clear_style_button' onClick={(e) => {
+                        //superscript
+                    }}>
+                        <SuperScript />
+                    </PanelButton>
+                    <PanelButton className='clear_style_button' onClick={(e) => {
+                        //subscript
+                    }}>
+                        <SubScript />
+                    </PanelButton>
+                    <PanelButton className='clear_style_button' onClick={(e) => {
+                        styleSelection(documentSelection, (segment) => {
+                            segment.textStyle = copyObject(defaultTextStyle);
+                        });
+                    }}>
+                        <ClearStyle />
                     </PanelButton>
                     <PanelButton className='align_button' onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
@@ -171,6 +203,16 @@ const sectionsContent = [
                         });
                     }}>
                         <AlignJustify />
+                    </PanelButton>
+                    <PanelButton className='list_button' onClick={(e) => {
+                        //create unordered list (bullet points)
+                    }}>
+                        <UnorderedList />
+                    </PanelButton>
+                    <PanelButton className='list_button' onClick={(e) => {
+                        //create ordered list (1, 2, 3, etc.)
+                    }}>
+                        <OrderedList />
                     </PanelButton>
                 </>
             );
@@ -610,10 +652,7 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
     const [documentName, setDocumentName] = useState(isNew ? 'Untitled' : initDocument.name);
     const [documentContent, setDocumentContent] = useState(isNew ? [
         {
-            textStyle: {
-                color: '#ffffff',
-                fontSize: 16,
-            },
+            textStyle: copyObject(defaultTextStyle),
             editStyle: {},
             text: '',
         },
