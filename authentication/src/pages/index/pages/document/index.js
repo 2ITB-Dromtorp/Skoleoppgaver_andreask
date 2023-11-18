@@ -1,9 +1,7 @@
 import './index.css';
 
-import { ReactComponent as AlignLeft } from '../../../../svgs/align_left.svg';
-import { ReactComponent as AlignCenter } from '../../../../svgs/align_center.svg';
-import { ReactComponent as AlignRight } from '../../../../svgs/align_right.svg';
-import { ReactComponent as AlignJustify } from '../../../../svgs/align_justify.svg';
+import { ReactComponent as FontIncrease } from '../../../../svgs/font_increase.svg';
+import { ReactComponent as FontDecrease } from '../../../../svgs/font_decrease.svg';
 
 import { ReactComponent as SuperScript } from '../../../../svgs/superscript.svg';
 import { ReactComponent as SubScript } from '../../../../svgs/subscript.svg';
@@ -14,6 +12,11 @@ import { ReactComponent as ClearStyle } from '../../../../svgs/clear_text_style.
 
 import { ReactComponent as UnorderedList } from '../../../../svgs/unordered_list.svg';
 import { ReactComponent as OrderedList } from '../../../../svgs/ordered_list.svg';
+
+import { ReactComponent as AlignLeft } from '../../../../svgs/align_left.svg';
+import { ReactComponent as AlignCenter } from '../../../../svgs/align_center.svg';
+import { ReactComponent as AlignRight } from '../../../../svgs/align_right.svg';
+import { ReactComponent as AlignJustify } from '../../../../svgs/align_justify.svg';
 
 import { LoadingContainer, LoadingFailedContainer } from '../../../../components/loading';
 
@@ -94,21 +97,21 @@ const sectionsContent = [
                             segment.textStyle.fontSize = fontSize;
                         });
                     }} />
-                    <PanelButton onClick={(e) => {
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
                             segment.textStyle.fontSize = (segment.textStyle.fontSize || 0) + 1;
                         });
                     }}>
-                        A
+                        <FontIncrease/>
                     </PanelButton>
-                    <PanelButton onClick={(e) => {
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
                             segment.textStyle.fontSize = Math.max((segment.textStyle.fontSize || 0) - 1, 1);
                         });
                     }}>
-                        a
+                        <FontDecrease/>
                     </PanelButton>
-                    <PanelButton style={{ fontWeight: 800 }} onClick={(e) => {
+                    <PanelButton className='panel_icon_button' style={{ fontWeight: 800 }} onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
                             if (segment.textStyle.fontWeight) {
                                 delete segment.textStyle.fontWeight;
@@ -119,7 +122,7 @@ const sectionsContent = [
                     }}>
                         B
                     </PanelButton>
-                    <PanelButton style={{ fontStyle: 'italic' }} onClick={(e) => {
+                    <PanelButton className='panel_icon_button' style={{ fontStyle: 'italic' }} onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
                             if (segment.textStyle.fontStyle) {
                                 delete segment.textStyle.fontStyle;
@@ -130,7 +133,7 @@ const sectionsContent = [
                     }}>
                         I
                     </PanelButton>
-                    <PanelButton style={{ textDecoration: '1px underline' }} onClick={(e) => {
+                    <PanelButton className='panel_icon_button' style={{ textDecoration: '1px underline' }} onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
                             if (segment.textStyle.textDecoration) {
                                 delete segment.textStyle.textDecoration;
@@ -152,64 +155,64 @@ const sectionsContent = [
                             A
                         </div>
                     </div>
-                    <PanelButton className='highlight_button' onClick={(e) => {
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
                             segment.textStyle.backgroundColor = e.target.value;
                         });
                     }}>
                         <Highlight />
                     </PanelButton>
-                    <PanelButton className='clear_style_button' onClick={(e) => {
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
                         //superscript
                     }}>
                         <SuperScript />
                     </PanelButton>
-                    <PanelButton className='clear_style_button' onClick={(e) => {
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
                         //subscript
                     }}>
                         <SubScript />
                     </PanelButton>
-                    <PanelButton className='clear_style_button' onClick={(e) => {
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
                             segment.textStyle = copyObject(defaultTextStyle);
                         });
                     }}>
                         <ClearStyle />
                     </PanelButton>
-                    <PanelButton className='align_button' onClick={(e) => {
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
                             segment.textStyle.textAlign = 'left';
                         });
                     }}>
                         <AlignLeft />
                     </PanelButton>
-                    <PanelButton className='align_button' onClick={(e) => {
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
                             segment.textStyle.textAlign = 'center';
                         });
                     }}>
                         <AlignCenter />
                     </PanelButton>
-                    <PanelButton className='align_button' onClick={(e) => {
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
                             segment.textStyle.textAlign = 'right';
                         });
                     }}>
                         <AlignRight />
                     </PanelButton>
-                    <PanelButton className='align_button' onClick={(e) => {
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
                             segment.textStyle.textAlign = 'justify';
                         });
                     }}>
                         <AlignJustify />
                     </PanelButton>
-                    <PanelButton className='list_button' onClick={(e) => {
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
                         //create unordered list (bullet points)
                     }}>
                         <UnorderedList />
                     </PanelButton>
-                    <PanelButton className='list_button' onClick={(e) => {
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
                         //create ordered list (1, 2, 3, etc.)
                     }}>
                         <OrderedList />

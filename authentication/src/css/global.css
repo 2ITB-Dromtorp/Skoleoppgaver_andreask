@@ -412,6 +412,34 @@ input[type=number] {
 
 
 
+.icon {
+    width: 100%;
+    height: 100%;
+}
+
+.icon_primary {
+    fill: var(--main-col);
+}
+
+.icon_secondary {
+    fill: rgb(59, 154, 220);
+}
+
+/*eraser*/
+.clear_text_style_icon_eraser_primary_fill {
+    fill: rgba(0, 0, 0, 0);
+}
+
+.clear_text_style_icon_eraser_secondary_fill {
+    fill: rgb(146, 46, 155);
+}
+
+.clear_text_style_icon_eraser_border {
+    fill: rgb(212, 146, 216);
+}
+
+
+
 /*loading svg*/
 .loading_svg {
     width: 100%;
@@ -474,7 +502,19 @@ input[type=number] {
 
 
 
-/*some icons*/
+/*font size icons*/
+.font_decrease_icon {
+    fill: var(--main-col);
+}
+
+.font_increase_icon {
+    fill: var(--main-col);
+}
+
+
+
+
+/*clear text style icon*/
 .clear_text_style_icon {
     fill: var(--main-col);
 }

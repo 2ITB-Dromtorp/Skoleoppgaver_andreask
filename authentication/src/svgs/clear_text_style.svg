@@ -1,4 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg class="clear_text_style_icon" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-    <path d="M29.4384,16.5715l-7.985-7.9856a2.0014,2.0014,0,0,0-2.8291,0l-5.3584,5.3584L9,2H7L2,16H4l.999-3h6l.8035,2.4077L4.5858,22.6244a2,2,0,0,0,0,2.8282L9.1316,30h9.5908l10.716-10.717A1.9173,1.9173,0,0,0,29.4384,16.5715ZM5.6653,11l2.331-7,2.3355,7Zm12.229,17H9.96L6,24.0381l6.3123-6.3115L20.24,25.6538Zm3.76-3.76-7.9275-7.9272L20.0393,10l7.9268,7.9272Z"/>
+<!--Totally not stolen from Microsoft Word-->
+<svg class="icon clear_text_style_icon" viewBox="0 0 2048 2048">
+    <path class="icon_primary clear_text_style_icon_primary" d="M 1036 1145 h -635 l -145 391 h -147 l 545 -1434 h 134 l 383 1012 l -106 107 m -74 -197 l -245 -671 q -10 -26 -16 -52 q -6 -25 -11 -49 h -4 q -5 26 -12 51 q -7 25 -16 50 l -241 671 z">
+    </path>
+    <path class="clear_text_style_icon_eraser_primary_fill" d="M 1184 1391 l 430 -429 l 362 362 l -430 429 z">
+    </path>
+    <path class="clear_text_style_icon_eraser_secondary_fill" d="M 962 1614 l 222 -223 l 362 362 l -222 223 z">
+    </path>
+    <path class="clear_text_style_icon_eraser_border" d="M 2048 1324 l -724 724 l -435 -434 l 725 -725 m 0 145 l -356 356 l 289 290 l 356 -356 m -428 428 l -290 -290 l -151 152 l 290 289 z">
+    </path>
 </svg>
