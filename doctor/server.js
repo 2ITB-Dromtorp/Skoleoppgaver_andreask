@@ -47,11 +47,20 @@ for (const name of Object.keys(nets)) {
 const IP = '127.0.0.1';//getOwnIP;
 const PORT = 80;
 
-let dbConfig = {
+/*
+const dbConfig = {
     host: IP,
     port: 3306,
     user: 'root',
     password: 'password',
+    database: 'doctor',
+};
+*/
+const dbConfig = {
+    host: IP,
+    port: 3307,
+    user: 'doctor',
+    password: 'jdwamu83258JDJWAIDWAJDOIWAJOIDWJA583275983275298',
     database: 'doctor',
 };
 

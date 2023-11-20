@@ -512,6 +512,17 @@ input[type=number] {
 }
 
 
+/*underline icon*/
+.underline_icon {
+    fill: none;
+    stroke: var(--main-col);
+    stroke-width: 2px;
+}
+
+.underline_icon * {
+    fill: none;
+}
+
 
 
 /*clear text style icon*/

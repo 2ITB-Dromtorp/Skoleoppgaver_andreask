@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg class="icon underline_icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round">
+    <path class="icon_primary underline_icon_letter" d="M18 4V11C18 14.3137 15.3137 17 12 17C8.68629 17 6 14.3137 6 11V4M4 3H8M16 3H20"/>
+    <path class="underline_icon_line" d="M4 21H20"/>
+</svg>

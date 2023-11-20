@@ -1,8 +1,8 @@
 import './App.css';
 
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useSearchParams } from 'react-router-dom';
 
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 
 import { UserDataContext } from './context';
 import { useRefreshUserData } from './custom_hooks';
@@ -54,17 +54,13 @@ function IsLoggedInRedirect({ needsLogin, element }) {
 function App() {
     const { 0: userData } = useContext(UserDataContext);
     const refreshUserData = useRefreshUserData();
+    const [isFirstRender, setIsFirstRender] = useState(true);
     useEffect(() => {
-        refreshUserData();
-        /*
-        this is a useEffect hook, and we use a custom hook: useRefreshUserData()
-        the point of this useEffect is to fetch if the user is logged in, and its data when the page loads
-        now useEffect is designed to run when something changes, but we only want it to run once, with an empty dependency array
-        react misunderstands our goals and creates a warning
-        comment below disables meaningless warning
-        */
-        //eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        if (isFirstRender) {
+            setIsFirstRender(false);
+            refreshUserData();
+        }
+    }, [refreshUserData]);
 
     const indexContent = userData.logged_in ? (
         <UserIndex />

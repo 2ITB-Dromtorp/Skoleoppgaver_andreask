@@ -3,6 +3,8 @@ import './index.css';
 import { ReactComponent as FontIncrease } from '../../../../svgs/font_increase.svg';
 import { ReactComponent as FontDecrease } from '../../../../svgs/font_decrease.svg';
 
+import { ReactComponent as Underline } from '../../../../svgs/underline.svg';
+
 import { ReactComponent as SuperScript } from '../../../../svgs/superscript.svg';
 import { ReactComponent as SubScript } from '../../../../svgs/subscript.svg';
 
@@ -102,14 +104,14 @@ const sectionsContent = [
                             segment.textStyle.fontSize = (segment.textStyle.fontSize || 0) + 1;
                         });
                     }}>
-                        <FontIncrease/>
+                        <FontIncrease />
                     </PanelButton>
                     <PanelButton className='panel_icon_button' onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
                             segment.textStyle.fontSize = Math.max((segment.textStyle.fontSize || 0) - 1, 1);
                         });
                     }}>
-                        <FontDecrease/>
+                        <FontDecrease />
                     </PanelButton>
                     <PanelButton className='panel_icon_button' style={{ fontWeight: 800 }} onClick={(e) => {
                         styleSelection(documentSelection, (segment) => {
@@ -142,7 +144,7 @@ const sectionsContent = [
                             }
                         });
                     }}>
-                        U
+                        <Underline />
                     </PanelButton>
                     <div className='panel_button' style={{ position: 'relative' }}>
                         <input style={{ position: 'absolute', width: '100%', height: '100%', opacity: '0' }} type='color' onChange={(e) => {
@@ -236,7 +238,31 @@ const sectionsContent = [
         Content: () => {
             return (
                 <>
-
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
+                        //page text
+                    }}>
+                        <FontIncrease />
+                    </PanelButton>
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
+                        //table
+                    }}>
+                        <FontIncrease />
+                    </PanelButton>
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
+                        //image
+                    }}>
+                        <FontIncrease />
+                    </PanelButton>
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
+                        //link
+                    }}>
+                        <FontIncrease />
+                    </PanelButton>
+                    <PanelButton className='panel_icon_button' onClick={(e) => {
+                        //page number
+                    }}>
+                        <FontIncrease />
+                    </PanelButton>
                 </>
             );
         },
@@ -663,13 +689,15 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
 
     const autoSetCaretSelection = () => {
         const selection = document.getSelection();
-        setDocumentSelection({
-            type: getTextId(selection.anchorNode) === getTextId(selection.focusNode) ? 'Caret' : 'Range',
-            startIndex: getTextId(selection.anchorNode),
-            startOffset: selection.anchorOffset,
-            endIndex: getTextId(selection.focusNode),
-            endOffset: selection.focusOffset,
-        });
+        if (pageRef.current.contains(selection.anchorNode)) {
+            setDocumentSelection({
+                type: getTextId(selection.anchorNode) === getTextId(selection.focusNode) ? 'Caret' : 'Range',
+                startIndex: getTextId(selection.anchorNode),
+                startOffset: selection.anchorOffset,
+                endIndex: getTextId(selection.focusNode),
+                endOffset: selection.focusOffset,
+            });
+        }
     }
 
     const styleSelection = (selection, func) => {
@@ -717,7 +745,7 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
 
     useEffect(() => {
         const selection = document.getSelection();
-        if (pageRef.current.contains(selection.anchorNode)) {
+        if (pageRef.current !== undefined && pageRef.current !== null && selection.anchorNode !== pageRef.current && pageRef.current.contains(selection.anchorNode)) {
             if (documentSelection.type === 'Caret') {
                 selection.setPosition(documentSelectStartRef.current.childNodes[0], documentSelection.startOffset);
             } else if (documentSelection.type === 'Range') {
@@ -808,19 +836,21 @@ export function DocumentEditor({ isNew, initDocument, ...props }) {
         const mouseMoveListener = (e) => {
             setTimeout(() => {
                 const selection = document.getSelection();
-                setDocumentSelection({
-                    type: documentSelection.startIndex === getTextId(selection.focusNode) ? 'Caret' : 'Range',
-                    startIndex: documentSelection.startIndex,
-                    startOffset: documentSelection.startOffset,
-                    endIndex: getTextId(selection.focusNode),
-                    endOffset: selection.focusOffset,
-                });
+                if (pageRef.current.contains(selection.anchorNode)) {
+                    setDocumentSelection({
+                        type: documentSelection.startIndex === getTextId(selection.focusNode) ? 'Caret' : 'Range',
+                        startIndex: documentSelection.startIndex,
+                        startOffset: documentSelection.startOffset,
+                        endIndex: getTextId(selection.focusNode),
+                        endOffset: selection.focusOffset,
+                    });
+                }
             }, 0);
         }
 
         document.addEventListener('keydown', keyDownListener);
-        document.addEventListener('mousedown', mouseDownListener, false);
-        document.addEventListener('mouseup', mouseUpListener, false);
+        document.addEventListener('mousedown', mouseDownListener);
+        document.addEventListener('mouseup', mouseUpListener);
         if (isSelecting) {
             document.addEventListener('mousemove', mouseMoveListener);
         }

@@ -1,5 +1,4 @@
 import '../../css/global.css';
-import '../../css/fonts.css';
 
 import { Outlet } from 'react-router-dom';
 
