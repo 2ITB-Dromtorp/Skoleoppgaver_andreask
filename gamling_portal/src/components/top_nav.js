@@ -24,10 +24,10 @@ function TopNav() {
         userContent = (
             <>
                 <CustomFancyButton primary={false} element={Link} id='login_button' to='/login'>
-                    Log in
+                    Logg inn
                 </CustomFancyButton>
                 <CustomFancyButton primary={true} element={Link} id='signup_button' to='/signup'>
-                    Sign up
+                    Registrer deg
                 </CustomFancyButton>
             </>
         );

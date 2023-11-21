@@ -1,8 +1,6 @@
 import React from "react";
 
-function getAdditionalClassName(className) {
-    return className ? ' ' + className : '';
-}
+import { getAdditionalClassName } from '../misc';
 
 export function CustomButton({ children, element, className, ...props }) {
     return React.createElement(element, { className: `button${getAdditionalClassName(className)}`, ...props }, children);

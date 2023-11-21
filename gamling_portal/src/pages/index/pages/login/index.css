@@ -1,0 +1,45 @@
+#user_section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 300px;
+    padding: 16px;
+    border-radius: 16px;
+    gap: 16px;
+    margin: 4rem auto auto auto;
+}
+
+#user_form_header {
+    margin: 0px 0px 0px 0px;
+}
+
+.user_form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#user_input_fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.user_input_field_container {
+    display: flex;
+    flex-direction: column;
+}
+
+/*
+#user_submit_button {
+    
+}
+*/
+
+#user_input_wrong_page {
+    display: flex;
+}
+
+#user_input_wrong_page_text {
+    color: var(--main-subtle-col);
+}
