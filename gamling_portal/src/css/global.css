@@ -6,31 +6,32 @@
     --nav-border-width: 1px;
     --actual-nav-height: calc(var(--nav-height) + (var(--nav-horiz-pad) * 2) + var(--nav-border-width));
     --theme-col: rgb(0, 156, 255);
-    --main-col: rgb(255, 255, 255);
-    --main-subtle-col: rgb(136, 136, 136);
+    --main-col: rgb(0, 0, 0);
+    --main-subtle-col: rgb(0, 0, 0);
     --main-bg-col: rgb(0, 0, 0);
-    --main-font: 'Sans serif';
+    --main-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
     --main-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.04), 0 2px 8px 0 rgba(0, 0, 0, 0.08), 0 0 4px -2px rgba(0, 0, 0, 0.12);
     --small-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 
-    --input-bg-col: rgb(10, 10, 10);
-    --text-input-bg-col: rgb(25, 25, 25);
-    --input-border-col: rgb(45, 45, 45);
+    --text-input-bg-col: rgb(200, 200, 200);
+    --input-border-col: rgb(210, 210, 210);
 
     --focus-border-col: rgb(0, 156, 255);
     --focus-outline-col: rgba(0, 156, 255, 0.25);
 
-    --button-primary-col: rgb(0, 0, 0);
-    --button-primary-idle-col: rgb(255, 255, 255);
-    --button-primary-hover-col: rgb(220, 220, 220);
-    --button-primary-active-col: rgb(200, 200, 200);
-    --button-primary-disabled-col: rgb(161, 165, 178);
+    --button-primary-col: rgb(255, 255, 255);
+    --button-primary-idle-col: rgb(13, 25, 186);
+    --button-primary-hover-col: rgb(40, 51, 201);
+    --button-primary-active-col: rgb(12, 19, 117);
+    --button-primary-disabled-col: rgb(148, 148, 148);
 
-    --button-secondary-col: rgb(255, 255, 255);
-    --button-secondary-idle-col: var(--input-bg-col);
-    --button-secondary-hover-col: rgb(30, 30, 30);
-    --button-secondary-active-col: rgb(50, 50, 50);
-    --button-secondary-disabled-col: rgb(25, 25, 25);
+    --button-secondary-col: rgb(0, 0, 0);
+    --button-secondary-idle-col: rgb(255, 255, 255);
+    --button-secondary-hover-col: rgb(220, 220, 220);
+    --button-secondary-active-col: rgb(190, 190, 190);
+    --button-secondary-disabled-col: rgb(148, 148, 148);
 
     --main-content-min-height: calc(100svh - var(--actual-nav-height));
 }
@@ -304,29 +305,6 @@ input[type=number] {
 
 
 
-/*labels*/
-.standard_label {
-    display: block;
-    margin-bottom: 8px;
-}
-
-
-
-
-
-
-
-
-
-
-
-/*floating container*/
-.floating_container {
-    background-color: var(--main-bg-col);
-    border: 1px solid var(--input-border-col);
-}
-
-
 
 
 
@@ -356,29 +334,6 @@ input[type=number] {
 
 
 
-
-
-
-
-/*loading*/
-#loading_loading_container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: var(--main-content-min-height);
-}
-
-
-
-
-/*failed to load*/
-#loading_failed_container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: var(--main-content-min-height);
-}
 
 
 
@@ -466,85 +421,7 @@ input[type=number] {
 .logo_icon {
     width: 100%;
     height: 100%;
-    fill: var(--main-col);
 }
-
-.edit_icon {
-    fill: none;
-    stroke: rgb(255, 255, 255);
-}
-
-.search_icon {
-    width: 100%;
-    height: 100%;
-    padding: 6px;
-    fill: rgb(255, 255, 255);
-}
-
-
-
-/*font size icons*/
-.font_decrease_icon {
-    fill: var(--main-col);
-}
-
-.font_increase_icon {
-    fill: var(--main-col);
-}
-
-
-/*underline icon*/
-.underline_icon {
-    fill: none;
-    stroke: var(--main-col);
-    stroke-width: 2px;
-}
-
-.underline_icon * {
-    fill: none;
-}
-
-
-
-/*clear text style icon*/
-.clear_text_style_icon {
-    fill: var(--main-col);
-}
-
-/*super and sub script icons*/
-.super_script_icon {
-    fill: var(--main-col);
-}
-
-.sub_script_icon {
-    fill: var(--main-col);
-}
-
-/*highlight*/
-.highlight_icon {
-    fill: var(--main-col);
-}
-
-
-
-/*align icons*/
-.align_icon {
-    fill: var(--main-col);
-}
-
-
-
-
-/*list icons*/
-.unordered_list_icon {
-    fill: var(--main-col);
-}
-
-.ordered_list_icon {
-    fill: var(--main-col);
-}
-
-
 
 
 

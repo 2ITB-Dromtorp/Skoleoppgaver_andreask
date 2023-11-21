@@ -1,4 +1,4 @@
-import './App.css';
+import './css/global.css';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -17,7 +17,7 @@ function App() {
             <Routes>
                 <Route path='/' element={<Layout />}>
                     <Route index element={<Index />} />
-                    <Route path='course/:courseId' element={<Course />} />
+                    <Route path='course/:courseName' element={<Course />} />
                     <Route path='*' element={<NoPage />} />
                 </Route>
             </Routes>
