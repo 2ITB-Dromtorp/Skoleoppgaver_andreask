@@ -4,8 +4,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 import { useEffect, useContext, useState } from 'react';
 
-import { UserDataContext } from './context';
-import { useRefreshUserData } from './custom_hooks';
+import { SessionDataContext } from './context';
+import { useRefreshSessionData } from './custom_hooks';
 
 import { LoadingContainer } from './components/loading';
 
@@ -21,15 +21,15 @@ import Account from './pages/index/pages/account/index';
 import Course from './pages/index/pages/course/index';
 
 function IsLoggedInRedirect({ needsLogin, element }) {
-    const { 0: userData } = useContext(UserDataContext);
+    const { 0: sessionData } = useContext(SessionDataContext);
     let newElement;
-    if ('logged_in' in userData === false) {
+    if ('logged_in' in sessionData === false) {
         newElement = (
             <LoadingContainer>
                 <p>Authorizing...</p>
             </LoadingContainer>
         );
-    } else if (userData.logged_in === needsLogin) {
+    } else if (sessionData.logged_in === needsLogin) {
         newElement = (
             <>
                 {element}
@@ -50,23 +50,21 @@ function IsLoggedInRedirect({ needsLogin, element }) {
 }
 
 function App() {
-    const { 0: userData } = useContext(UserDataContext);
-    const refreshUserData = useRefreshUserData();
+    const { 0: sessionData } = useContext(SessionDataContext);
+    const refreshSessionData = useRefreshSessionData();
     const [isFirstRender, setIsFirstRender] = useState(true);
     useEffect(() => {
         if (isFirstRender) {
             setIsFirstRender(false);
-            refreshUserData();
+            refreshSessionData();
         }
-    }, [refreshUserData]);
+    }, [refreshSessionData]);
 
-    const indexContent = userData.logged_in ? (
+    const indexContent = sessionData.logged_in ? (
         <Index />
     ) : (
         <Index />
     );
-
-    console.log("wandoiwanodwa", userData);
 
     return (
         <BrowserRouter>

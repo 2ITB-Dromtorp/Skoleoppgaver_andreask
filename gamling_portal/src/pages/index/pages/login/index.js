@@ -4,12 +4,12 @@ import { useState } from 'react';
 
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useRefreshUserData } from '../../../../custom_hooks';
+import { useRefreshSessionData } from '../../../../custom_hooks';
 
 import { FancyButton, TextInput } from '../../../../components/input';
 
 function UserForm({ isLogin }) {
-    const refreshUserData = useRefreshUserData();
+    const refreshSessionData = useRefreshSessionData();
     const navigate = useNavigate();
 
     const [usernameInput, setUsernameInput] = useState('');
@@ -36,7 +36,7 @@ function UserForm({ isLogin }) {
             }),
         }).then((res) => {
             if (res.status === 200) {
-                refreshUserData();
+                refreshSessionData();
                 navigate('/');
             } else {
                 console.error(res);

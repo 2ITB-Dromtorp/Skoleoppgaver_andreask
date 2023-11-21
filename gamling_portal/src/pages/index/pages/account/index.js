@@ -2,13 +2,13 @@ import './index.css';
 
 import { useNavigate } from 'react-router-dom';
 
-import { useResetUserData } from '../../../../custom_hooks';
+import { useResetSessionData } from '../../../../custom_hooks';
 
 import { FancyButton } from '../../../../components/input';
 
 function Account() {
     const navigate = useNavigate();
-    const resetUserData = useResetUserData();
+    const resetSessionData = useResetSessionData();
     return (
         <section id='account_section' className='main_content'>
             <FancyButton primary={true} onClick={(e) => {
@@ -16,7 +16,7 @@ function Account() {
                     method: 'POST',
                 }).then((res) => {
                     if (res.status === 200) {
-                        resetUserData();
+                        resetSessionData();
                         navigate('/');
                     }
                 });

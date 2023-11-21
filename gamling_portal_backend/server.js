@@ -119,9 +119,11 @@ const APIURLS = [
     getAPIURL('/login'),
     getAPIURL('/logout'),
     getAPIURL('/getsession'),
+    getAPIURL('/joincourse'),
 ];
 const verifyURLS = [
     getAPIURL('/logout'),
+    getAPIURL('/joincourse'),
 ];
 
 
@@ -402,4 +404,37 @@ app.get(getAPIURL('/getsession'), (req, res) => {
             });
         }
     });
+});
+
+
+
+
+
+
+
+//website functions
+app.post(getAPIURL('/joincourse'), (req, res) => {
+    const bod = req.body;
+    const courseName = bod.courseName;
+    if (courseName === undefined) {
+        res.status(400).send(`Course name is undefined.`);
+        return;
+    }
+    if (courseName === null) {
+        res.status(400).send(`Course name is null.`);
+        return;
+    }
+    if (typeof (courseName) !== 'string') {
+        res.status(400).send(`Course name isn't of type 'String'.`);
+        return;
+    }
+    const user = req.user;
+    user.joined_courses.push(courseName);
+    mySqlConnection.query('UPDATE users SET joined_courses = ? WHERE id = ?', [user.joined_courses, user.id], (err) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.status(200).send('Successfully joined course.');
+        }
+    })
 });

@@ -4,14 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { UserDataContextProvider } from './context';
+import { SessionDataContextProvider, UserDataContextProvider } from './context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
-        <UserDataContextProvider>
-            <App />
-        </UserDataContextProvider>
+        <SessionDataContextProvider>
+            <UserDataContextProvider>
+                <App />
+            </UserDataContextProvider>
+        </SessionDataContextProvider>
     </React.StrictMode>
 );
 

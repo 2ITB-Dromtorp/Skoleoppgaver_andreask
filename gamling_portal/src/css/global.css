@@ -39,7 +39,7 @@
 /*global*/
 * {
     font-family: var(--main-font);
-    font-weight: 300;
+    font-weight: normal;
     font-feature-settings: normal;
     font-kerning: auto;
     font-optical-sizing: auto;
@@ -482,6 +482,10 @@ input[type=number] {
     vertical-align: middle;
     stroke: currentColor;
 }
+
+
+
+
 
 
 

@@ -3,8 +3,9 @@ import './index.css';
 import { CustomButton, FancyButton } from "../../../../components/input";
 import { Link } from 'react-router-dom';
 
-import { ArrowRightSvg } from '../../../../components/svg';
-import { useRef } from 'react';
+import { ArrowRightSvg, CheckmarkIcon } from '../../../../svg';
+import { useContext, useRef } from 'react';
+import { SessionDataContext, UserDataContext } from '../../../../context';
 
 const courseCols = {
     norwegian: [255, 84, 249],
@@ -13,7 +14,18 @@ const courseCols = {
 }
 
 function Course({ courseName, courseTitle, courseDesc, courseImage }) {
+    const { 0: sessionData } = useContext(SessionDataContext);
+    const { 0: userData } = useContext(UserDataContext);
     const col = courseCols[courseName];
+    let bottomAddContent;
+    if (sessionData && sessionData.logged_in === true && userData) {
+        bottomAddContent = (
+            <div>
+                <CheckmarkIcon />
+                Meldt på
+            </div>
+        );
+    }
     return (
         <div className='course_card' style={{ '--r': col[0], '--g': col[1], '--b': col[2] }}>
             <div className='course_card_image'>
@@ -25,9 +37,11 @@ function Course({ courseName, courseTitle, courseDesc, courseImage }) {
             <div className='course_card_desc'>
                 {courseDesc}
             </div>
-            <CustomButton element={Link} to={`/course/${courseName}`}>
-                Se kurs&nbsp;<ArrowRightSvg className="text_icon" />
-            </CustomButton>
+            <div className='course_bottom'>
+                <CustomButton element={Link} className='course_view_button' to={`/course/${courseName}`}>
+                    Se kurs&nbsp;<ArrowRightSvg className="text_icon" />
+                </CustomButton>
+            </div>
         </div>
     );
 }

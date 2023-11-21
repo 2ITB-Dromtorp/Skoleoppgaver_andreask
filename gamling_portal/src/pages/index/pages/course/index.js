@@ -1,6 +1,9 @@
 import { useParams } from 'react-router-dom';
 import './index.css';
-import React from 'react';
+import React, { useContext } from 'react';
+import { FancyButton } from '../../../../components/input';
+
+import { CheckmarkIcon } from '../../../../svg';
 
 function NormalDL({ children }) {
     return (
@@ -23,6 +26,33 @@ function NormalDD({ children }) {
         <dd className='normal_dd'>
             {children}
         </dd>
+    );
+}
+
+function CourseNav() {
+    const { courseName } = useParams()
+    return (
+        <nav id='course_nav'>
+            <div id='course_nav_content'>
+                <FancyButton primary={true} onClick={() => {
+                    fetch('/api/joincourse', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            courseName: courseName,
+                        }),
+                    }).then((res) => {
+                        if (res.status === 200) {
+                            console.log("POG");
+                        }
+                    });
+                }}>
+                    Meld deg på kurset
+                </FancyButton>
+            </div>
+        </nav>
     );
 }
 
