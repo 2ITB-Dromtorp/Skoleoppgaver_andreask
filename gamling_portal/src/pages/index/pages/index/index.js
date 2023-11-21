@@ -18,10 +18,10 @@ function Course({ courseName, courseTitle, courseDesc, courseImage }) {
     const { 0: userData } = useContext(UserDataContext);
     const col = courseCols[courseName];
     let bottomAddContent;
-    if (sessionData && sessionData.logged_in === true && userData) {
+    if (sessionData && sessionData.logged_in === true && userData && userData.joined_courses.includes(courseName)) {
         bottomAddContent = (
-            <div>
-                <CheckmarkIcon />
+            <div className='joined_course_message'>
+                <CheckmarkIcon className="joined_course_checkmark_icon" />
                 Meldt på
             </div>
         );
@@ -41,6 +41,7 @@ function Course({ courseName, courseTitle, courseDesc, courseImage }) {
                 <CustomButton element={Link} className='course_view_button' to={`/course/${courseName}`}>
                     Se kurs&nbsp;<ArrowRightSvg className="text_icon" />
                 </CustomButton>
+                {bottomAddContent}
             </div>
         </div>
     );

@@ -1,3 +1,27 @@
 #course {
     margin: 0 min(max(5vw, 50px), 100px);
 }
+
+
+
+
+#course_nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: sticky;
+    height: 50px;
+    backdrop-filter: blur(4px);
+    box-shadow: var(--main-shadow);
+}
+
+#course_nav_content {
+    
+}
+
+#course_not_logged_in {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}

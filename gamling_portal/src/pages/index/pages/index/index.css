@@ -84,6 +84,8 @@
 .course_card_desc {}
 
 .course_bottom {
+    display: flex;
+    align-items: flex-end;
     margin-top: 8px;
 }
 
@@ -138,8 +140,20 @@
 
 
 
-/*icons*/
-.checkmark_icon {
-    font: none;
-    stroke: currentColor;
+/*joined course*/
+.joined_course_message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+    color: rgb(0, 255, 0);
+    font-weight: 700;
+}
+
+
+.joined_course_checkmark_icon {
+    width: 24px;
+    height: 24px;
+    stroke: rgb(0, 255, 0);
+    fill: none;
 }

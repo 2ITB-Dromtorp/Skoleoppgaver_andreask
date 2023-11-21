@@ -15,7 +15,9 @@ export function useResetSessionData() {
 
 export function useRefreshSessionData() {
     const { 1: setSessionData } = useContext(SessionDataContext);
+    const refreshUserData = useRefreshUserData();
     return () => {
+        refreshUserData();
         fetch('/api/getsession', {
             method: 'GET',
         }).then((res) => {

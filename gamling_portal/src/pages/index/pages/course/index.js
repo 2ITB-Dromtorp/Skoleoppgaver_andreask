@@ -1,9 +1,9 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import './index.css';
 import React, { useContext } from 'react';
-import { FancyButton } from '../../../../components/input';
-
-import { CheckmarkIcon } from '../../../../svg';
+import { CustomFancyButton, FancyButton } from '../../../../components/input';
+import { SessionDataContext, UserDataContext } from '../../../../context';
+import { useRefreshUserData } from '../../../../custom_hooks';
 
 function NormalDL({ children }) {
     return (
@@ -30,12 +30,19 @@ function NormalDD({ children }) {
 }
 
 function CourseNav() {
-    const { courseName } = useParams()
-    return (
-        <nav id='course_nav'>
-            <div id='course_nav_content'>
-                <FancyButton primary={true} onClick={() => {
-                    fetch('/api/joincourse', {
+    const { 0: userData } = useContext(UserDataContext);
+    const { 0: sessionData } = useContext(SessionDataContext);
+    const refreshUserData = useRefreshUserData();
+    const { courseName } = useParams();
+    const isLoggedIn = sessionData && sessionData.logged_in;
+    let content;
+    if (isLoggedIn === true) {
+        const isInAnotherCourse = userData && userData.joined_courses.length > 0 && userData.joined_courses.includes(courseName) === false;
+        if (isInAnotherCourse === false) {
+            const isJoinCourse = userData && userData.joined_courses.includes(courseName) === false;
+            content = (
+                <FancyButton primary={true} isDelete={isJoinCourse === false} onClick={() => {
+                    fetch(`/api/${isJoinCourse ? 'joincourse' : 'leavecourse'}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -45,12 +52,40 @@ function CourseNav() {
                         }),
                     }).then((res) => {
                         if (res.status === 200) {
-                            console.log("POG");
+                            refreshUserData();
+                        } else {
+                            console.log("NOT POG");
                         }
                     });
                 }}>
-                    Meld deg på kurset
+                    {isJoinCourse ? 'Meld deg på kurset' : 'Meld deg av kurset'}
                 </FancyButton>
+            );
+        } else {
+            content = (
+                <p>
+                    Du kan bare være med i ett kurs av gangen. Du er allerede med i <Link to={`/course/${userData.joined_courses[0]}`}>
+                        {coursesContent[userData.joined_courses[0]].title}
+                    </Link>
+                </p>
+            );
+        }
+    } else {
+        content = (
+            <div id="course_not_logged_in">
+                <p>
+                    Du må være logget inn for å bli med i kurs.
+                </p>
+                <CustomFancyButton to='/login' element={Link} primary={true}>
+                    Logg inn
+                </CustomFancyButton>
+            </div>
+        );
+    }
+    return (
+        <nav id='course_nav'>
+            <div id='course_nav_content'>
+                {content}
             </div>
         </nav>
     );
@@ -257,14 +292,17 @@ function Course() {
     const content = coursesContent[courseName];
 
     return (
-        <section id="course">
-            <h1>
-                {content.title}
-            </h1>
-            <div id="course_content">
-                {React.createElement(content.Content)}
-            </div>
-        </section>
+        <>
+            <CourseNav />
+            <section id="course">
+                <h1>
+                    {content.title}
+                </h1>
+                <div id="course_content">
+                    {React.createElement(content.Content)}
+                </div>
+            </section>
+        </>
     );
 }
 

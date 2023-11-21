@@ -14,8 +14,8 @@ export function Button({ children, ...props }) {
     );
 }
 
-export function CustomFancyButton({ children, element, primary, className, ...props }) {
-    return React.createElement(element, { className: `fancy_button ${(primary ? 'primary' : 'secondary') + getAdditionalClassName(className)}`, ...props }, children);
+export function CustomFancyButton({ children, element, primary, isDelete, className, ...props }) {
+    return React.createElement(element, { className: `fancy_button ${(primary ? 'primary' : 'secondary') + getAdditionalClassName(className) + (isDelete ? ' delete_button' : '')}`, ...props }, children);
 }
 
 export function FancyButton({ element, children, ...props }) {

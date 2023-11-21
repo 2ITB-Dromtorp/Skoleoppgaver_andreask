@@ -120,10 +120,14 @@ const APIURLS = [
     getAPIURL('/logout'),
     getAPIURL('/getsession'),
     getAPIURL('/joincourse'),
+    getAPIURL('/getuserdata'),
+    getAPIURL('/leavecourse'),
 ];
 const verifyURLS = [
     getAPIURL('/logout'),
     getAPIURL('/joincourse'),
+    getAPIURL('/getuserdata'),
+    getAPIURL('/leavecourse'),
 ];
 
 
@@ -406,6 +410,11 @@ app.get(getAPIURL('/getsession'), (req, res) => {
     });
 });
 
+//session
+app.get(getAPIURL('/getuserdata'), (req, res) => {
+    res.status(200).send(req.user);
+});
+
 
 
 
@@ -430,11 +439,42 @@ app.post(getAPIURL('/joincourse'), (req, res) => {
     }
     const user = req.user;
     user.joined_courses.push(courseName);
-    mySqlConnection.query('UPDATE users SET joined_courses = ? WHERE id = ?', [user.joined_courses, user.id], (err) => {
+    mySqlConnection.query('UPDATE users SET joined_courses = ? WHERE id = ?', [JSON.stringify(user.joined_courses), user.id], (err) => {
         if (err) {
             res.status(500).send(err);
         } else {
             res.status(200).send('Successfully joined course.');
+        }
+    })
+});
+
+app.post(getAPIURL('/leavecourse'), (req, res) => {
+    const bod = req.body;
+    const courseName = bod.courseName;
+    if (courseName === undefined) {
+        res.status(400).send(`Course name is undefined.`);
+        return;
+    }
+    if (courseName === null) {
+        res.status(400).send(`Course name is null.`);
+        return;
+    }
+    if (typeof (courseName) !== 'string') {
+        res.status(400).send(`Course name isn't of type 'String'.`);
+        return;
+    }
+    const user = req.user;
+    const index = user.joined_courses.indexOf(courseName);
+    if (index === -1) {
+        res.status(400).send(`Cannot leave course you have not joined.`);
+        return;
+    }
+    user.joined_courses.splice(index, 1);
+    mySqlConnection.query('UPDATE users SET joined_courses = ? WHERE id = ?', [JSON.stringify(user.joined_courses), user.id], (err) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.status(200).send('Successfully left course.');
         }
     })
 });
