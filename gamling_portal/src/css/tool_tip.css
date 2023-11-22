@@ -14,14 +14,15 @@
     --tool-tip-col: rgb(255, 255, 255);
     --border-width: 5px;
     position: relative;
+    max-width: 200px;
     box-shadow: var(--main-shadow);
 }
 
-.tool_tip:not(.popup_tool_tip) {
+.tool_tip:not(.interactive_tool_tip) {
     pointer-events: none;
 }
 
-.tool_tip.popup_tool_tip {
+.tool_tip.interactive_tool_tip {
     pointer-events: all;
 }
 
@@ -47,7 +48,24 @@
     box-sizing: border-box;
 }
 
-/*directions*/
+/*directions for container*/
+.tool_tip.left {
+    transform: translate(-100%, -50%) translate(var(--x), var(--y));
+}
+
+.tool_tip.right {
+    transform: translate(0%, -50%) translate(var(--x), var(--y));
+}
+
+.tool_tip.top {
+    transform: translate(-50%, -100%) translate(var(--x), var(--y));
+}
+
+.tool_tip.bottom {
+    transform: translate(-50%, 0%) translate(var(--x), var(--y));
+}
+
+/*directions for arrow*/
 .tool_tip.left>.tool_tip_arrow {
     top: 50%;
     left: 100%;

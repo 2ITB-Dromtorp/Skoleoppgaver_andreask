@@ -7,16 +7,18 @@ import reportWebVitals from './reportWebVitals';
 import { SessionDataContextProvider, ToolTipsContextProvider, UserDataContextProvider } from './context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+/*
+<React.StrictMode>
+</React.StrictMode>
+*/
 root.render(
-    <React.StrictMode>
-        <SessionDataContextProvider>
-            <UserDataContextProvider>
-                <ToolTipsContextProvider>
-                    <App />
-                </ToolTipsContextProvider>
-            </UserDataContextProvider>
-        </SessionDataContextProvider>
-    </React.StrictMode>
+    <SessionDataContextProvider>
+        <UserDataContextProvider>
+            <ToolTipsContextProvider>
+                <App />
+            </ToolTipsContextProvider>
+        </UserDataContextProvider>
+    </SessionDataContextProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

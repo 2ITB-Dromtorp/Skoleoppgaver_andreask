@@ -1,12 +1,12 @@
 import './index.css';
 
-import { CustomButton, FancyButton } from "../../../../components/input";
+import { Button, CustomButton, FancyButton } from "../../../../components/input";
 import { Link } from 'react-router-dom';
 
 import { ArrowRightIcon, CheckmarkIcon } from '../../../../svg';
-import { useContext, useRef } from 'react';
+import { useState, useContext, useEffect, useRef } from 'react';
 import { SessionDataContext, UserDataContext } from '../../../../context';
-import { ToolTip } from '../../../../components/tool_tip';
+import { useAddToolTip, useRemoveToolTip } from '../../../../custom_hooks';
 
 function Course({ courseName, courseTitle, courseDesc, courseImage }) {
     const { 0: sessionData } = useContext(SessionDataContext);
@@ -42,7 +42,30 @@ function Course({ courseName, courseTitle, courseDesc, courseImage }) {
 }
 
 function Index() {
+    const viewCoursesRef = useRef();
     const coursesRef = useRef();
+
+    const addToolTip = useAddToolTip();
+    const [isFirstRender, setIsFirstRender] = useState(true);
+    useEffect(() => {
+        if (isFirstRender) {
+            setIsFirstRender(false);
+            const RenderToolTip = () => {
+                const removeToolTip = useRemoveToolTip();
+                return (
+                    <>
+                        some sussy testy
+                        <Button onClick={(e) => {
+                            removeToolTip(firstToolTip);
+                        }}>bton</Button>
+                    </>
+                );
+            }
+            const firstToolTip = addToolTip('left', true, () => {
+                return viewCoursesRef.current;
+            }, RenderToolTip);
+        }
+    }, [isFirstRender, addToolTip]);
 
     /*
     <svg id='tutorial_highlight_svg' preserveAspectRatio='none' viewBox='0 0 100 100'>
@@ -67,7 +90,7 @@ function Index() {
                     <p id="main_header_desc">
                         Velkommen til vår nettside dedikert til opplæring for voksne! Enten du ønsker å tilegne deg nye ferdigheter, oppdatere dine kunnskaper eller utforske en ny karrierevei, er vårt opplæringsprogram skreddersydd for å møte dine behov som voksenstudent. Vi tilbyr et mangfoldig utvalg av kurs innen ulike fagområder, levert av erfarne instruktører som forstår de unike utfordringene voksne elever står overfor.
                     </p>
-                    <FancyButton primary={true} id="main_header_view_courses_button" onClick={() => {
+                    <FancyButton ref={viewCoursesRef} primary={true} id="main_header_view_courses_button" onClick={() => {
                         coursesRef.current.scrollIntoView({ behavior: 'smooth' });
                     }}>
                         Se kurs&nbsp;<ArrowRightIcon className="text_icon" />

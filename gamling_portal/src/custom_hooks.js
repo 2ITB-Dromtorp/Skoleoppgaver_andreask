@@ -70,9 +70,27 @@ export function useRefreshUserData() {
 //tool tips
 export function useAddToolTip() {
     const { 1: setToolTips } = useContext(ToolTipsContext);
+    return (dir, interactive, attachRef, content) => {
+        const toolTip = {
+            dir: dir,
+            interactive: interactive,
+            attachRef: attachRef,
+            content: content,
+        };
+        setToolTips((toolTips) => {
+            toolTips.push(toolTip);
+            return toolTips;
+        });
+        return toolTip;
+    }
+}
+
+export function useRemoveToolTip() {
+    const { 1: setToolTips } = useContext(ToolTipsContext);
     return (toolTip) => {
         setToolTips((toolTips) => {
-            return toolTips.push(toolTip);
+            toolTips.splice(toolTips.indexOf(toolTip, 1));
+            return toolTips;
         });
     }
 }
