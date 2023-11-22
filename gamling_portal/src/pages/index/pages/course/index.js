@@ -5,92 +5,6 @@ import { CustomFancyButton, FancyButton } from '../../../../components/input';
 import { SessionDataContext, UserDataContext } from '../../../../context';
 import { useRefreshUserData } from '../../../../custom_hooks';
 
-function NormalDL({ children }) {
-    return (
-        <dl className='normal_dl'>
-            {children}
-        </dl>
-    );
-}
-
-function NormalDT({ children }) {
-    return (
-        <dt className='normal_dt'>
-            {children}
-        </dt>
-    );
-}
-
-function NormalDD({ children }) {
-    return (
-        <dd className='normal_dd'>
-            {children}
-        </dd>
-    );
-}
-
-function CourseNav() {
-    const { 0: userData } = useContext(UserDataContext);
-    const { 0: sessionData } = useContext(SessionDataContext);
-    const refreshUserData = useRefreshUserData();
-    const { courseName } = useParams();
-    const isLoggedIn = sessionData && sessionData.logged_in;
-    let content;
-    if (isLoggedIn === true) {
-        const isInAnotherCourse = userData && userData.joined_courses.length > 0 && userData.joined_courses.includes(courseName) === false;
-        if (isInAnotherCourse === false) {
-            const isJoinCourse = userData && userData.joined_courses.includes(courseName) === false;
-            content = (
-                <FancyButton primary={true} isDelete={isJoinCourse === false} onClick={() => {
-                    fetch(`/api/${isJoinCourse ? 'joincourse' : 'leavecourse'}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            courseName: courseName,
-                        }),
-                    }).then((res) => {
-                        if (res.status === 200) {
-                            refreshUserData();
-                        } else {
-                            console.log("NOT POG");
-                        }
-                    });
-                }}>
-                    {isJoinCourse ? 'Meld deg på kurset' : 'Meld deg av kurset'}
-                </FancyButton>
-            );
-        } else {
-            content = (
-                <p>
-                    Du kan bare være med i ett kurs av gangen. Du er allerede med i <Link to={`/course/${userData.joined_courses[0]}`}>
-                        {coursesContent[userData.joined_courses[0]].title}
-                    </Link>
-                </p>
-            );
-        }
-    } else {
-        content = (
-            <div id="course_not_logged_in">
-                <p>
-                    Du må være logget inn for å bli med i kurs.
-                </p>
-                <CustomFancyButton to='/login' element={Link} primary={true}>
-                    Logg inn
-                </CustomFancyButton>
-            </div>
-        );
-    }
-    return (
-        <nav id='course_nav'>
-            <div id='course_nav_content'>
-                {content}
-            </div>
-        </nav>
-    );
-}
-
 const coursesContent = {
     norwegian: {
         title: 'Norsk',
@@ -273,18 +187,302 @@ const coursesContent = {
         Content: () => {
             return (
                 <>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Arnold_Schwarzenegger_1974.jpg/220px-Arnold_Schwarzenegger_1974.jpg" alt="arnold_n_word" />
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Arnold_Schwarzenegger_1974.jpg/220px-Arnold_Schwarzenegger_1974.jpg" alt="arnold_n_word" />
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Arnold_Schwarzenegger_1974.jpg/220px-Arnold_Schwarzenegger_1974.jpg" alt="arnold_n_word" />
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Arnold_Schwarzenegger_1974.jpg/220px-Arnold_Schwarzenegger_1974.jpg" alt="arnold_n_word" />
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Arnold_Schwarzenegger_1974.jpg/220px-Arnold_Schwarzenegger_1974.jpg" alt="arnold_n_word" />
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Arnold_Schwarzenegger_1974.jpg/220px-Arnold_Schwarzenegger_1974.jpg" alt="arnold_n_word" />
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Arnold_Schwarzenegger_1974.jpg/220px-Arnold_Schwarzenegger_1974.jpg" alt="arnold_n_word" />
+                    <h3>
+                        Kursbeskrivelse
+                    </h3>
+                    <p>
+                        Vårt 8-ukers treningskurs for voksne i alderen 40-60 år er utviklet av erfarne treningsinstruktører med spesialisering innen seniorfitness. Kurset kombinerer varierte treningsformer, inkludert styrketrening med vekter, kroppsvektøvelser, kondisjonstrening og avspenningsteknikker.
+                    </p>
+                    <NormalDL>
+                        <NormalDT>
+                            Uke 1-2: Introduksjon og evaluering
+                        </NormalDT>
+                        <NormalDD>
+                            <p>
+                                Grundig helsevurdering og målsetting
+                            </p>
+                            <p>
+                                Innføring i riktig teknikk for styrkeøvelser
+                            </p>
+                            <p>
+                                Lett kondisjonstrening for å øke hjerte- og lungesystemets aktivitet
+                            </p>
+                        </NormalDD>
+                        <NormalDT>
+                            Uke 3-4: Styrke og fleksibilitet
+                        </NormalDT>
+                        <NormalDD>
+                            <p>
+                                Fokus på styrketrening for å bygge muskelmasse og styrke beinbygningen
+                            </p>
+                            <p>
+                                Introduksjon til fleksibilitetsøvelser for å forbedre bevegelsesområdet
+                            </p>
+                        </NormalDD>
+                        <NormalDT>
+                            Uke 5-6: Kondisjon og balanse
+                        </NormalDT>
+                        <NormalDD>
+                            <p>
+                                Økende intensitet i kondisjonstreningen for å forbedre hjerte- og lungekapasitet
+                            </p>
+                            <p>
+                                Balanseøvelser for å styrke kjernemuskulaturen og redusere risikoen for fall
+                            </p>
+                        </NormalDD>
+                        <NormalDT>
+                            Uke 7-8: Helhetlig integrasjon og oppfølging
+                        </NormalDT>
+                        <NormalDD>
+                            <p>
+                                Sammensetning av alle elementene fra kurset i helhetlige treningsøkter
+                            </p>
+                            <p>
+                                Evaluering av individuelle fremgang og justering av mål
+                            </p>
+                            <p>
+                                Veiledning om hvordan opprettholde en aktiv livsstil etter kursets slutt
+                            </p>
+                        </NormalDD>
+                    </NormalDL>
+                </>
+            );
+        },
+    },
+    homeknowledge: {
+        title: 'Heimkunnskap',
+        Content: () => {
+            return (
+                <>
+                    <h3>
+                        Kursbeskrivelse
+                    </h3>
+                    <NormalDL>
+                        <NormalDT>
+                            Uke 1: Matlaging og Kosthold:
+                        </NormalDT>
+                        <NormalDD>
+                            <NormalDL>
+                                <NormalDT>
+                                    Introduksjon til Kjøkkenet:
+                                </NormalDT>
+                                <NormalDD>
+                                    <p>
+                                        Kjøkkenredskaper og deres bruk.
+                                    </p>
+                                    <p>
+                                        Mattrygghet og hygiene på kjøkkenet.
+                                    </p>
+                                </NormalDD>
+                                <NormalDT>
+                                    Grunnleggende Matlagingsteknikker:
+                                </NormalDT>
+                                <NormalDD>
+                                    <p>
+                                        Steking, koking, baking, og grilling.
+                                    </p>
+                                    <p>
+                                        Enkle oppskrifter for å praktisere teknikkene.
+                                    </p>
+                                </NormalDD>
+                                <NormalDT>
+                                    Balansert Kosthold:
+                                </NormalDT>
+                                <NormalDD>
+                                    <p>
+                                        Grunnleggende ernæringsprinsipper.
+                                    </p>
+                                    <p>
+                                        Hvordan sammensette et balansert måltid.
+                                    </p>
+                                </NormalDD>
+                            </NormalDL>
+                        </NormalDD>
+                        <NormalDT>
+                            Uke 2: Husstell:
+                        </NormalDT>
+                        <NormalDD>
+                            <NormalDL>
+                                <NormalDT>
+                                    Hjemmeorganisering:
+                                </NormalDT>
+                                <NormalDD>
+                                    <p>
+                                        Rengjøring og organisering av hjemmet.
+                                    </p>
+                                    <p>
+                                        Effektive rutiner for å opprettholde orden.
+                                    </p>
+                                </NormalDD>
+                                <NormalDT>
+                                    Tøyvask og Vedlikehold:
+                                </NormalDT>
+                                <NormalDD>
+                                    <p>
+                                        Riktig bruk av vaskemaskin og tørketrommel.
+                                    </p>
+                                    <p>
+                                        Plaggvedlikehold og reparasjon.
+                                    </p>
+                                </NormalDD>
+                                <NormalDT>
+                                    Innredning og Stil:
+                                </NormalDT>
+                                <NormalDD>
+                                    <p>
+                                        Grunnleggende prinsipper for interiørdesign.
+                                    </p>
+                                    <p>
+                                        Budsjettvennlige måter å forbedre hjemmet på.
+                                    </p>
+                                </NormalDD>
+                            </NormalDL>
+                        </NormalDD>
+                        <NormalDT>
+                            Uke 3: Husholdningsferdigheter:
+                        </NormalDT>
+                        <NormalDD>
+                            <NormalDL>
+                                <NormalDT>
+                                    Økonomistyring:
+                                </NormalDT>
+                                <NormalDD>
+                                    <p>
+                                        Budsjettlegging og regnskap for daglige utgifter.
+                                    </p>
+                                    <p>
+                                        Tips for å spare penger i hjemmet.
+                                    </p>
+                                </NormalDD>
+                                <NormalDT>
+                                    Tidsstyring:
+                                </NormalDT>
+                                <NormalDD>
+                                    <p>
+                                        Effektive måter å organisere tid på.
+                                    </p>
+                                    <p>
+                                        Planlegging av daglige oppgaver og aktiviteter.
+                                    </p>
+                                </NormalDD>
+                                <NormalDT>
+                                    Grunnleggende Reparasjoner:
+                                </NormalDT>
+                                <NormalDD>
+                                    <p>
+                                        Feilsøking og enkle reparasjoner i hjemmet.
+                                    </p>
+                                    <p>
+                                        Hvordan håndtere vanlige problemer.
+                                    </p>
+                                </NormalDD>
+                            </NormalDL>
+                        </NormalDD>
+                        <NormalDT>
+                            Uke 4: Prosjektavslutning og Oppsummering:
+                        </NormalDT>
+                        <NormalDD>
+                            <NormalDL>
+                                <NormalDT>
+                                    Prosjekt: Kreativ Matlaging:
+                                </NormalDT>
+                                <NormalDD>
+                                    <p>
+                                        Deltakerne skal lage et måltid ved å anvende de lærte teknikkene.
+                                    </p>
+                                </NormalDD>
+                                <NormalDT>
+                                    Refleksjon og Oppsummering:
+                                </NormalDT>
+                                <NormalDD>
+                                    <p>
+                                        Deltakerne deler erfaringer og hva de har lært.
+                                    </p>
+                                    <p>
+                                        Mål for videre utvikling innen heimkunnskap.
+                                    </p>
+                                </NormalDD>
+                            </NormalDL>
+                        </NormalDD>
+                    </NormalDL>
                 </>
             );
         },
     },
 };
+
+function NormalDL({ children }) {
+    return (
+        <dl className='normal_dl'>
+            {children}
+        </dl>
+    );
+}
+
+function NormalDT({ children }) {
+    return (
+        <dt className='normal_dt'>
+            {children}
+        </dt>
+    );
+}
+
+function NormalDD({ children }) {
+    return (
+        <dd className='normal_dd'>
+            {children}
+        </dd>
+    );
+}
+
+function CourseNav() {
+    const { 0: userData } = useContext(UserDataContext);
+    const { 0: sessionData } = useContext(SessionDataContext);
+    const refreshUserData = useRefreshUserData();
+    const { courseName } = useParams();
+    const isLoggedIn = sessionData && sessionData.logged_in;
+    let content;
+    if (isLoggedIn === true) {
+        const isJoinCourse = userData && userData.joined_courses.includes(courseName) === false;
+        content = (
+            <FancyButton primary={true} isDelete={isJoinCourse === false} onClick={() => {
+                fetch(`/api/${isJoinCourse ? 'joincourse' : 'leavecourse'}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        courseName: courseName,
+                    }),
+                }).then((res) => {
+                    if (res.status === 200) {
+                        refreshUserData();
+                    }
+                });
+            }}>
+                {isJoinCourse ? 'Meld deg på kurset' : 'Meld deg av kurset'}
+            </FancyButton>
+        );
+    } else {
+        content = (
+            <div id="course_not_logged_in">
+                <p>
+                    Du må være logget inn for å bli med i kurs.
+                </p>
+                <CustomFancyButton to='/login' element={Link} primary={true}>
+                    Logg inn
+                </CustomFancyButton>
+            </div>
+        );
+    }
+    return (
+        <nav id='course_nav'>
+            <div id='course_nav_content'>
+                {content}
+            </div>
+        </nav>
+    );
+}
 
 function Course() {
     const { courseName } = useParams();

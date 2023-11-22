@@ -389,8 +389,24 @@ app.post(getAPIURL('/login'), async (req, res) => {
 
 //logout
 app.post(getAPIURL('/logout'), (req, res) => {
-    res.clearCookie('auth');
-    res.status(200).send('Successfully logged out');
+    const user = req.user;
+    const sessions = user.sessions;
+    for (let i = 0; i < sessions.length; i++) {
+        const session = sessions[i];
+        if (session.token === req.cookies.auth) {
+            sessions.splice(i, 1);
+            res.clearCookie('auth');
+            break;
+        }
+    }
+    mySqlConnection.query('UPDATE users SET sessions = ? WHERE id = ?', [JSON.stringify(sessions), user.id], (err) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send(err);
+        } else {
+            res.status(200).send('Successfully logged out');
+        }
+    });
 });
 
 //session
@@ -478,3 +494,29 @@ app.post(getAPIURL('/leavecourse'), (req, res) => {
         }
     })
 });
+
+setInterval(() => {
+    mySqlConnection.query('SELECT * from users', (err, users) => {
+        if (err) {
+            console.error(err);
+        } else {
+            for (let i = 0; i < users.length; i++) {
+                const user = users[i];
+                const sessions = user.sessions;
+                for (let j = 0; j < sessions.length; j++) {
+                    const session = sessions[j];
+                    const now = Date.now();
+                    const off = now - session.date;
+                    if (off > maxAuthCookieAge) {
+                        sessions.splice(j, 1);
+                        mySqlConnection.query('UPDATE users SET sessions = ? WHERE id = ?', [JSON.stringify(sessions), user.id], (err) => {
+                            if (err) {
+                                console.error(err);
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    });
+}, 60 * 1000);

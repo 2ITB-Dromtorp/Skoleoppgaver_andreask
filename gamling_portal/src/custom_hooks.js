@@ -7,8 +7,10 @@ import { SessionDataContext, UserDataContext } from './context';
 export function useResetSessionData() {
     const { 1: setSessionData } = useContext(SessionDataContext);
     const refreshSessionData = useRefreshSessionData();
+    const resetUserData = useResetUserData();
     return () => {
         setSessionData({});
+        resetUserData();
         refreshSessionData();
     }
 }
@@ -17,13 +19,15 @@ export function useRefreshSessionData() {
     const { 1: setSessionData } = useContext(SessionDataContext);
     const refreshUserData = useRefreshUserData();
     return () => {
-        refreshUserData();
         fetch('/api/getsession', {
             method: 'GET',
         }).then((res) => {
             if (res.status === 200) {
                 res.json().then((data) => {
                     setSessionData(data);
+                    if (data.logged_in) {
+                        refreshUserData();
+                    }
                 });
             } else {
                 console.error(res);
@@ -38,10 +42,8 @@ export function useRefreshSessionData() {
 //user data
 export function useResetUserData() {
     const { 1: setUserData } = useContext(UserDataContext);
-    const refreshUserData = useRefreshUserData();
     return () => {
-        setUserData({});
-        refreshUserData();
+        setUserData();
     }
 }
 

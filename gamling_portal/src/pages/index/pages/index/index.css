@@ -34,6 +34,7 @@
 
 #course_cards_section {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -41,6 +42,10 @@
     height: 100%;
     box-sizing: border-box;
     padding: 100px 0;
+}
+
+#courses_header {
+    font-size: 40px;
 }
 
 #course_cards {
@@ -56,23 +61,22 @@
 
 /*course*/
 .course_card {
-    --col: rgb(var(--r), var(--g), var(--b));
     display: flex;
     flex-direction: column;
     max-width: 360px;
     width: 100%;
     height: 400px;
-    border-radius: 10px;
+    border-radius: 20px;
     box-shadow: var(--main-shadow);
-    background-color: rgba(var(--r), var(--g), var(--b), 0.75);
-    border: 1px solid var(--col);
+    background-color: rgb(255, 255, 255);
     padding: 24px;
     box-sizing: border-box;
 }
 
 .course_card_image {
     width: 100%;
-    height: 100%;
+    height: 60%;
+    flex-shrink: 0;
 }
 
 .course_card_name {
@@ -81,12 +85,22 @@
     font-size: 20px;
 }
 
-.course_card_desc {}
+.course_card_desc {
+    min-height: 0;
+    flex-grow: 1;
+}
 
 .course_bottom {
     display: flex;
     align-items: flex-end;
+    flex-shrink: 0;
     margin-top: 8px;
+    height: 24px;
+}
+
+.course_view_button {
+    font-weight: 600;
+    text-decoration: none;
 }
 
 
@@ -144,16 +158,17 @@
 .joined_course_message {
     display: flex;
     align-items: center;
+    height: 100%;
     gap: 8px;
     margin-left: auto;
     color: rgb(0, 255, 0);
-    font-weight: 700;
+    font-weight: 600;
 }
 
 
 .joined_course_checkmark_icon {
-    width: 24px;
-    height: 24px;
+    width: auto;
+    height: 100%;
     stroke: rgb(0, 255, 0);
     fill: none;
 }

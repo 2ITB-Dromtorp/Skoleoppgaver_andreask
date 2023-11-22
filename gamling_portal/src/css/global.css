@@ -51,6 +51,36 @@
     font-stretch: 100%;
 }
 
+
+
+
+/*custom scrollbar*/
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgb(255, 255, 255);
+}
+
+::-webkit-scrollbar-thumb {
+    width: 8px;
+    background: rgb(220, 220, 220);
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(200, 200, 200);
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: rgb(180, 180, 180);
+}
+
+
+
+
+
 /*body*/
 body {
     margin: 0;

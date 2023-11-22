@@ -21,7 +21,7 @@ function Account() {
                     }
                 });
             }}>
-                Log out
+                Logg ut
             </FancyButton>
         </section>
     );

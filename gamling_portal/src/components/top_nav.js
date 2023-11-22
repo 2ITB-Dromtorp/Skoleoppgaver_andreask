@@ -2,6 +2,8 @@ import '../css/top_nav.css';
 
 import { ReactComponent as LogoSvg } from '../svgs/logo.svg';
 
+import { UserIcon } from '../svg';
+
 import { useContext } from 'react';
 
 import { SessionDataContext } from '../context';
@@ -17,7 +19,7 @@ function TopNav() {
     if (sessionData && sessionData.logged_in) {
         userContent = (
             <CustomButton element={Link} id='profile_button' to='/account'>
-                <img id='profile_image' src='https://i.pinimg.com/originals/b3/19/3e/b3193e0e568e2553f94943471b7e3bc8.gif' alt='profile_picture' />
+                <UserIcon id="profile_icon"/>
             </CustomButton>
         );
     } else {

@@ -65,37 +65,39 @@ function UserForm({ isLogin }) {
 
     return (
         <section id='user_section' className='main_content'>
-            <section id='user_section' className={`floating_container ${classType}`}>
-                <h2 id='user_form_header'>{typeText}</h2>
-                <form id={classType + '_form'} className='user_form' onSubmit={loginFormSubmit}>
-                    <div id='user_input_fields'>
-                        <div className='user_input_field_container'>
-                            <label className='standard_label' htmlFor={classType + '_username_input'}>Username</label>
-                            <TextInput id={classType + '_username_input'} type='text' autofill='off' required value={usernameInput} onChange={(e) => {
-                                setUsernameInput(e.target.value);
-                            }} />
+            <div id='user_form_section'>
+                <section id='user_form_container' className={classType}>
+                    <h2 id='user_form_header'>{typeText}</h2>
+                    <form id={classType + '_form'} className='user_form' onSubmit={loginFormSubmit}>
+                        <div id='user_input_fields'>
+                            <div className='user_input_field_container'>
+                                <label className='standard_label' htmlFor={classType + '_username_input'}>Username</label>
+                                <TextInput id={classType + '_username_input'} type='text' autofill='off' required value={usernameInput} onChange={(e) => {
+                                    setUsernameInput(e.target.value);
+                                }} />
+                            </div>
+                            <div className='user_input_field_container'>
+                                <label className='standard_label' htmlFor={classType + '_password_input'}>Password</label>
+                                <TextInput id={classType + '_username_input'} type='password' autofill='off' required value={passwordInput} onChange={(e) => {
+                                    setPasswordInput(e.target.value);
+                                }} />
+                            </div>
                         </div>
-                        <div className='user_input_field_container'>
-                            <label className='standard_label' htmlFor={classType + '_password_input'}>Password</label>
-                            <TextInput id={classType + '_username_input'} type='password' autofill='off' required value={passwordInput} onChange={(e) => {
-                                setPasswordInput(e.target.value);
-                            }} />
+                        <div id='user_input_wrong_page'>
+                            <div id='user_input_wrong_page_text'>
+                                {wrongPageText}
+                            </div>
+                            &nbsp;
+                            <Link to={`/${wrongPagePath}`}>
+                                {wrongPageLinkText}
+                            </Link>
                         </div>
-                    </div>
-                    <div id='user_input_wrong_page'>
-                        <div id='user_input_wrong_page_text'>
-                            {wrongPageText}
-                        </div>
-                        &nbsp;
-                        <Link to={`/${wrongPagePath}`}>
-                            {wrongPageLinkText}
-                        </Link>
-                    </div>
-                    <FancyButton primary={true} id='user_submit_button' type='submit'>
-                        {typeText}
-                    </FancyButton>
-                </form>
-            </section>
+                        <FancyButton primary={true} id='user_submit_button' type='submit'>
+                            {typeText}
+                        </FancyButton>
+                    </form>
+                </section>
+            </div>
         </section>
     );
 }

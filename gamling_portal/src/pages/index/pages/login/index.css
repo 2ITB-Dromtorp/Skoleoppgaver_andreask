@@ -1,12 +1,21 @@
-#user_section {
+#user_form_section {
+    padding: 0px 16px;
+}
+
+#user_form_container {
+    --pad: 16px;
+    --base-max-width: 300px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 300px;
+    max-width: calc(var(--base-max-width) + (var(--pad) * 2));
+    width: 100%;
     padding: 16px;
     border-radius: 16px;
     gap: 16px;
     margin: 4rem auto auto auto;
+    box-sizing: border-box;
+    box-shadow: var(--main-shadow);
 }
 
 #user_form_header {
