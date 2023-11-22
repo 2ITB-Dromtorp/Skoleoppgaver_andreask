@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { SessionDataContext, UserDataContext } from './context';
+import { SessionDataContext, UserDataContext, ToolTipsContext } from './context';
 
 
 
@@ -60,6 +60,19 @@ export function useRefreshUserData() {
             } else {
                 console.error(res);
             }
+        });
+    }
+}
+
+
+
+
+//tool tips
+export function useAddToolTip() {
+    const { 1: setToolTips } = useContext(ToolTipsContext);
+    return (toolTip) => {
+        setToolTips((toolTips) => {
+            return toolTips.push(toolTip);
         });
     }
 }

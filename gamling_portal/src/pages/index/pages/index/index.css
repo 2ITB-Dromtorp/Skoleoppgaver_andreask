@@ -71,7 +71,6 @@
 #course_cards {
     display: grid;
     justify-content: center;
-    align-items: flex-end;
     gap: 24px;
     height: 100%;
     padding: 24px;
@@ -124,40 +123,34 @@
 }
 
 
-
 /*media queries for courses*/
-/*phones*/
 @media only screen and (max-width: 600px) {
     #course_cards {
         grid-template-columns: 1fr;
     }
 }
 
-/*large phones and tablets*/
 @media only screen and (min-width: 600px) {
     #course_cards {
         grid-template-columns: 1fr 1fr;
     }
 }
 
-/*landscape tablets*/
 @media only screen and (min-width: 768px) {
     #course_cards {
         grid-template-columns: 1fr 1fr;
     }
 }
 
-/*laptops and desktops*/
 @media only screen and (min-width: 992px) {
     #course_cards {
         grid-template-columns: 1fr 1fr 1fr;
     }
 }
 
-/*extra large laptops and desktops*/
 @media only screen and (min-width: 1200px) {
     #course_cards {
-        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 }
 

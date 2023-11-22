@@ -1,3 +1,5 @@
+import '../css/tool_tip.css';
+
 import { getAdditionalClassName } from '../misc';
 
 export function ToolTips({ children }) {
@@ -10,7 +12,7 @@ export function ToolTips({ children }) {
 
 export function ToolTip({ children, className, dir, ...props }) {
     return (
-        <div className={`tool_tip${getAdditionalClassName(className)}`} {...props}>
+        <div className={`tool_tip ${dir}${getAdditionalClassName(className)}`} {...props}>
             <div className='tool_tip_content'>
                 {children}
             </div>

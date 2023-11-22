@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react';
 
 export const SessionDataContext = createContext();
-export function SessionDataContextProvider({ children, ...props }) {
+export function SessionDataContextProvider({ children }) {
     const [sessionData, setSessionData] = useState({});
 
     return (
@@ -12,7 +12,7 @@ export function SessionDataContextProvider({ children, ...props }) {
 }
 
 export const UserDataContext = createContext();
-export function UserDataContextProvider({ children, ...props }) {
+export function UserDataContextProvider({ children }) {
     const [userData, setUserData] = useState();
 
     return (
@@ -22,13 +22,13 @@ export function UserDataContextProvider({ children, ...props }) {
     );
 }
 
-export const DocumentsContext = createContext();
-export function DocumentsContextProvider({ children, ...props }) {
-    const [documents, setDocuments] = useState([]);
+export const ToolTipsContext = createContext();
+export function ToolTipsContextProvider({ children }) {
+    const [toolTips, setToolTips] = useState([]);
 
     return (
-        <DocumentsContext.Provider value={[documents, setDocuments]}>
+        <ToolTipsContext.Provider value={[toolTips, setToolTips]}>
             {children}
-        </DocumentsContext.Provider>
+        </ToolTipsContext.Provider>
     );
 }

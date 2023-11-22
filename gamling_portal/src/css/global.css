@@ -248,7 +248,7 @@ input[type=number] {
     overflow: hidden;
     color: var(--button-text-col);
     border-radius: 10px;
-    transition-property: bborder-color, outline-width, ackground-color;
+    transition-property: bborder-color, outline-width, background-color;
     transition-duration: 0.1s;
     transition-timing-function: ease-out;
 }

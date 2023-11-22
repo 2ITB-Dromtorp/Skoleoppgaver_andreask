@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRightIcon, CheckmarkIcon } from '../../../../svg';
 import { useContext, useRef } from 'react';
 import { SessionDataContext, UserDataContext } from '../../../../context';
+import { ToolTip } from '../../../../components/tool_tip';
 
 function Course({ courseName, courseTitle, courseDesc, courseImage }) {
     const { 0: sessionData } = useContext(SessionDataContext);
