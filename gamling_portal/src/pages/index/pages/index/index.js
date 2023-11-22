@@ -58,6 +58,7 @@ function Index() {
     return (
         <div id="index_container">
             <header id="main_header_section">
+                <img id="main_header_image" src="https://elevatedachievement.com/wp-content/uploads/2022/04/shutterstock_760359742-scaled.jpg" alt="adults_in_a_classroom" />
                 <div id="main_header">
                     <h1 id="main_header_header">
                         Opplæring for godt voksne
