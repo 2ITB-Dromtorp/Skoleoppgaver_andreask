@@ -172,3 +172,36 @@
     stroke: rgb(0, 255, 0);
     fill: none;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+#tutorial_highlight_svg {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+}
+
+/*
+#tutorial_highlight_container {
+
+}
+*/
+
+/*
+#tutorial_highlight_mask {
+
+}
+*/

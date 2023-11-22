@@ -43,6 +43,18 @@ function Course({ courseName, courseTitle, courseDesc, courseImage }) {
 function Index() {
     const coursesRef = useRef();
 
+    /*
+    <svg id='tutorial_highlight_svg' preserveAspectRatio='none' viewBox='0 0 100 100'>
+        <defs>
+            <mask id="window_mask">
+                <rect x="0%" y="0%" width="100%" height="100%" fill="rgb(255, 255, 255)" />
+                <rect x="25%" y="25%" width="50%" height="50%" fill="rgb(0, 0, 0)" />
+            </mask>
+        </defs>
+        <rect x="0%" y="0%" width="100%" height="100%" fill="rgba(0, 0, 0, 0.8)" mask="url(#window_mask)" />
+    </svg>
+    */
+
     return (
         <div id="index_container">
             <header id="main_header_section">
