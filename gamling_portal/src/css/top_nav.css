@@ -22,7 +22,7 @@ nav {
 #top_nav_content {
     display: flex;
     width: 100%;
-    gap: 12px;
+    gap: 14px;
 }
 
 #home_link {

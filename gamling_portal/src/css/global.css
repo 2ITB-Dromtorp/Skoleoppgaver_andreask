@@ -1,8 +1,8 @@
 /*root*/
 :root {
     --nav-height: 32px;
-    --nav-horiz-pad: 15px;
-    --nav-vert-pad: 15px;
+    --nav-horiz-pad: 14px;
+    --nav-vert-pad: 14px;
     --nav-border-width: 1px;
     --actual-nav-height: calc(var(--nav-height) + (var(--nav-horiz-pad) * 2) + var(--nav-border-width));
     --theme-col: rgb(0, 156, 255);
@@ -431,6 +431,7 @@ input[type=number] {
 .main_content {
     display: flex;
     flex-direction: column;
+    position: relative;
     min-height: var(--main-content-min-height);
 }
 

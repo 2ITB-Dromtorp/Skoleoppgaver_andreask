@@ -66,7 +66,7 @@ function Index() {
                     <p id="main_header_desc">
                         Velkommen til vår nettside dedikert til opplæring for voksne! Enten du ønsker å tilegne deg nye ferdigheter, oppdatere dine kunnskaper eller utforske en ny karrierevei, er vårt opplæringsprogram skreddersydd for å møte dine behov som voksenstudent. Vi tilbyr et mangfoldig utvalg av kurs innen ulike fagområder, levert av erfarne instruktører som forstår de unike utfordringene voksne elever står overfor.
                     </p>
-                    <FancyButton primary={true} onClick={() => {
+                    <FancyButton primary={true} id="main_header_view_courses_button" onClick={() => {
                         coursesRef.current.scrollIntoView({ behavior: 'smooth' });
                     }}>
                         Se kurs&nbsp;<ArrowRightIcon className="text_icon" />

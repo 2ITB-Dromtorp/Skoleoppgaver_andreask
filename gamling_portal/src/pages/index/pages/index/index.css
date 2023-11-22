@@ -48,6 +48,10 @@
     color: rgb(255, 255, 255);
 }
 
+#main_header_view_courses_button {
+    margin-top: 24px;
+}
+
 #course_cards_section {
     display: flex;
     flex-direction: column;
@@ -201,6 +205,8 @@
 
 
 
+/*unused at the moment*/
+/*
 #tutorial_highlight_svg {
     position: fixed;
     left: 0;
@@ -209,6 +215,7 @@
     height: 100%;
     z-index: 10000;
 }
+*/
 
 /*
 #tutorial_highlight_container {
