@@ -5,29 +5,15 @@ import { getAdditionalClassName } from '../misc';
 import { ToolTipsContext } from '../context';
 
 export function ToolTips() {
-    const { 0: toolTips } = useContext(ToolTipsContext);
-    const { 1: forceUpdate } = useReducer(x => x + 1, 0);
-
-    useEffect(() => {
-        const scrollListener = (e) => {
-            forceUpdate();
-        }
-        document.addEventListener('scroll', scrollListener, true);
-        return () => {
-            document.removeEventListener('scroll', scrollListener, true);
-        }
-    });
+    const { 2: toolTips } = useContext(ToolTipsContext);
 
     return (
         <div id="tool_tips">
             {toolTips.map((toolTip, index) => {
-                if (toolTip.attachRef() === undefined) {
-                    return;
-                }
-                const attachRect = toolTip.attachRef().getBoundingClientRect();
+                const rect = toolTip.attachRef.current.getBoundingClientRect();
                 return (
-                    <ToolTip key={index} dir={toolTip.dir} className={toolTip.interactive ? 'interactive_tool_tip' : ''} style={{ '--x': `${attachRect.x}px`, '--y': `${attachRect.y}px` }}>
-                        {React.createElement(toolTip.content)}
+                    <ToolTip key={index} dir={toolTip.dir} className={toolTip.interactive ? 'interactive_tool_tip' : ''} style={{'--x': `${rect.x}px`, '--y': `${rect.y}px`, '--width': `${rect.width}px`, '--height': `${rect.height}px`}}>
+                        {React.createElement(toolTip.content, { toolTip: toolTip })}
                     </ToolTip>
                 );
             })}

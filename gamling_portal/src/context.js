@@ -26,8 +26,16 @@ export const ToolTipsContext = createContext();
 export function ToolTipsContextProvider({ children }) {
     const [toolTips, setToolTips] = useState([]);
 
+    const addToolTip = (toolTip) => {
+        setToolTips((prevToolTips) => [...prevToolTips, toolTip]);
+    };
+
+    const removeToolTip = (removeToolTip) => {
+        setToolTips((prevToolTips) => prevToolTips.filter((toolTip) => toolTip.id !== removeToolTip.id));
+    };
+
     return (
-        <ToolTipsContext.Provider value={[toolTips, setToolTips]}>
+        <ToolTipsContext.Provider value={[addToolTip, removeToolTip, toolTips]}>
             {children}
         </ToolTipsContext.Provider>
     );

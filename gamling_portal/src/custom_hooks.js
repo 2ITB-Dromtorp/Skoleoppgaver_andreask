@@ -68,29 +68,21 @@ export function useRefreshUserData() {
 
 
 //tool tips
-export function useAddToolTip() {
-    const { 1: setToolTips } = useContext(ToolTipsContext);
-    return (dir, interactive, attachRef, content) => {
+export function useToolTip() {
+    const [addToolTip, removeToolTip, toolTips] = useContext(ToolTipsContext);
+
+    return (content, dir, interactive, attachRef) => {
+        const id = toolTips.length;
         const toolTip = {
+            id: id,
             dir: dir,
             interactive: interactive,
-            attachRef: attachRef,
             content: content,
-        };
-        setToolTips((toolTips) => {
-            toolTips.push(toolTip);
-            return toolTips;
-        });
+            attachRef: attachRef,
+            destroy: () => removeToolTip(toolTip),
+        }
+        addToolTip(toolTip);
+
         return toolTip;
     }
-}
-
-export function useRemoveToolTip() {
-    const { 1: setToolTips } = useContext(ToolTipsContext);
-    return (toolTip) => {
-        setToolTips((toolTips) => {
-            toolTips.splice(toolTips.indexOf(toolTip, 1));
-            return toolTips;
-        });
-    }
-}
+};

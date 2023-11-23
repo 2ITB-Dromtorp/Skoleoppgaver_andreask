@@ -11,6 +11,12 @@ function Account() {
     const resetSessionData = useResetSessionData();
     return (
         <section id='account_section' className='main_content'>
+            <h1>
+                Bruker
+            </h1>
+            <p>
+                Her er funksjoner som du kan bruke for brukerkontoen din.
+            </p>
             <FancyButton primary={true} onClick={(e) => {
                 fetch('/api/logout', {
                     method: 'POST',

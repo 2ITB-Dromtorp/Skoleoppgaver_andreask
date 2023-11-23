@@ -30,7 +30,7 @@
 
 /*content*/
 .tool_tip_content {
-    padding: 8px 12px;
+    padding: 12px;
     border-radius: 8px;
     background-color: var(--tool-tip-col);
 }
@@ -50,19 +50,19 @@
 
 /*directions for container*/
 .tool_tip.left {
-    transform: translate(-100%, -50%) translate(var(--x), var(--y));
+    transform: translate(-100%, -50%) translate(var(--x), var(--y)) translate(0, calc(var(--height) * 0.5)) translate(-10px, 0);
 }
 
 .tool_tip.right {
-    transform: translate(0%, -50%) translate(var(--x), var(--y));
+    transform: translate(0, -50%) translate(var(--x), var(--y)) translate(var(--width), calc(var(--height) * 0.5)) translate(10px, 0);
 }
 
 .tool_tip.top {
-    transform: translate(-50%, -100%) translate(var(--x), var(--y));
+    transform: translate(-50%, -100%) translate(var(--x), var(--y)) translate(calc(var(--width) * 0.5), 0) translate(0, -10px);
 }
 
 .tool_tip.bottom {
-    transform: translate(-50%, 0%) translate(var(--x), var(--y));
+    transform: translate(-50%, 0) translate(var(--x), var(--y)) translate(calc(var(--width) * 0.5), var(--height)) translate(0, 10px);
 }
 
 /*directions for arrow*/

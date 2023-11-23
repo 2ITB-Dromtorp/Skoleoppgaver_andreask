@@ -1,12 +1,12 @@
 import './index.css';
 
-import { Button, CustomButton, FancyButton } from "../../../../components/input";
+import { CustomButton, FancyButton } from "../../../../components/input";
 import { Link } from 'react-router-dom';
 
 import { ArrowRightIcon, CheckmarkIcon } from '../../../../svg';
 import { useState, useContext, useEffect, useRef } from 'react';
-import { SessionDataContext, UserDataContext } from '../../../../context';
-import { useAddToolTip, useRemoveToolTip } from '../../../../custom_hooks';
+import { SessionDataContext, ToolTipsContext, UserDataContext } from '../../../../context';
+import { useToolTip } from '../../../../custom_hooks';
 
 function Course({ courseName, courseTitle, courseDesc, courseImage }) {
     const { 0: sessionData } = useContext(SessionDataContext);
@@ -45,6 +45,29 @@ function Index() {
     const viewCoursesRef = useRef();
     const coursesRef = useRef();
 
+    const createToolTip = useToolTip();
+    const [isFirstRender, setIsFirstRender] = useState(true);
+    const [myToolTip, setMyToolTip] = useState();
+    useEffect(() => {
+        if (isFirstRender) {
+            setIsFirstRender(false);
+            const toolTip = createToolTip(() => {
+                return (
+                    <>
+                        Trykk her for å se tilgjengelige kurs
+                        <FancyButton primary={true} onClick={(e) => {
+                            toolTip.destroy();
+                        }}>
+                            Jeg forstår
+                        </FancyButton>
+                    </>
+                );
+            }, 'top', true, viewCoursesRef);
+            setMyToolTip(toolTip);
+        }
+    }, [isFirstRender, createToolTip]);
+
+    /*
     const addToolTip = useAddToolTip();
     const [isFirstRender, setIsFirstRender] = useState(true);
     useEffect(() => {
@@ -66,6 +89,7 @@ function Index() {
             }, RenderToolTip);
         }
     }, [isFirstRender, addToolTip]);
+    */
 
     /*
     <svg id='tutorial_highlight_svg' preserveAspectRatio='none' viewBox='0 0 100 100'>
