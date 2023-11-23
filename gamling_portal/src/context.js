@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useRef, useState } from 'react';
 
 export const SessionDataContext = createContext();
 export function SessionDataContextProvider({ children }) {
@@ -38,5 +38,28 @@ export function ToolTipsContextProvider({ children }) {
         <ToolTipsContext.Provider value={[addToolTip, removeToolTip, toolTips]}>
             {children}
         </ToolTipsContext.Provider>
+    );
+}
+
+
+
+export const TutorialRefsContext = createContext();
+export function TutorialRefsContextProvider({ children }) {
+    const homeButtonRef = useRef();
+    const loginButtonRef = useRef();
+    const signupButtonRef = useRef();
+    const accountButtonRef = useRef();
+    const viewCoursesRef = useRef();
+
+    return (
+        <TutorialRefsContext.Provider value={{
+            homeButtonRef: homeButtonRef,
+            loginButtonRef: loginButtonRef,
+            signupButtonRef: signupButtonRef,
+            accountButtonRef: accountButtonRef,
+            viewCoursesRef: viewCoursesRef,
+        }}>
+            {children}
+        </TutorialRefsContext.Provider>
     );
 }

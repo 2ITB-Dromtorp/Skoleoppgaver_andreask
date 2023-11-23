@@ -6,7 +6,7 @@ import { UserIcon } from '../svg';
 
 import { useContext } from 'react';
 
-import { SessionDataContext } from '../context';
+import { SessionDataContext, TutorialRefsContext } from '../context';
 
 import { Link } from 'react-router-dom';
 
@@ -15,20 +15,22 @@ import { CustomButton, CustomFancyButton } from './input';
 function TopNav() {
     const { 0: sessionData } = useContext(SessionDataContext);
 
+    const {homeButtonRef, loginButtonRef, signupButtonRef, accountButtonRef} = useContext(TutorialRefsContext);
+
     let userContent;
     if (sessionData && sessionData.logged_in) {
         userContent = (
-            <CustomButton element={Link} id='profile_button' to='/account'>
+            <CustomButton ref={accountButtonRef} element={Link} id='profile_button' to='/account'>
                 <UserIcon id="profile_icon"/>
             </CustomButton>
         );
     } else {
         userContent = (
             <>
-                <CustomFancyButton primary={false} element={Link} id='login_button' to='/login'>
+                <CustomFancyButton ref={loginButtonRef} primary={false} element={Link} id='login_button' to='/login'>
                     Logg inn
                 </CustomFancyButton>
-                <CustomFancyButton primary={true} element={Link} id='signup_button' to='/signup'>
+                <CustomFancyButton ref={signupButtonRef} primary={true} element={Link} id='signup_button' to='/signup'>
                     Registrer deg
                 </CustomFancyButton>
             </>
@@ -38,7 +40,7 @@ function TopNav() {
     return (
         <nav id='top_nav'>
             <div id='top_nav_content'>
-                <Link id='home_link' className='button' to='/'>
+                <Link ref={homeButtonRef} id='home_link' className='button' to='/'>
                     <LogoSvg id='home_link_icon' />
                 </Link>
                 {userContent}

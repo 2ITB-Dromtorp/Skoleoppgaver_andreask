@@ -73,6 +73,7 @@ export function useToolTip() {
 
     return (content, dir, interactive, attachRef) => {
         const id = toolTips.length;
+        console.log("www", id)
         const toolTip = {
             id: id,
             dir: dir,

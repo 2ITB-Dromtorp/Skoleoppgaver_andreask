@@ -13,7 +13,7 @@
 .tool_tip {
     --tool-tip-col: rgb(255, 255, 255);
     --border-width: 5px;
-    position: relative;
+    position: absolute;
     max-width: 200px;
     box-shadow: var(--main-shadow);
 }

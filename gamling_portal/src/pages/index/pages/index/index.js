@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { ArrowRightIcon, CheckmarkIcon } from '../../../../svg';
 import { useState, useContext, useEffect, useRef } from 'react';
-import { SessionDataContext, ToolTipsContext, UserDataContext } from '../../../../context';
+import { SessionDataContext, UserDataContext, TutorialRefsContext } from '../../../../context';
 import { useToolTip } from '../../../../custom_hooks';
 
 function Course({ courseName, courseTitle, courseDesc, courseImage }) {
@@ -42,19 +42,20 @@ function Course({ courseName, courseTitle, courseDesc, courseImage }) {
 }
 
 function Index() {
-    const viewCoursesRef = useRef();
+    const { homeButtonRef, loginButtonRef, signupButtonRef, accountButtonRef, viewCoursesRef } = useContext(TutorialRefsContext);
+
     const coursesRef = useRef();
 
     const createToolTip = useToolTip();
+    const { 0: sessionData } = useContext(SessionDataContext);
     const [isFirstRender, setIsFirstRender] = useState(true);
-    const [myToolTip, setMyToolTip] = useState();
     useEffect(() => {
-        if (isFirstRender) {
+        if (isFirstRender && (sessionData && 'logged_in' in sessionData)) {
             setIsFirstRender(false);
-            const toolTip = createToolTip(() => {
+            createToolTip(({ toolTip }) => {
                 return (
                     <>
-                        Trykk her for å se tilgjengelige kurs
+                        Trykk her for å gå tilbake til hjemmesiden
                         <FancyButton primary={true} onClick={(e) => {
                             toolTip.destroy();
                         }}>
@@ -62,34 +63,65 @@ function Index() {
                         </FancyButton>
                     </>
                 );
-            }, 'top', true, viewCoursesRef);
-            setMyToolTip(toolTip);
-        }
-    }, [isFirstRender, createToolTip]);
-
-    /*
-    const addToolTip = useAddToolTip();
-    const [isFirstRender, setIsFirstRender] = useState(true);
-    useEffect(() => {
-        if (isFirstRender) {
-            setIsFirstRender(false);
-            const RenderToolTip = () => {
-                const removeToolTip = useRemoveToolTip();
-                return (
-                    <>
-                        some sussy testy
-                        <Button onClick={(e) => {
-                            removeToolTip(firstToolTip);
-                        }}>bton</Button>
-                    </>
-                );
+            }, 'right', true, homeButtonRef);
+            if (loginButtonRef.current) {
+                createToolTip(({ toolTip }) => {
+                    return (
+                        <>
+                            Trykk her for å logge inn
+                            <FancyButton primary={true} onClick={(e) => {
+                                toolTip.destroy();
+                            }}>
+                                Jeg forstår
+                            </FancyButton>
+                        </>
+                    );
+                }, 'left', true, loginButtonRef);
             }
-            const firstToolTip = addToolTip('left', true, () => {
-                return viewCoursesRef.current;
-            }, RenderToolTip);
+            if (signupButtonRef.current) {
+                createToolTip(({ toolTip }) => {
+                    return (
+                        <>
+                            Trykk her for å se registrere ny bruker
+                            <FancyButton primary={true} onClick={(e) => {
+                                toolTip.destroy();
+                            }}>
+                                Jeg forstår
+                            </FancyButton>
+                        </>
+                    );
+                }, 'bottom', true, signupButtonRef);
+            }
+            if (accountButtonRef.current) {
+                createToolTip(({ toolTip }) => {
+                    return (
+                        <>
+                            Trykk her for å se og redigere brukeren din
+                            <FancyButton primary={true} onClick={(e) => {
+                                toolTip.destroy();
+                            }}>
+                                Jeg forstår
+                            </FancyButton>
+                        </>
+                    );
+                }, 'bottom', true, accountButtonRef);
+            }
+            if (viewCoursesRef.current) {
+                createToolTip(({ toolTip }) => {
+                    return (
+                        <>
+                            Trykk her for å se tilgjengelige kurs
+                            <FancyButton primary={true} onClick={(e) => {
+                                toolTip.destroy();
+                            }}>
+                                Jeg forstår
+                            </FancyButton>
+                        </>
+                    );
+                }, 'bottom', true, viewCoursesRef);
+            }
         }
-    }, [isFirstRender, addToolTip]);
-    */
+    }, [isFirstRender, sessionData, createToolTip]);
 
     /*
     <svg id='tutorial_highlight_svg' preserveAspectRatio='none' viewBox='0 0 100 100'>

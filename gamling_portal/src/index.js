@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { SessionDataContextProvider, ToolTipsContextProvider, UserDataContextProvider } from './context';
+import { SessionDataContextProvider, ToolTipsContextProvider, UserDataContextProvider, TutorialRefsContextProvider } from './context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 /*
@@ -15,7 +15,9 @@ root.render(
     <SessionDataContextProvider>
         <UserDataContextProvider>
             <ToolTipsContextProvider>
-                <App />
+                <TutorialRefsContextProvider>
+                    <App />
+                </TutorialRefsContextProvider>
             </ToolTipsContextProvider>
         </UserDataContextProvider>
     </SessionDataContextProvider>
