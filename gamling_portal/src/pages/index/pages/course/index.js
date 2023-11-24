@@ -5,8 +5,8 @@ import { CustomFancyButton, FancyButton } from '../../../../components/input';
 import { SessionDataContext, UserDataContext } from '../../../../context';
 import { useRefreshUserData } from '../../../../custom_hooks';
 
-const coursesContent = {
-    norwegian: {
+const coursesContent = [
+    {
         title: 'Norsk',
         Content: () => {
             return (
@@ -100,7 +100,7 @@ const coursesContent = {
             );
         },
     },
-    computerknowledge: {
+    {
         title: 'Datakunnskap',
         Content: () => {
             return (
@@ -182,74 +182,7 @@ const coursesContent = {
             );
         },
     },
-    gym: {
-        title: 'Kroppsøving',
-        Content: () => {
-            return (
-                <>
-                    <h3>
-                        Kursbeskrivelse
-                    </h3>
-                    <p>
-                        Vårt 8-ukers treningskurs for voksne i alderen 40-60 år er utviklet av erfarne treningsinstruktører med spesialisering innen seniorfitness. Kurset kombinerer varierte treningsformer, inkludert styrketrening med vekter, kroppsvektøvelser, kondisjonstrening og avspenningsteknikker.
-                    </p>
-                    <NormalDL>
-                        <NormalDT>
-                            Uke 1-2: Introduksjon og evaluering
-                        </NormalDT>
-                        <NormalDD>
-                            <p>
-                                Grundig helsevurdering og målsetting
-                            </p>
-                            <p>
-                                Innføring i riktig teknikk for styrkeøvelser
-                            </p>
-                            <p>
-                                Lett kondisjonstrening for å øke hjerte- og lungesystemets aktivitet
-                            </p>
-                        </NormalDD>
-                        <NormalDT>
-                            Uke 3-4: Styrke og fleksibilitet
-                        </NormalDT>
-                        <NormalDD>
-                            <p>
-                                Fokus på styrketrening for å bygge muskelmasse og styrke beinbygningen
-                            </p>
-                            <p>
-                                Introduksjon til fleksibilitetsøvelser for å forbedre bevegelsesområdet
-                            </p>
-                        </NormalDD>
-                        <NormalDT>
-                            Uke 5-6: Kondisjon og balanse
-                        </NormalDT>
-                        <NormalDD>
-                            <p>
-                                Økende intensitet i kondisjonstreningen for å forbedre hjerte- og lungekapasitet
-                            </p>
-                            <p>
-                                Balanseøvelser for å styrke kjernemuskulaturen og redusere risikoen for fall
-                            </p>
-                        </NormalDD>
-                        <NormalDT>
-                            Uke 7-8: Helhetlig integrasjon og oppfølging
-                        </NormalDT>
-                        <NormalDD>
-                            <p>
-                                Sammensetning av alle elementene fra kurset i helhetlige treningsøkter
-                            </p>
-                            <p>
-                                Evaluering av individuelle fremgang og justering av mål
-                            </p>
-                            <p>
-                                Veiledning om hvordan opprettholde en aktiv livsstil etter kursets slutt
-                            </p>
-                        </NormalDD>
-                    </NormalDL>
-                </>
-            );
-        },
-    },
-    homeknowledge: {
+    {
         title: 'Heimkunnskap',
         Content: () => {
             return (
@@ -409,7 +342,74 @@ const coursesContent = {
             );
         },
     },
-};
+    {
+        title: 'Kroppsøving',
+        Content: () => {
+            return (
+                <>
+                    <h3>
+                        Kursbeskrivelse
+                    </h3>
+                    <p>
+                        Vårt 8-ukers treningskurs for voksne i alderen 40-60 år er utviklet av erfarne treningsinstruktører med spesialisering innen seniorfitness. Kurset kombinerer varierte treningsformer, inkludert styrketrening med vekter, kroppsvektøvelser, kondisjonstrening og avspenningsteknikker.
+                    </p>
+                    <NormalDL>
+                        <NormalDT>
+                            Uke 1-2: Introduksjon og evaluering
+                        </NormalDT>
+                        <NormalDD>
+                            <p>
+                                Grundig helsevurdering og målsetting
+                            </p>
+                            <p>
+                                Innføring i riktig teknikk for styrkeøvelser
+                            </p>
+                            <p>
+                                Lett kondisjonstrening for å øke hjerte- og lungesystemets aktivitet
+                            </p>
+                        </NormalDD>
+                        <NormalDT>
+                            Uke 3-4: Styrke og fleksibilitet
+                        </NormalDT>
+                        <NormalDD>
+                            <p>
+                                Fokus på styrketrening for å bygge muskelmasse og styrke beinbygningen
+                            </p>
+                            <p>
+                                Introduksjon til fleksibilitetsøvelser for å forbedre bevegelsesområdet
+                            </p>
+                        </NormalDD>
+                        <NormalDT>
+                            Uke 5-6: Kondisjon og balanse
+                        </NormalDT>
+                        <NormalDD>
+                            <p>
+                                Økende intensitet i kondisjonstreningen for å forbedre hjerte- og lungekapasitet
+                            </p>
+                            <p>
+                                Balanseøvelser for å styrke kjernemuskulaturen og redusere risikoen for fall
+                            </p>
+                        </NormalDD>
+                        <NormalDT>
+                            Uke 7-8: Helhetlig integrasjon og oppfølging
+                        </NormalDT>
+                        <NormalDD>
+                            <p>
+                                Sammensetning av alle elementene fra kurset i helhetlige treningsøkter
+                            </p>
+                            <p>
+                                Evaluering av individuelle fremgang og justering av mål
+                            </p>
+                            <p>
+                                Veiledning om hvordan opprettholde en aktiv livsstil etter kursets slutt
+                            </p>
+                        </NormalDD>
+                    </NormalDL>
+                </>
+            );
+        },
+    },
+];
 
 function NormalDL({ children }) {
     return (
@@ -439,7 +439,8 @@ function CourseNav() {
     const { 0: userData } = useContext(UserDataContext);
     const { 0: sessionData } = useContext(SessionDataContext);
     const refreshUserData = useRefreshUserData();
-    const { courseId } = useParams();
+    const { courseId: courseIdStr } = useParams();
+    const courseId = Number(courseIdStr);
     const isLoggedIn = sessionData && sessionData.logged_in;
     let content;
     if (isLoggedIn === true) {

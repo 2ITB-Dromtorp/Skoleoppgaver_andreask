@@ -431,7 +431,12 @@ app.get(getAPIURL('/getsession'), (req, res) => {
 
 //session
 app.get(getAPIURL('/getuserdata'), (req, res) => {
-    res.status(200).send(req.user);
+    const user = req.user;
+    res.status(200).send({
+        id: user.id,
+        username: user.username,
+        joined_courses: user.joined_courses,
+    });
 });
 
 
@@ -443,21 +448,21 @@ app.get(getAPIURL('/getuserdata'), (req, res) => {
 //website functions
 app.post(getAPIURL('/joincourse'), (req, res) => {
     const bod = req.body;
-    const courseName = bod.course;
-    if (courseName === undefined) {
-        res.status(400).send(`Course name is undefined.`);
+    const courseId = bod.course;
+    if (courseId === undefined) {
+        res.status(400).send(`Course id is undefined.`);
         return;
     }
-    if (courseName === null) {
-        res.status(400).send(`Course name is null.`);
+    if (courseId === null) {
+        res.status(400).send(`Course id is null.`);
         return;
     }
-    if (typeof (courseName) !== 'string') {
-        res.status(400).send(`Course name isn't of type 'String'.`);
+    if (typeof (courseId) !== 'number') {
+        res.status(400).send(`Course id isn't of type 'Number'.`);
         return;
     }
     const user = req.user;
-    user.joined_courses.push(courseName);
+    user.joined_courses.push(courseId);
     mySqlConnection.query('UPDATE users SET joined_courses = ? WHERE id = ?', [JSON.stringify(user.joined_courses), user.id], (err) => {
         if (err) {
             res.status(500).send(err);
@@ -469,21 +474,21 @@ app.post(getAPIURL('/joincourse'), (req, res) => {
 
 app.post(getAPIURL('/leavecourse'), (req, res) => {
     const bod = req.body;
-    const courseName = bod.course;
-    if (courseName === undefined) {
-        res.status(400).send(`Course name is undefined.`);
+    const courseId = bod.course;
+    if (courseId === undefined) {
+        res.status(400).send(`Course id is undefined.`);
         return;
     }
-    if (courseName === null) {
-        res.status(400).send(`Course name is null.`);
+    if (courseId === null) {
+        res.status(400).send(`Course id is null.`);
         return;
     }
-    if (typeof (courseName) !== 'string') {
-        res.status(400).send(`Course name isn't of type 'String'.`);
+    if (typeof (courseId) !== 'number') {
+        res.status(400).send(`Course id isn't of type 'Number'.`);
         return;
     }
     const user = req.user;
-    const index = user.joined_courses.indexOf(courseName);
+    const index = user.joined_courses.indexOf(courseId);
     if (index === -1) {
         res.status(400).send(`Cannot leave course you have not joined.`);
         return;
@@ -519,73 +524,94 @@ function drawPDFTable(page, table, rowCount, columnCount, cellWidth, cellHeight,
     }
 }
 
+function createCourseReceipt(course) {
+    return new Promise((resolve, reject) => {
+        PDFDocument.create().then(async (pdfDoc) => {
+            const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+            const page = pdfDoc.addPage([550, 750]);
+
+            let pageOff = 700;
+
+            page.drawText('Kvittering for kurspåmelding', { x: 50, y: pageOff, size: 32, font: boldFont });
+            pageOff -= 60;
+            page.drawText('Kursinformasjon', { x: 50, y: pageOff, size: 16, font: boldFont });
+            pageOff -= 25;
+            page.drawText('Kurs:', { x: 50, y: pageOff, size: 16, variant: 'bold' });
+            page.drawText(course.name, { x: 150, y: pageOff, size: 16, variant: 'bold' });
+            pageOff -= 20;
+            page.drawText('Lærer:', { x: 50, y: pageOff, size: 16 });
+            page.drawText(course.host, { x: 150, y: pageOff, size: 16 });
+            pageOff -= 20;
+            page.drawText('Pris:', { x: 50, y: pageOff, size: 16 });
+            page.drawText(`${course.price} kr,-`, { x: 150, y: pageOff, size: 16 });
+            pageOff -= 40;
+
+            page.drawText('Tider:', { x: 50, y: pageOff, size: 16 });
+            pageOff -= 10;
+            drawPDFTable(page, [
+                ['Dato', 'Tid'],
+                ['24.11.2023', '12:00 - 14:00'],
+                ['25.11.2023', '12:00 - 14:00'],
+                ['26.11.2023', '14:00 - 16:00'],
+                ['27.11.2023', '14:00 - 16:00'],
+                ['28.11.2023', '16:00 - 18:00'],
+                ['29.11.2023', '16:00 - 18:00'],
+                ['30.11.2023', '18:00 - 20:00'],
+            ], 8, 2, 150, 24, 50, pageOff, 16);
+            pageOff -= 24 * (8 + 1);
+            pageOff -= 20;
+
+            page.drawText('Kontakt', { x: 50, y: pageOff, size: 16, font: boldFont });
+            pageOff -= 25;
+            page.drawText('Email:', { x: 50, y: pageOff, size: 16 });
+            page.drawText('kurs@dromtorp.no', { x: 150, y: pageOff, size: 16 });
+            pageOff -= 20;
+            page.drawText('Tlf:', { x: 50, y: pageOff, size: 16 });
+            page.drawText('+47 12345678', { x: 150, y: pageOff, size: 16 });
+            pageOff -= 40;
+
+
+
+
+            pdfDoc.save().then((modifiedPdfBytes) => {
+                resolve(Buffer.from(modifiedPdfBytes));
+            });
+        });
+    });
+}
+
 app.get(getAPIURL('/coursereceipt'), (req, res) => {
     const query = req.query;
-    const courseName = query.course;
-    if (courseName === undefined) {
-        res.status(400).send(`Course name is undefined.`);
+    const courseIdStr = query.course;
+    if (courseIdStr === undefined) {
+        res.status(400).send(`Course id string is undefined.`);
         return;
     }
-    if (courseName === null) {
-        res.status(400).send(`Course name is null.`);
+    if (courseIdStr === null) {
+        res.status(400).send(`Course id string is null.`);
         return;
     }
-    if (typeof (courseName) !== 'string') {
-        res.status(400).send(`Course name isn't of type 'String'.`);
+    if (typeof (courseIdStr) !== 'string') {
+        res.status(400).send(`Course id string isn't of type 'String'.`);
         return;
     }
-    PDFDocument.create().then(async (pdfDoc) => {
-        const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
-
-        const page = pdfDoc.addPage([550, 750]);
-
-        let pageOff = 700;
-
-        page.drawText('Kvittering for kurspåmelding', { x: 50, y: pageOff, size: 32, font: boldFont });
-        pageOff -= 60;
-        page.drawText('Kursinformasjon', { x: 50, y: pageOff, size: 16, font: boldFont });
-        pageOff -= 25;
-        page.drawText('Kurs:', { x: 50, y: pageOff, size: 16, variant: 'bold' });
-        page.drawText('Norsk', { x: 150, y: pageOff, size: 16, variant: 'bold' });
-        pageOff -= 20;
-        page.drawText('Lærer:', { x: 50, y: pageOff, size: 16 });
-        page.drawText('Ahmad Murtaza Zahid', { x: 150, y: pageOff, size: 16 });
-        pageOff -= 20;
-        page.drawText('Pris:', { x: 50, y: pageOff, size: 16 });
-        page.drawText('Gratis', { x: 150, y: pageOff, size: 16 });
-        pageOff -= 40;
-
-        page.drawText('Tider:', { x: 50, y: pageOff, size: 16 });
-        pageOff -= 10;
-        drawPDFTable(page, [
-            ['Dato', 'Tid'],
-            ['24.11.2023', '12:00 - 14:00'],
-            ['25.11.2023', '12:00 - 14:00'],
-            ['26.11.2023', '14:00 - 16:00'],
-            ['27.11.2023', '14:00 - 16:00'],
-            ['28.11.2023', '16:00 - 18:00'],
-            ['29.11.2023', '16:00 - 18:00'],
-            ['30.11.2023', '18:00 - 20:00'],
-        ], 8, 2, 150, 24, 50, pageOff, 16);
-        pageOff -= 24 * (8 + 1);
-        pageOff -= 20;
-
-        page.drawText('Kontakt', { x: 50, y: pageOff, size: 16, font: boldFont });
-        pageOff -= 25;
-        page.drawText('Email:', { x: 50, y: pageOff, size: 16 });
-        page.drawText('kurs@dromtorp.no', { x: 150, y: pageOff, size: 16 });
-        pageOff -= 20;
-        page.drawText('Tlf:', { x: 50, y: pageOff, size: 16 });
-        page.drawText('+47 12345678', { x: 150, y: pageOff, size: 16 });
-        pageOff -= 40;
-
-
-
-
-        pdfDoc.save().then((modifiedPdfBytes) => {
-            res.contentType('application/pdf');
-            res.send(Buffer.from(modifiedPdfBytes));
-        });
+    const courseId = Number(courseIdStr);
+    if (typeof (courseId) !== 'number') {
+        res.status(400).send(`Course id isn't of type 'Number'.`);
+        return;
+    }
+    mySqlConnection.query('SELECT * FROM courses WHERE id = ?', [courseId], (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send(err);
+        } else {
+            const course = data[0];
+            createCourseReceipt(course).then((buffer) => {
+                res.contentType('application/pdf');
+                res.send(buffer);
+            });
+        }
     });
 });
 
