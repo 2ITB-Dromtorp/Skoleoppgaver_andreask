@@ -439,11 +439,11 @@ function CourseNav() {
     const { 0: userData } = useContext(UserDataContext);
     const { 0: sessionData } = useContext(SessionDataContext);
     const refreshUserData = useRefreshUserData();
-    const { courseName } = useParams();
+    const { courseId } = useParams();
     const isLoggedIn = sessionData && sessionData.logged_in;
     let content;
     if (isLoggedIn === true) {
-        const isJoinCourse = userData && userData.joined_courses.includes(courseName) === false;
+        const isJoinCourse = userData && userData.joined_courses.includes(courseId) === false;
         content = (
             <FancyButton primary={true} isDelete={isJoinCourse === false} onClick={() => {
                 fetch(`/api/${isJoinCourse ? 'joincourse' : 'leavecourse'}`, {
@@ -452,7 +452,7 @@ function CourseNav() {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        courseName: courseName,
+                        course: courseId,
                     }),
                 }).then((res) => {
                     if (res.status === 200) {
@@ -485,9 +485,9 @@ function CourseNav() {
 }
 
 function Course() {
-    const { courseName } = useParams();
+    const { courseId } = useParams();
 
-    const content = coursesContent[courseName];
+    const content = coursesContent[courseId];
 
     return (
         <>
@@ -496,6 +496,37 @@ function Course() {
                 <h1>
                     {content.title}
                 </h1>
+                <FancyButton onClick={(e) => {
+                    // Create blob link to download
+                    const url = new URL('/api/coursereceipt', window.location.origin);
+                    const searchParams = new URLSearchParams();
+                    searchParams.append('course', courseId);
+                    url.search = searchParams;
+                    fetch(url.toString(), {
+                        method: 'GET',
+                    }).then((res) => {
+                        res.blob().then((blob) => {
+                            const downloadURL = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf'}));
+                            const link = document.createElement('a');
+                            link.href = downloadURL;
+                            link.setAttribute(
+                                'download',
+                                'Kvittering',
+                            );
+
+                            // Append to html link element page
+                            document.body.appendChild(link);
+
+                            // Start download
+                            link.click();
+
+                            // Clean up and remove the link
+                            link.parentNode.removeChild(link);
+                        });
+                    });
+                }}>
+                    Last ned kvittering
+                </FancyButton>
                 <div id="course_content">
                     {React.createElement(content.Content)}
                 </div>

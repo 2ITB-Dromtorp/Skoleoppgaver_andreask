@@ -71,7 +71,7 @@ function App() {
             <Routes>
                 <Route path='/' element={<Layout />}>
                     <Route index element={indexContent} />
-                    <Route path='course/:courseName' element={<Course />} />
+                    <Route path='course/:courseId' element={<Course />} />
                     <Route path='signup' element={<IsLoggedInRedirect needsLogin={false} element={<Login isLogin={false} />} />} />
                     <Route path='login' element={<IsLoggedInRedirect needsLogin={false} element={<Login isLogin={true} />} />} />
                     <Route path='account' element={<IsLoggedInRedirect needsLogin={true} element={<Account />} />} />

@@ -8,11 +8,11 @@ import { useState, useContext, useEffect, useRef } from 'react';
 import { SessionDataContext, UserDataContext, TutorialRefsContext } from '../../../../context';
 import { useToolTip } from '../../../../custom_hooks';
 
-function Course({ courseName, courseTitle, courseDesc, courseImage }) {
+function Course({ courseId, courseTitle, courseDesc, courseImage }) {
     const { 0: sessionData } = useContext(SessionDataContext);
     const { 0: userData } = useContext(UserDataContext);
     let bottomAddContent;
-    if (sessionData && sessionData.logged_in === true && userData && userData.joined_courses.includes(courseName)) {
+    if (sessionData && sessionData.logged_in === true && userData && userData.joined_courses.includes(courseId)) {
         bottomAddContent = (
             <div className='joined_course_message'>
                 <CheckmarkIcon className="joined_course_checkmark_icon" />
@@ -32,7 +32,7 @@ function Course({ courseName, courseTitle, courseDesc, courseImage }) {
                 {courseDesc}
             </div>
             <div className='course_bottom'>
-                <CustomButton element={Link} className='course_view_button' to={`/course/${courseName}`}>
+                <CustomButton element={Link} className='course_view_button' to={`/course/${courseId}`}>
                     Se kurs&nbsp;<ArrowRightIcon className="text_icon" />
                 </CustomButton>
                 {bottomAddContent}
@@ -46,6 +46,7 @@ function Index() {
 
     const coursesRef = useRef();
 
+    /*
     const createToolTip = useToolTip();
     const { 0: sessionData } = useContext(SessionDataContext);
     const [isFirstRender, setIsFirstRender] = useState(true);
@@ -122,6 +123,7 @@ function Index() {
             }
         }
     }, [isFirstRender, sessionData, createToolTip]);
+    */
 
     /*
     <svg id='tutorial_highlight_svg' preserveAspectRatio='none' viewBox='0 0 100 100'>
@@ -158,10 +160,10 @@ function Index() {
                     Kurs
                 </h2>
                 <div id="course_cards">
-                    <Course courseName='norwegian' courseTitle='Norsk' courseDesc='Dykk inn i vårt norskopplæringskurs skreddersydd for voksne.' courseImage={<img className='course_image_image' src="https://images.unsplash.com/photo-1553729784-e91953dec042?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29uJTIwcmVhZGluZ3xlbnwwfHwwfHx8MA%3D%3D" alt="person_reading_book" />} />
-                    <Course courseName='computerknowledge' courseTitle='Datakunnskap' courseDesc='Vår datakunnskapsskurs gir voksne en grunnleggende forståelse av datamaskiner.' courseImage={<img className='course_image_image' src="https://img.freepik.com/free-photo/male-entrepreneur-using-computer-while-working-office_637285-8680.jpg" alt="person_using_computer" />} />
-                    <Course courseName='gym' courseTitle='Kroppsøving' courseDesc='Ta din treningsrutine til nye høyder med vårt intensive gymkurs.' courseImage={<img className='course_image_image' src="https://hips.hearstapps.com/hmg-prod/images/running-is-one-of-the-best-ways-to-stay-fit-royalty-free-image-1036780592-1553033495.jpg?crop=0.88976xw:1xh;center,top&resize=1200:*" alt="person_jogging" />} />
-                    <Course courseName='homeknowledge' courseTitle='Heimkunnskap' courseDesc='Lær praktiske ferdigheter i matlaging, ernæring og husholdning på dette engasjerende kurs.' courseImage={<img className='course_image_image' src="https://www.mashed.com/img/gallery/this-is-why-people-are-baking-more-during-the-pandemic-according-to-a-chef-exclusive/intro-1599689497.jpg" alt="person_baking" />} />
+                    <Course courseId='norwegian' courseTitle='Norsk' courseDesc='Dykk inn i vårt norskopplæringskurs skreddersydd for voksne.' courseImage={<img className='course_image_image' src="https://images.unsplash.com/photo-1553729784-e91953dec042?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29uJTIwcmVhZGluZ3xlbnwwfHwwfHx8MA%3D%3D" alt="person_reading_book" />} />
+                    <Course courseId='computerknowledge' courseTitle='Datakunnskap' courseDesc='Vår datakunnskapsskurs gir voksne en grunnleggende forståelse av datamaskiner.' courseImage={<img className='course_image_image' src="https://img.freepik.com/free-photo/male-entrepreneur-using-computer-while-working-office_637285-8680.jpg" alt="person_using_computer" />} />
+                    <Course courseId='gym' courseTitle='Kroppsøving' courseDesc='Ta din treningsrutine til nye høyder med vårt intensive gymkurs.' courseImage={<img className='course_image_image' src="https://hips.hearstapps.com/hmg-prod/images/running-is-one-of-the-best-ways-to-stay-fit-royalty-free-image-1036780592-1553033495.jpg?crop=0.88976xw:1xh;center,top&resize=1200:*" alt="person_jogging" />} />
+                    <Course courseId='homeknowledge' courseTitle='Heimkunnskap' courseDesc='Lær praktiske ferdigheter i matlaging, ernæring og husholdning på dette engasjerende kurs.' courseImage={<img className='course_image_image' src="https://www.mashed.com/img/gallery/this-is-why-people-are-baking-more-during-the-pandemic-according-to-a-chef-exclusive/intro-1599689497.jpg" alt="person_baking" />} />
                 </div>
             </section>
         </div>

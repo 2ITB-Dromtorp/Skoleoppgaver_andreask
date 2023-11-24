@@ -7,12 +7,15 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const mysql = require('mysql2');
+const fs = require('fs');
+const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
 
 const app = express();
 
 const saltRounds = 15;
 
 const maxAuthCookieAge = 30 * 24 * 60 * 60 * 1000;
+
 
 
 
@@ -440,7 +443,7 @@ app.get(getAPIURL('/getuserdata'), (req, res) => {
 //website functions
 app.post(getAPIURL('/joincourse'), (req, res) => {
     const bod = req.body;
-    const courseName = bod.courseName;
+    const courseName = bod.course;
     if (courseName === undefined) {
         res.status(400).send(`Course name is undefined.`);
         return;
@@ -466,7 +469,7 @@ app.post(getAPIURL('/joincourse'), (req, res) => {
 
 app.post(getAPIURL('/leavecourse'), (req, res) => {
     const bod = req.body;
-    const courseName = bod.courseName;
+    const courseName = bod.course;
     if (courseName === undefined) {
         res.status(400).send(`Course name is undefined.`);
         return;
@@ -492,8 +495,112 @@ app.post(getAPIURL('/leavecourse'), (req, res) => {
         } else {
             res.status(200).send('Successfully left course.');
         }
-    })
+    });
 });
+
+
+
+function drawPDFTable(page, table, rowCount, columnCount, cellWidth, cellHeight, startX, startY, textSize) {
+    for (let i = 0; i < rowCount; i++) {
+        for (let j = 0; j < columnCount; j++) {
+            const x = startX + (j * cellWidth);
+            const y = startY - (cellHeight + (i * cellHeight));
+            page.drawRectangle({
+                x,
+                y,
+                width: cellWidth,
+                height: cellHeight,
+                borderColor: rgb(0, 0, 0),
+                borderWidth: 1,
+            });
+            const text = table[i][j];
+            page.drawText(text, { x: x + 5, y: y + (cellHeight * 0.5) - (textSize * 0.5), size: textSize });
+        }
+    }
+}
+
+app.get(getAPIURL('/coursereceipt'), (req, res) => {
+    const query = req.query;
+    const courseName = query.course;
+    if (courseName === undefined) {
+        res.status(400).send(`Course name is undefined.`);
+        return;
+    }
+    if (courseName === null) {
+        res.status(400).send(`Course name is null.`);
+        return;
+    }
+    if (typeof (courseName) !== 'string') {
+        res.status(400).send(`Course name isn't of type 'String'.`);
+        return;
+    }
+    PDFDocument.create().then(async (pdfDoc) => {
+        const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+        const page = pdfDoc.addPage([550, 750]);
+
+        let pageOff = 700;
+
+        page.drawText('Kvittering for kurspåmelding', { x: 50, y: pageOff, size: 32, font: boldFont });
+        pageOff -= 60;
+        page.drawText('Kursinformasjon', { x: 50, y: pageOff, size: 16, font: boldFont });
+        pageOff -= 25;
+        page.drawText('Kurs:', { x: 50, y: pageOff, size: 16, variant: 'bold' });
+        page.drawText('Norsk', { x: 150, y: pageOff, size: 16, variant: 'bold' });
+        pageOff -= 20;
+        page.drawText('Lærer:', { x: 50, y: pageOff, size: 16 });
+        page.drawText('Ahmad Murtaza Zahid', { x: 150, y: pageOff, size: 16 });
+        pageOff -= 20;
+        page.drawText('Pris:', { x: 50, y: pageOff, size: 16 });
+        page.drawText('Gratis', { x: 150, y: pageOff, size: 16 });
+        pageOff -= 40;
+
+        page.drawText('Tider:', { x: 50, y: pageOff, size: 16 });
+        pageOff -= 10;
+        drawPDFTable(page, [
+            ['Dato', 'Tid'],
+            ['24.11.2023', '12:00 - 14:00'],
+            ['25.11.2023', '12:00 - 14:00'],
+            ['26.11.2023', '14:00 - 16:00'],
+            ['27.11.2023', '14:00 - 16:00'],
+            ['28.11.2023', '16:00 - 18:00'],
+            ['29.11.2023', '16:00 - 18:00'],
+            ['30.11.2023', '18:00 - 20:00'],
+        ], 8, 2, 150, 24, 50, pageOff, 16);
+        pageOff -= 24 * (8 + 1);
+        pageOff -= 20;
+
+        page.drawText('Kontakt', { x: 50, y: pageOff, size: 16, font: boldFont });
+        pageOff -= 25;
+        page.drawText('Email:', { x: 50, y: pageOff, size: 16 });
+        page.drawText('kurs@dromtorp.no', { x: 150, y: pageOff, size: 16 });
+        pageOff -= 20;
+        page.drawText('Tlf:', { x: 50, y: pageOff, size: 16 });
+        page.drawText('+47 12345678', { x: 150, y: pageOff, size: 16 });
+        pageOff -= 40;
+
+
+
+
+        pdfDoc.save().then((modifiedPdfBytes) => {
+            res.contentType('application/pdf');
+            res.send(Buffer.from(modifiedPdfBytes));
+        });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 setInterval(() => {
     mySqlConnection.query('SELECT * from users', (err, users) => {
