@@ -8,8 +8,8 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const mysql = require('mysql2');
 const fs = require('fs');
-const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
-const ReactDOMServer = require('react-dom/server');
+const { PDFDocument, rgb, StandardFonts, PDFName } = require('pdf-lib');
+const bwipjs = require('bwip-js');
 
 const app = express();
 
@@ -88,6 +88,10 @@ function isIPBanned(req, res) {
 //haker 🕵️🕵️🕵️
 function generateAuthToken() {
     return crypto.randomBytes(256).toString('base64');
+}
+
+function generateCourseTicketToken() {
+    return crypto.randomBytes(64).toString('base64');
 }
 
 
@@ -458,6 +462,37 @@ app.get(getAPIURL('/courses'), (req, res) => {
     });
 });
 
+app.get(getAPIURL('/course'), (req, res) => {
+    const query = req.query;
+    const courseIdStr = query.course;
+    if (courseIdStr === undefined) {
+        res.status(400).send(`Course id string is undefined.`);
+        return;
+    }
+    if (courseIdStr === null) {
+        res.status(400).send(`Course id string is null.`);
+        return;
+    }
+    if (typeof (courseIdStr) !== 'string') {
+        res.status(400).send(`Course id string isn't of type 'String'.`);
+        return;
+    }
+    const courseId = Number(courseIdStr);
+    if (typeof (courseId) !== 'number') {
+        res.status(400).send(`Course id isn't of type 'Number'.`);
+        return;
+    }
+    mySqlConnection.query('SELECT * FROM courses WHERE id = ?', [courseId], (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send(err);
+        } else {
+            const course = data[0];
+            res.send(course);
+        }
+    });
+});
+
 app.post(getAPIURL('/joincourse'), (req, res) => {
     const bod = req.body;
     const courseId = bod.course;
@@ -517,6 +552,7 @@ app.post(getAPIURL('/leavecourse'), (req, res) => {
 
 
 
+
 function drawPDFTable(page, table, rowCount, columnCount, cellWidth, cellHeight, startX, startY, textSize) {
     for (let i = 0; i < rowCount; i++) {
         for (let j = 0; j < columnCount; j++) {
@@ -536,31 +572,111 @@ function drawPDFTable(page, table, rowCount, columnCount, cellWidth, cellHeight,
     }
 }
 
-function createCourseReceipt(course) {
+function createLink(pdfDoc, page, uri, x1, y1, x2, y2) {
+    const link = pdfDoc.context.register(
+        pdfDoc.context.obj({
+            Type: 'Annots',
+            Subtype: 'Link',
+            Rect: [
+                x1,
+                y1,
+                x2,
+                y2,
+            ],
+            Border: [0, 0, 2],
+            C: [0, 0, 1],
+            A: { Type: 'Action', S: 'URI', URI: uri },
+        }),
+    );
+    page.node.set(PDFName.of('Annots'), pdfDoc.context.obj([link]));
+    return link;
+}
+function drawTextLink(pdfDoc, page, uri, text, textProps) {
+    const width = textProps.font.widthOfTextAtSize(text, textProps.size);
+    const height = textProps.font.heightAtSize(textProps.size);
+    const link = createLink(pdfDoc, page, uri, textProps.x, textProps.y, textProps.x + width, textProps.y + height);
+    page.drawText(text, textProps);
+    return link;
+}
+
+
+function createBarcode(options) {
+    return new Promise((resolve, reject) => {
+        bwipjs.toBuffer(options, (err, buffer) => {
+            if (err) {
+                console.log(err);
+                reject(err);
+            } else {
+                resolve(buffer);
+            }
+        });
+    });
+}
+
+
+function createCourseReceipt(course, ticketId) {
     return new Promise((resolve, reject) => {
         PDFDocument.create().then(async (pdfDoc) => {
+            const defaultFontSize = 16;
+            const smallFontSize = 12;
+
+            const defaultFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+            const readableFont = await pdfDoc.embedFont(StandardFonts.CourierBold);
             const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-            const page = pdfDoc.addPage([550, 750]);
+            const linkCol = rgb(125 / 255, 125 / 255, 255 / 255);
 
-            let pageOff = 700;
+            const page = pdfDoc.addPage();
 
-            page.drawText('Kvittering for kurspåmelding', { x: 50, y: pageOff, size: 32, font: boldFont });
-            pageOff -= 60;
-            page.drawText('Kursinformasjon', { x: 50, y: pageOff, size: 16, font: boldFont });
-            pageOff -= 25;
-            page.drawText('Kurs:', { x: 50, y: pageOff, size: 16, variant: 'bold' });
-            page.drawText(course.name, { x: 150, y: pageOff, size: 16, variant: 'bold' });
-            pageOff -= 20;
-            page.drawText('Lærer:', { x: 50, y: pageOff, size: 16 });
-            page.drawText(course.host, { x: 150, y: pageOff, size: 16 });
-            pageOff -= 20;
-            page.drawText('Pris:', { x: 50, y: pageOff, size: 16 });
-            page.drawText(`${course.price} kr,-`, { x: 150, y: pageOff, size: 16 });
-            pageOff -= 40;
+            const pageWidth = page.getWidth();
+            const pageHeight = page.getHeight();
 
-            page.drawText('Tider:', { x: 50, y: pageOff, size: 16 });
-            pageOff -= 10;
+            let pageYOff = pageHeight;
+
+            page.drawRectangle({
+                x: 0,
+                y: pageHeight - 100,
+                width: pageWidth,
+                height: 100,
+                color: rgb(45 / 255, 69 / 255, 194 / 255),
+            });
+
+            pageYOff -= 60;
+            page.drawText('Kvittering for kurspåmelding', { x: 50, y: pageYOff, size: 32, font: boldFont, color: rgb(1, 1, 1) });
+            pageYOff -= 90;
+
+            const barcodeBuffer = await createBarcode({ bcid: 'azteccode', text: ticketId });
+            const barcodeUrl = 'data:image/png;base64,' + barcodeBuffer.toString('base64');
+            const barcodeImage = await pdfDoc.embedPng(barcodeUrl);
+            const barcodeDims = barcodeImage.scale(1);
+
+            const barcodeX = pageWidth - barcodeDims.width - 50;
+            const barcodeY = pageYOff - barcodeDims.height;
+
+            page.drawImage(barcodeImage, {
+                x: barcodeX,
+                y: barcodeY,
+                width: barcodeDims.width,
+                height: barcodeDims.height,
+            });
+
+            const ticketIdMargin = 50;
+            page.drawText(ticketId, { x: ticketIdMargin, y: 50, size: smallFontSize, font: readableFont, lineHeight: smallFontSize, maxWidth: pageWidth - (ticketIdMargin * 2), wordBreaks: [""] });
+
+            page.drawText('Kursinformasjon', { x: 50, y: pageYOff, size: defaultFontSize, font: boldFont });
+            pageYOff -= 25;
+            page.drawText('Fag:', { x: 50, y: pageYOff, size: defaultFontSize, font: defaultFont });
+            page.drawText(course.name, { x: 150, y: pageYOff, size: defaultFontSize, font: defaultFont });
+            pageYOff -= 20;
+            page.drawText('Lærer:', { x: 50, y: pageYOff, size: defaultFontSize, font: defaultFont });
+            page.drawText(course.host, { x: 150, y: pageYOff, size: defaultFontSize, font: defaultFont });
+            pageYOff -= 20;
+            page.drawText('Pris:', { x: 50, y: pageYOff, size: defaultFontSize, font: defaultFont });
+            page.drawText(`${course.price} kr,-`, { x: 150, y: pageYOff, size: defaultFontSize, font: defaultFont });
+            pageYOff -= 40;
+
+            page.drawText('Tider:', { x: 50, y: pageYOff, size: defaultFontSize, font: defaultFont });
+            pageYOff -= 12;
             drawPDFTable(page, [
                 ['Dato', 'Tid'],
                 ['24.11.2023', '12:00 - 14:00'],
@@ -570,20 +686,19 @@ function createCourseReceipt(course) {
                 ['28.11.2023', '16:00 - 18:00'],
                 ['29.11.2023', '16:00 - 18:00'],
                 ['30.11.2023', '18:00 - 20:00'],
-            ], 8, 2, 150, 24, 50, pageOff, 16);
-            pageOff -= 24 * (8 + 1);
-            pageOff -= 20;
+            ], 8, 2, 150, 24, 50, pageYOff, 16);
+            pageYOff -= 24 * 8;
+            pageYOff -= 12;
+            pageYOff -= 20;
 
-            page.drawText('Kontakt', { x: 50, y: pageOff, size: 16, font: boldFont });
-            pageOff -= 25;
-            page.drawText('Email:', { x: 50, y: pageOff, size: 16 });
-            page.drawText('kurs@dromtorp.no', { x: 150, y: pageOff, size: 16 });
-            pageOff -= 20;
-            page.drawText('Tlf:', { x: 50, y: pageOff, size: 16 });
-            page.drawText('+47 12345678', { x: 150, y: pageOff, size: 16 });
-            pageOff -= 40;
-
-
+            page.drawText('Kontakt', { x: 50, y: pageYOff, size: defaultFontSize, font: defaultFont, font: boldFont });
+            pageYOff -= 25;
+            page.drawText('E-post:', { x: 50, y: pageYOff, size: defaultFontSize, font: defaultFont });
+            drawTextLink(pdfDoc, page, 'mailto:kurs@dromtorp.no', 'kurs@dromtorp.no', { x: 150, y: pageYOff, size: defaultFontSize, font: defaultFont, color: linkCol });
+            pageYOff -= 20;
+            page.drawText('Tlf:', { x: 50, y: pageYOff, size: defaultFontSize, font: defaultFont });
+            drawTextLink(pdfDoc, page, 'tel:+4712345678', '+47 12345678', { x: 150, y: pageYOff, size: defaultFontSize, font: defaultFont, color: linkCol });
+            pageYOff -= 40;
 
 
             pdfDoc.save().then((modifiedPdfBytes) => {
@@ -619,55 +734,13 @@ app.get(getAPIURL('/coursereceipt'), (req, res) => {
             res.status(500).send(err);
         } else {
             const course = data[0];
-            createCourseReceipt(course).then((buffer) => {
+            createCourseReceipt(course, generateCourseTicketToken()).then((buffer) => {
                 res.contentType('application/pdf');
                 res.send(buffer);
             });
         }
     });
 });
-
-
-
-
-
-
-
-
-
-app.get(getAPIURL('/course'), (req, res) => {
-    const query = req.query;
-    const courseIdStr = query.course;
-    if (courseIdStr === undefined) {
-        res.status(400).send(`Course id string is undefined.`);
-        return;
-    }
-    if (courseIdStr === null) {
-        res.status(400).send(`Course id string is null.`);
-        return;
-    }
-    if (typeof (courseIdStr) !== 'string') {
-        res.status(400).send(`Course id string isn't of type 'String'.`);
-        return;
-    }
-    const courseId = Number(courseIdStr);
-    if (typeof (courseId) !== 'number') {
-        res.status(400).send(`Course id isn't of type 'Number'.`);
-        return;
-    }
-    mySqlConnection.query('SELECT * FROM courses WHERE id = ?', [courseId], (err, data) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send(err);
-        } else {
-            const course = data[0];
-            res.send(course);
-        }
-    });
-});
-
-
-
 
 
 
