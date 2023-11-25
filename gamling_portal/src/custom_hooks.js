@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { SessionDataContext, UserDataContext, ToolTipsContext } from './context';
+import { SessionDataContext, UserDataContext, ToolTipsContext, CoursesContext } from './context';
 
 
 
@@ -56,6 +56,26 @@ export function useRefreshUserData() {
             if (res.status === 200) {
                 res.json().then((data) => {
                     setUserData(data);
+                });
+            } else {
+                console.error(res);
+            }
+        });
+    }
+}
+
+
+
+//courses
+export function useRefreshCourses() {
+    const { 1: setCourses } = useContext(CoursesContext);
+    return () => {
+        fetch('/api/courses', {
+            method: 'GET',
+        }).then((res) => {
+            if (res.status === 200) {
+                res.json().then((data) => {
+                    setCourses(data);
                 });
             } else {
                 console.error(res);

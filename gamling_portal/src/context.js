@@ -22,6 +22,17 @@ export function UserDataContextProvider({ children }) {
     );
 }
 
+export const CoursesContext = createContext();
+export function CoursesContextProvider({ children }) {
+    const [courses, setCourses] = useState([]);
+
+    return (
+        <CoursesContext.Provider value={[courses, setCourses]}>
+            {children}
+        </CoursesContext.Provider>
+    );
+}
+
 export const ToolTipsContext = createContext();
 export function ToolTipsContextProvider({ children }) {
     const [toolTips, setToolTips] = useState([]);

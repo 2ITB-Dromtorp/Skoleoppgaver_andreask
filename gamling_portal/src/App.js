@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, useContext, useState } from 'react';
 
 import { SessionDataContext } from './context';
-import { useRefreshSessionData } from './custom_hooks';
+import { useRefreshSessionData, useRefreshCourses } from './custom_hooks';
 
 import { LoadingContainer } from './components/loading';
 
@@ -52,13 +52,15 @@ function IsLoggedInRedirect({ needsLogin, element }) {
 function App() {
     const { 0: sessionData } = useContext(SessionDataContext);
     const refreshSessionData = useRefreshSessionData();
+    const refreshCourses = useRefreshCourses();
     const [isFirstRender, setIsFirstRender] = useState(true);
     useEffect(() => {
         if (isFirstRender) {
             setIsFirstRender(false);
             refreshSessionData();
+            refreshCourses();
         }
-    }, [refreshSessionData]);
+    }, [isFirstRender, refreshSessionData, refreshCourses]);
 
     const indexContent = sessionData.logged_in ? (
         <Index />

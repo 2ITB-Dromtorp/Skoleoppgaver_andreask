@@ -72,13 +72,13 @@ function UserForm({ isLogin }) {
                         <div id='user_input_fields'>
                             <div className='user_input_field_container'>
                                 <label className='standard_label' htmlFor={classType + '_username_input'}>Username</label>
-                                <TextInput id={classType + '_username_input'} type='text' autofill='off' required value={usernameInput} onChange={(e) => {
+                                <TextInput id={classType + '_username_input'} type='text' autoComplete='off' required value={usernameInput} onChange={(e) => {
                                     setUsernameInput(e.target.value);
                                 }} />
                             </div>
                             <div className='user_input_field_container'>
                                 <label className='standard_label' htmlFor={classType + '_password_input'}>Password</label>
-                                <TextInput id={classType + '_username_input'} type='password' autofill='off' required value={passwordInput} onChange={(e) => {
+                                <TextInput id={classType + '_password_input'} type='password' autoComplete='off' required value={passwordInput} onChange={(e) => {
                                     setPasswordInput(e.target.value);
                                 }} />
                             </div>

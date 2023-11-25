@@ -1,9 +1,4 @@
 /*top nav*/
-nav {
-    position: sticky;
-    position: -webkit-sticky;
-}
-
 #top_nav {
     display: flex;
     justify-content: center;
@@ -61,6 +56,7 @@ nav {
     width: var(--nav-height);
     height: var(--nav-height);
     margin-left: auto;
+    background-color: rgb(255, 255, 255);
     border-radius: calc(var(--nav-height) * 0.5);
     border: 1px solid rgb(220, 220, 220);
     overflow: hidden;

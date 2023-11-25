@@ -9,6 +9,7 @@ const crypto = require('crypto');
 const mysql = require('mysql2');
 const fs = require('fs');
 const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
+const ReactDOMServer = require('react-dom/server');
 
 const app = express();
 
@@ -445,7 +446,18 @@ app.get(getAPIURL('/getuserdata'), (req, res) => {
 
 
 
-//website functions
+//courses
+app.get(getAPIURL('/courses'), (req, res) => {
+    mySqlConnection.query('SELECT * FROM courses', (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send(err);
+        } else {
+            res.status(200).send(data);
+        }
+    });
+});
+
 app.post(getAPIURL('/joincourse'), (req, res) => {
     const bod = req.body;
     const courseId = bod.course;
@@ -621,6 +633,38 @@ app.get(getAPIURL('/coursereceipt'), (req, res) => {
 
 
 
+
+
+app.get(getAPIURL('/course'), (req, res) => {
+    const query = req.query;
+    const courseIdStr = query.course;
+    if (courseIdStr === undefined) {
+        res.status(400).send(`Course id string is undefined.`);
+        return;
+    }
+    if (courseIdStr === null) {
+        res.status(400).send(`Course id string is null.`);
+        return;
+    }
+    if (typeof (courseIdStr) !== 'string') {
+        res.status(400).send(`Course id string isn't of type 'String'.`);
+        return;
+    }
+    const courseId = Number(courseIdStr);
+    if (typeof (courseId) !== 'number') {
+        res.status(400).send(`Course id isn't of type 'Number'.`);
+        return;
+    }
+    mySqlConnection.query('SELECT * FROM courses WHERE id = ?', [courseId], (err, data) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send(err);
+        } else {
+            const course = data[0];
+            res.send(course);
+        }
+    });
+});
 
 
 

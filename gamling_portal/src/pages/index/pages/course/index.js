@@ -1,22 +1,19 @@
 import { Link, useParams } from 'react-router-dom';
 import './index.css';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { CustomFancyButton, FancyButton } from '../../../../components/input';
-import { SessionDataContext, UserDataContext } from '../../../../context';
+import { CoursesContext, SessionDataContext, UserDataContext } from '../../../../context';
 import { useRefreshUserData } from '../../../../custom_hooks';
+import { ArrowRightIcon } from '../../../../svg'
 
 const coursesContent = [
     {
-        title: 'Norsk',
         Content: () => {
             return (
                 <>
                     <h3>
-                        Kursbeskrivelse
+                        Kursplan
                     </h3>
-                    <p>
-                        Dette kurset er skreddersydd for voksne i alderen 40-60 år som ønsker å styrke sine norskkunnskaper på en praktisk og relevant måte. Målet er å gi deltakerne en solid forståelse av det norske språket for å kunne kommunisere effektivt i ulike situasjoner.
-                    </p>
                     <NormalDL>
                         <NormalDT>
                             Uke 1: Grunnleggende Norsk Kommunikasjon
@@ -101,16 +98,12 @@ const coursesContent = [
         },
     },
     {
-        title: 'Datakunnskap',
         Content: () => {
             return (
                 <>
                     <h3>
-                        Kursbeskrivelse
+                        Kursplan
                     </h3>
-                    <p>
-                        Dette kurset er skreddersydd for voksne i alderen 40-60 år som ønsker å styrke sine datakunnskaper og føle seg mer selvsikre i den stadig mer digitale verdenen. Enten du er nybegynner eller har noe grunnleggende kjennskap, vil kurset gi deg den nødvendige kompetansen for å navigere og kommunisere effektivt i dagens teknologirike samfunn.
-                    </p>
                     <NormalDL>
                         <NormalDT className=''>
                             Uke 1: Introduksjon til Dataverdenen
@@ -183,12 +176,11 @@ const coursesContent = [
         },
     },
     {
-        title: 'Heimkunnskap',
         Content: () => {
             return (
                 <>
                     <h3>
-                        Kursbeskrivelse
+                        Kursplan
                     </h3>
                     <NormalDL>
                         <NormalDT>
@@ -343,16 +335,12 @@ const coursesContent = [
         },
     },
     {
-        title: 'Kroppsøving',
         Content: () => {
             return (
                 <>
                     <h3>
-                        Kursbeskrivelse
+                        Kursplan
                     </h3>
-                    <p>
-                        Vårt 8-ukers treningskurs for voksne i alderen 40-60 år er utviklet av erfarne treningsinstruktører med spesialisering innen seniorfitness. Kurset kombinerer varierte treningsformer, inkludert styrketrening med vekter, kroppsvektøvelser, kondisjonstrening og avspenningsteknikker.
-                    </p>
                     <NormalDL>
                         <NormalDT>
                             Uke 1-2: Introduksjon og evaluering
@@ -486,54 +474,118 @@ function CourseNav() {
 }
 
 function Course() {
-    const { courseId } = useParams();
+    const { courseId: courseIdStr } = useParams();
+    const courseId = Number(courseIdStr);
 
-    const content = coursesContent[courseId];
+    const courseRef = useRef();
 
-    return (
-        <>
-            <CourseNav />
-            <section id="course">
-                <h1>
-                    {content.title}
-                </h1>
-                <FancyButton onClick={(e) => {
-                    // Create blob link to download
-                    const url = new URL('/api/coursereceipt', window.location.origin);
-                    const searchParams = new URLSearchParams();
-                    searchParams.append('course', courseId);
-                    url.search = searchParams;
-                    fetch(url.toString(), {
-                        method: 'GET',
-                    }).then((res) => {
-                        res.blob().then((blob) => {
-                            const downloadURL = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf'}));
-                            const link = document.createElement('a');
-                            link.href = downloadURL;
-                            link.setAttribute(
-                                'download',
-                                'Kvittering',
-                            );
+    const { 0: courses } = useContext(CoursesContext);
 
-                            // Append to html link element page
-                            document.body.appendChild(link);
+    const { 0: userData } = useContext(UserDataContext);
+    const { 0: sessionData } = useContext(SessionDataContext);
+    const isLoggedIn = sessionData && sessionData.logged_in;
 
-                            // Start download
-                            link.click();
+    if (courses.length === 0) {
+        return (
+            <>
+                <p>
+                    Laster inn...
+                </p>
+            </>
+        );
+    } else {
+        const course = courses[courseId];
+        const content = coursesContent[courseId];
 
-                            // Clean up and remove the link
-                            link.parentNode.removeChild(link);
+        let receiptContent;
+        if (isLoggedIn) {
+            const isJoinCourse = userData && userData.joined_courses.includes(courseId) === false;
+            if (isJoinCourse === false) {
+                receiptContent = (
+                    <FancyButton primary={true} onClick={(e) => {
+                        // Create blob link to download
+                        const url = new URL('/api/coursereceipt', window.location.origin);
+                        const searchParams = new URLSearchParams();
+                        searchParams.append('course', courseId);
+                        url.search = searchParams;
+                        fetch(url.toString(), {
+                            method: 'GET',
+                        }).then((res) => {
+                            res.blob().then((blob) => {
+                                const downloadURL = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+                                const link = document.createElement('a');
+                                link.href = downloadURL;
+                                link.setAttribute(
+                                    'download',
+                                    'Kvittering',
+                                );
+
+                                // Append to html link element page
+                                document.body.appendChild(link);
+
+                                // Start download
+                                link.click();
+
+                                // Clean up and remove the link
+                                link.parentNode.removeChild(link);
+                            });
                         });
-                    });
-                }}>
-                    Last ned kvittering
-                </FancyButton>
-                <div id="course_content">
-                    {React.createElement(content.Content)}
-                </div>
-            </section>
-        </>
-    );
+                    }}>
+                        Last ned kvittering
+                    </FancyButton>
+                );
+            } else {
+                receiptContent = (
+                    <p id="receipt_message">
+                        Meld deg på dette kurset for å få kvittering
+                    </p>
+                );
+            }
+        } else {
+            receiptContent = (
+                <p id="receipt_message">
+                    Du må være logget inn for å laste ned kvittering
+                </p>
+            );
+        }
+
+        return (
+            <>
+                <CourseNav />
+                <section id="course">
+                    <header className="main_header">
+                        <img className="main_header_image" src={course.image} alt="kurs_bilde" />
+                        <div className="main_header_content_container">
+                            <div className="main_header_content">
+                                <h1 className="main_header_header">
+                                    {course.name}
+                                </h1>
+                                <p className="main_header_desc">
+                                    {course.long_description}
+                                </p>
+                                <FancyButton primary={true} className="main_header_button" onClick={() => {
+                                    courseRef.current.scrollIntoView({ behavior: 'smooth' });
+                                }}>
+                                    Se kurs&nbsp;<ArrowRightIcon className="text_icon" />
+                                </FancyButton>
+                            </div>
+                        </div>
+                    </header>
+                    <section ref={courseRef} id="course_section">
+                        <div id="receipt_section">
+                            <h3 id="receipt_header">
+                                Kvittering
+                            </h3>
+                            {receiptContent}
+                        </div>
+                        <div id="course_content">
+                            {React.createElement(content.Content)}
+                        </div>
+                    </section>
+                </section>
+            </>
+        );
+    }
 }
 
 export default Course;
