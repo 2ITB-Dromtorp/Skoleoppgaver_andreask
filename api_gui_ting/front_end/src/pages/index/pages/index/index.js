@@ -97,7 +97,11 @@ export default function Index() {
                 res.json().then((data) => {
                     setCurFields(data.fields);
                     setCurData(data.data);
-                    setEditedData(JSON.parse(JSON.stringify(data.data)));
+                    const newEditedData = JSON.parse(JSON.stringify(data.data));
+                    for (let i = 0; i < newEditedData.length; i++) {
+                        newEditedData[i].isNew = false;
+                    }
+                    setEditedData(newEditedData);
                 });
             }
         });
@@ -120,6 +124,7 @@ export default function Index() {
                 </button>
                 <button onClick={(e) => {
                     const newItem = {};
+                    newItem.isNew = true;
                     for (const [fieldName, field] of Object.entries(curFields)) {
                         if (field.serverProvided === false) {
                             let initialValue;
@@ -129,6 +134,8 @@ export default function Index() {
                                 initialValue = '';
                             }
                             newItem[fieldName] = initialValue;
+                        } else {
+                            newItem[fieldName] = 'Server provided';
                         }
                     }
                     setEditedData([
@@ -140,32 +147,53 @@ export default function Index() {
                 </button>
                 <button onClick={(e) => {
                     setSavingItems(true);
-                    const newItemSaveStatus = [];
+                    const itemsToSave = [];
+                    const newItemSaveStatus = {};
                     for (let i = 0; i < editedData.length; i++) {
                         const item = editedData[i];
                         let saveStatus;
-                        if (JSON.stringify(item) === JSON.stringify(curData[i])) {
-                            saveStatus = 'no_changes';
+
+                        let isEdited = false;
+                        if (item.isNew) {
+                            isEdited = true;
                         } else {
-                            saveStatus = 'pending';
+                            for (const fieldName of Object.keys(curFields)) {
+                                if (item[fieldName] !== curData[i][fieldName]) {
+                                    isEdited = true;
+                                    break;
+                                }
+                            }
                         }
-                        newItemSaveStatus.push(saveStatus);
+
+                        if (isEdited) {
+                            saveStatus = 'pending';
+                            itemsToSave.push(item);
+                        } else {
+                            saveStatus = 'no_changes';
+                        }
+                        newItemSaveStatus[item.id] = saveStatus;
                     }
                     setItemSaveStatus(newItemSaveStatus);
 
-                    const changeItemSaveStatus = (i, newStatus) => {
+                    const changeItemSaveStatus = (id, newStatus) => {
                         setItemSaveStatus((prev) => {
-                            return prev.map((status, index) => {
-                                if (index === i) {
-                                    return newStatus;
+                            const newItemSaveStatus = {};
+                            for (const [curId, status] of Object.entries(prev)) {
+                                let newCurStatus;
+
+                                if (curId === id) {
+                                    newCurStatus = newStatus;
+                                } else {
+                                    newCurStatus = status;
                                 }
-                                return status;
-                            });
+                                newItemSaveStatus[curId] = newCurStatus;
+                            }
+                            return newItemSaveStatus;
                         });
                     }
                     const loop = (i) => {
                         return new Promise((resolve, reject) => {
-                            if (i === editedData.length) {
+                            if (i === itemsToSave.length) {
                                 resolve();
                                 return;
                             }
@@ -174,27 +202,33 @@ export default function Index() {
                                     resolve();
                                 });
                             }
-                            const item = editedData[i];
+                            const item = itemsToSave[i];
                             if (JSON.stringify(item) === JSON.stringify(curData[i])) {
                                 continueLoop();
                                 return;
                             }
-                            changeItemSaveStatus(i, 'saving');
-                            fetch(`/api/updateitem`, {
-                                method: 'PUT',
+                            changeItemSaveStatus(item.id, 'saving');
+                            const dataToSave = {};
+                            for (const [fieldName, field] of Object.entries(curFields)) {
+                                if (field.serverProvided === false && field.editable === true) {
+                                    dataToSave[fieldName] = item[fieldName];
+                                }
+                            }
+                            fetch(`/api/${item.isNew ? 'createitem' : 'updateitem'}`, {
+                                method: item.isNew ? 'POST' : 'PUT',
                                 headers: {
                                     'Content-Type': 'application/json',
                                 },
                                 body: JSON.stringify({
                                     id: item.id,
-                                    data: item,
+                                    data: dataToSave,
                                 }),
                             }).then((res) => {
                                 if (res.status === 200) {
-                                    changeItemSaveStatus(i, 'saved');
+                                    changeItemSaveStatus(item.id, 'saved');
                                     continueLoop();
                                 } else {
-                                    changeItemSaveStatus(i, 'failed');
+                                    changeItemSaveStatus(item.id, 'failed');
                                     continueLoop();
                                 }
                             });
@@ -238,9 +272,9 @@ export default function Index() {
                     </tr>
                 </thead>
                 <tbody id='api_gui_rows'>
-                    {editedData ? editedData.map((row, index) => {
+                    {editedData ? editedData.map((item, index) => {
                         return (
-                            <ApiGuiRow key={index} refreshData={refreshData} editedData={editedData} setEditedData={setEditedData} fields={curFields} item={row} saveStatus={itemSaveStatus?.[index]} />
+                            <ApiGuiRow key={index} refreshData={refreshData} editedData={editedData} setEditedData={setEditedData} fields={curFields} item={item} saveStatus={itemSaveStatus?.[item.id]} />
                         );
                     }) : (
                         <tr className='api_gui_row'>
