@@ -2,7 +2,38 @@ import './index.css';
 
 import { useEffect, useState } from 'react';
 
-function ApiGuiRow({ refreshData, editedData, setEditedData, fields, item, saveStatus, ...props }) {
+//user id *wink* *wink* JNIJCSeziCBeIW7J
+
+function getAdditionalClassName(className) {
+    return className ? ` ${className}` : '';
+}
+
+function FancyButton({ children, className, ...props }) {
+    return (
+        <button className={`fancy_button${getAdditionalClassName(className)}`} {...props}>
+            {children}
+        </button>
+    );
+}
+
+function getIsEdited(item, origItem, curFields) {
+    let isEdited = false;
+    if (item.isNew) {
+        isEdited = true;
+    } else if (item.flaggedForDelete === true) {
+        isEdited = true;
+    } else {
+        for (const fieldName of Object.keys(curFields)) {
+            if (item.data[fieldName] !== origItem[fieldName]) {
+                isEdited = true;
+                break;
+            }
+        }
+    }
+    return isEdited;
+}
+
+function ApiGuiRow({ refreshData, curData, editedData, setEditedData, fields, item, saveStatus, ...props }) {
     const content = [];
 
     for (const [fieldName, field] of Object.entries(fields)) {
@@ -10,7 +41,7 @@ function ApiGuiRow({ refreshData, editedData, setEditedData, fields, item, saveS
         content.push((
             <td key={fieldName}>
                 {field.editable ? (
-                    <input type='text' value={fieldValue} onChange={(e) => {
+                    <input type={field.type === 'number' ? 'number' : field.type === 'string' ? 'text' : 'text'} value={fieldValue} onChange={(e) => {
                         const newData = [...editedData];
                         const newItem = JSON.parse(JSON.stringify(item));
                         newItem.data[fieldName] = e.target.value;
@@ -48,10 +79,16 @@ function ApiGuiRow({ refreshData, editedData, setEditedData, fields, item, saveS
         ));
     }
 
+    const isDelete = item.flaggedForDelete;
+    const isEdited = getIsEdited(item, curData[editedData.indexOf(item)], fields);
+
     return (
-        <tr className='api_gui_row'>
+        <tr className={`api_gui_row${isDelete ? ' delete' : isEdited ? ' edited' : ''}`}>
+            <td className='api_gui_row_modification' key='modifications'>
+                {isDelete ? '🗑️' : isEdited ? '✏️' : ''}
+            </td>
             <td key='actions'>
-                <button className={`api_gui_row_delete_button ${item.flaggedForDelete ? 'delete' : 'cancel'}`} onClick={(e) => {
+                <FancyButton className={`api_gui_row_delete_button ${item.flaggedForDelete ? 'delete' : 'cancel'}`} onClick={(e) => {
                     if (item.isNew) {
                         setEditedData(editedData.filter((checkItem) => {
                             return checkItem !== item;
@@ -69,7 +106,7 @@ function ApiGuiRow({ refreshData, editedData, setEditedData, fields, item, saveS
                     }
                 }}>
                     {item.flaggedForDelete ? 'Cancel' : 'Delete'}
-                </button>
+                </FancyButton>
             </td>
             {content}
         </tr>
@@ -125,12 +162,12 @@ export default function Index() {
                     API DATABASE GUI v4.0.0
                 </h1>
                 <div id='api_gui_buttons'>
-                    <button onClick={(e) => {
+                    <FancyButton onClick={(e) => {
                         refreshData();
                     }}>
                         Refresh
-                    </button>
-                    <button onClick={(e) => {
+                    </FancyButton>
+                    <FancyButton onClick={(e) => {
                         const newItem = {
                             isNew: true,
                             flaggedForDelete: false,
@@ -155,8 +192,8 @@ export default function Index() {
                         ]);
                     }}>
                         Insert
-                    </button>
-                    <button onClick={(e) => {
+                    </FancyButton>
+                    <FancyButton onClick={(e) => {
                         setSavingItems(true);
                         const itemsToSave = [];
                         const newItemSaveStatus = {};
@@ -164,19 +201,7 @@ export default function Index() {
                             const item = editedData[i];
                             let saveStatus;
 
-                            let isEdited = false;
-                            if (item.isNew) {
-                                isEdited = true;
-                            } else if (item.flaggedForDelete === true) {
-                                isEdited = true;
-                            } else {
-                                for (const fieldName of Object.keys(curFields)) {
-                                    if (item.data[fieldName] !== curData[i][fieldName]) {
-                                        isEdited = true;
-                                        break;
-                                    }
-                                }
-                            }
+                            const isEdited = getIsEdited(item, curData[i], curFields);
 
                             if (isEdited) {
                                 saveStatus = 'pending';
@@ -256,77 +281,94 @@ export default function Index() {
                         });
                     }}>
                         Save
-                    </button>
+                    </FancyButton>
                 </div>
-                <table id='api_gui'>
-                    <thead id='api_gui_header'>
-                        <tr className='api_gui_row'>
-                            <th>
-                                Actions
-                            </th>
-                            {curFields ? (() => {
-                                const fields = [];
-                                for (const key in curFields) {
-                                    fields.push((
-                                        <th key={key}>
-                                            {key}
-                                        </th>
-                                    ));
-                                }
-                                return fields;
-                            })() : (
-                                <td key='loading'>
-                                    Loading...
-                                </td>
-                            )}
-                            {itemSaveStatus && (
-                                <th>
-                                    Save status
+                <div id='api_gui_table_container'>
+                    <table id='api_gui_table'>
+                        <thead id='api_gui_header'>
+                            <tr className='api_gui_row'>
+                                <th key='modifications'>
+
                                 </th>
+                                <th key='actions'>
+                                    Actions
+                                </th>
+                                {curFields ? (() => {
+                                    const fields = [];
+                                    for (const key in curFields) {
+                                        fields.push((
+                                            <th key={key}>
+                                                <div className='api_gui_table_head_container'>
+                                                    <div className='api_gui_table_head_text'>
+                                                        {key}
+                                                    </div>
+                                                    <button className='sort_button'>
+                                                        <div className='sort_arrow'>
+
+                                                        </div>
+                                                    </button>
+                                                </div>
+                                            </th>
+                                        ));
+                                    }
+                                    return fields;
+                                })() : (
+                                    <td key='loading'>
+                                        Loading...
+                                    </td>
+                                )}
+                                {itemSaveStatus && (
+                                    <th>
+                                        Save status
+                                    </th>
+                                )}
+                            </tr>
+                        </thead>
+                        <tbody id='api_gui_rows'>
+                            {editedData ? editedData.map((item, index) => {
+                                return (
+                                    <ApiGuiRow key={index} refreshData={refreshData} curData={curData} editedData={editedData} setEditedData={setEditedData} fields={curFields} item={item} saveStatus={itemSaveStatus?.[item.data.id]} />
+                                );
+                            }) : (
+                                <tr className='api_gui_row'>
+                                    <td>
+                                        Loading...
+                                    </td>
+                                </tr>
                             )}
-                        </tr>
-                    </thead>
-                    <tbody id='api_gui_rows'>
-                        {editedData ? editedData.map((item, index) => {
-                            return (
-                                <ApiGuiRow key={index} refreshData={refreshData} editedData={editedData} setEditedData={setEditedData} fields={curFields} item={item} saveStatus={itemSaveStatus?.[item.data.id]} />
-                            );
-                        }) : (
+                        </tbody>
+                        <tfoot id='api_gui_footer'>
                             <tr className='api_gui_row'>
                                 <td>
-                                    Loading...
+
                                 </td>
-                            </tr>
-                        )}
-                    </tbody>
-                    <tfoot id='api_gui_footer'>
-                        <tr className='api_gui_row'>
-                            <td>
-                                Entries: {editedData ? editedData.length : 'Loading...'}
-                            </td>
-                            {(() => {
-                                const placeholders = [];
-                                if (curFields) {
-                                    for (let i = 0; i < Object.keys(curFields).length; i++) {
+                                <td>
+                                    Entries: {editedData ? editedData.length : 'Loading...'}
+                                </td>
+                                {(() => {
+                                    const placeholders = [];
+                                    if (curFields) {
+                                        for (let i = 0; i < Object.keys(curFields).length; i++) {
+                                            placeholders.push((
+                                                <td key={i}>
+
+                                                </td>
+                                            ));
+                                        }
+                                    }
+                                    if (savingItems) {
                                         placeholders.push((
-                                            <td key={i}>
+                                            <td key='saving'>
 
                                             </td>
                                         ));
                                     }
-                                }
-                                if (savingItems) {
-                                    placeholders.push((
-                                        <td key='saving'>
-
-                                        </td>
-                                    ));
-                                }
-                                return placeholders;
-                            })()}
-                        </tr>
-                    </tfoot>
-                </table>
+                                    return placeholders;
+                                })()}
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </section>
         </>
     );

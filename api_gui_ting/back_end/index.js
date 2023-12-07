@@ -214,8 +214,6 @@ app.put(getAPIURL('/updateitem'), (req, res) => {
     const data = body.data;
     if (checkRequestValueFull(res, data, 'data', 'object') === false) return;
 
-    console.log(data, listFields)
-
     const actualData = {};
     for (const key in data) {
         if (key in listFields) {

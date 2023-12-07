@@ -18,39 +18,71 @@
 
 
 
+#api_gui_table_container {
+    width: 100%;
+    max-width: fit-content;
+    overflow-x: auto;
+}
 
-#api_gui {
+#api_gui_table {
+    --cell-height: 27px;
+    --cell-vert-pad: 4px;
+    --cell-horiz-pad: 12px;
     border-collapse: collapse;
 }
 
 
 
 
-.api_gui_row {
-    
-}
-
 .api_gui_row>:is(th, td) {
-    padding: 4px 12px;
+    height: var(--cell-height);
+    padding: var(--cell-vert-pad) var(--cell-horiz-pad);
     text-align: left;
     vertical-align: middle;
 }
 
-#api_gui_header, #api_gui_footer {
+#api_gui_header,
+#api_gui_footer {
     font-weight: 500;
     background-color: rgb(200, 200, 200);
 }
 
 #api_gui_rows {}
 
-#api_gui_rows> :nth-child(odd) {
+
+.api_gui_row {
+    box-sizing: border-box;
+}
+
+#api_gui_rows>.api_gui_row:nth-child(odd) {
     background-color: rgb(240, 240, 240);
 }
 
-#api_gui_rows> :nth-child(even) {
+#api_gui_rows>.api_gui_row:nth-child(even) {
     background-color: rgb(220, 220, 220);
 }
 
+.api_gui_row_modification {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--cell-height);
+    height: 100%;
+    padding: 4px !important;
+    background-color: var(--col);
+}
+
+.api_gui_row:is(.edited, .delete)>.api_gui_row_modification {
+    
+}
+
+.api_gui_row.edited > .api_gui_row_modification {
+    --col: rgb(240, 220, 120);
+}
+
+.api_gui_row.delete > .api_gui_row_modification {
+    --col: rgb(240, 120, 120);
+}
 
 .api_gui_row_delete_button {
     color: var(--col);
@@ -66,3 +98,28 @@
     --col: rgb(0, 0, 0);
     --border-col: rgb(150, 150, 150);
 }
+
+
+.api_gui_table_head_container {
+    display: flex;
+    gap: 8px;
+}
+
+.api_gui_table_head_text {
+    display: flex;
+    align-items: center;
+    vertical-align: baseline;
+}
+
+
+
+.sort_button {
+    width: var(--cell-height);
+    height: var(--cell-height);
+    box-sizing: border-box;
+    margin-left: auto;
+    aspect-ratio: 1 / 1;
+}
+
+
+.sort_arrow {}
