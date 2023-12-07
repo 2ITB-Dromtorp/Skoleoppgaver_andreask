@@ -2,13 +2,17 @@
     border-collapse: collapse;
 }
 
+.api_gui_row {
+    
+}
+
 .api_gui_row>:is(th, td) {
     padding: 4px 10px;
     text-align: left;
     vertical-align: middle;
 }
 
-#api_gui_header {
+#api_gui_header, #api_gui_footer {
     font-weight: 500;
     background-color: rgb(200, 200, 200);
 }
@@ -16,7 +20,7 @@
 #api_gui_rows {}
 
 #api_gui_rows> :nth-child(odd) {
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(240, 240, 240);
 }
 
 #api_gui_rows> :nth-child(even) {

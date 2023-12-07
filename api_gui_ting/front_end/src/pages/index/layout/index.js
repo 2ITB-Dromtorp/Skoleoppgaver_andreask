@@ -9,7 +9,7 @@ export default function Layout() {
                     lorem ipsum
                 </div>
             </nav>
-            <main>
+            <main id='main'>
                 <Outlet />
             </main>
         </>

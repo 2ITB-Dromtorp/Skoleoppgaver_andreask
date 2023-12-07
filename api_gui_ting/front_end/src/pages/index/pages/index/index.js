@@ -30,7 +30,7 @@ function ApiGuiRow({ refreshData, editedData, setEditedData, fields, item, saveS
     if (saveStatus) {
         let icon;
         if (saveStatus === 'no_changes') {
-            icon = '☑️'
+            icon = ''
         } if (saveStatus === 'pending') {
             icon = '⏳';
         } else if (saveStatus === 'saving') {
@@ -151,13 +151,40 @@ export default function Index() {
                             <ApiGuiRow key={index} refreshData={refreshData} editedData={editedData} setEditedData={setEditedData} fields={curFields} item={row} saveStatus={itemSaveStatus?.[index]} />
                         );
                     }) : (
-                        <tr>
+                        <tr className='api_gui_row'>
                             <td>
                                 Loading...
                             </td>
                         </tr>
                     )}
                 </tbody>
+                <tfoot id='api_gui_footer'>
+                    <tr className='api_gui_row'>
+                        <td>
+                            Entries: {editedData ? editedData.length : 'Loading...'}
+                        </td>
+                        {(() => {
+                            const placeholders = [];
+                            if (curFields) {
+                                for (let i = 0; i < Object.keys(curFields).length; i++) {
+                                    placeholders.push((
+                                        <td key={i}>
+
+                                        </td>
+                                    ));
+                                }
+                            }
+                            if (savingItems) {
+                                placeholders.push((
+                                    <td key='saving'>
+
+                                    </td>
+                                ));
+                            }
+                            return placeholders;
+                        })()}
+                    </tr>
+                </tfoot>
             </table>
             <button onClick={(e) => {
                 setSavingItems(true);

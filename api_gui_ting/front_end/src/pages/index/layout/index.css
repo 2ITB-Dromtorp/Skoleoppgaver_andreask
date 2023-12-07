@@ -5,3 +5,8 @@
     box-sizing: border-box;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
 }
+
+
+#main {
+    margin: 0 min(10vw, 32px);
+}
