@@ -6,10 +6,11 @@ function ApiGuiRow({ refreshData, editedData, setEditedData, fields, item, saveS
     const content = [];
 
     for (const [fieldName, field] of Object.entries(fields)) {
+        const fieldValue = item.data[fieldName];
         content.push((
             <td key={fieldName}>
                 {field.editable ? (
-                    <input type='text' value={item.data[fieldName]} onChange={(e) => {
+                    <input type='text' value={fieldValue} onChange={(e) => {
                         const newData = [...editedData];
                         const newItem = JSON.parse(JSON.stringify(item));
                         newItem.data[fieldName] = e.target.value;
@@ -19,7 +20,7 @@ function ApiGuiRow({ refreshData, editedData, setEditedData, fields, item, saveS
                     />
                 ) : (
                     <>
-                        {item[fieldName]}
+                        {fieldValue}
                     </>
                 )}
             </td>
@@ -118,213 +119,215 @@ export default function Index() {
     }, []);
 
     return (
-        <div>
-            <h1>
-                API DATABASE GUI Thing v1.0.0
-            </h1>
-            <div id='api_gui_buttons'>
-                <button onClick={(e) => {
-                    refreshData();
-                }}>
-                    Refresh
-                </button>
-                <button onClick={(e) => {
-                    const newItem = {
-                        isNew: true,
-                        flaggedForDelete: false,
-                        data: {},
-                    };
-                    for (const [fieldName, field] of Object.entries(curFields)) {
-                        if (field.serverProvided === false) {
-                            let initialValue;
-                            if (field.type === 'number') {
-                                initialValue = 0;
-                            } else if (field.type === 'string') {
-                                initialValue = '';
-                            }
-                            newItem.data[fieldName] = initialValue;
-                        } else {
-                            newItem.data[fieldName] = 'Server provided';
-                        }
-                    }
-                    setEditedData([
-                        ...editedData,
-                        newItem,
-                    ]);
-                }}>
-                    Insert
-                </button>
-                <button onClick={(e) => {
-                    setSavingItems(true);
-                    const itemsToSave = [];
-                    const newItemSaveStatus = {};
-                    for (let i = 0; i < editedData.length; i++) {
-                        const item = editedData[i];
-                        let saveStatus;
-
-                        let isEdited = false;
-                        if (item.isNew) {
-                            isEdited = true;
-                        } else if (item.flaggedForDelete === true) {
-                            isEdited = true;
-                        } else {
-                            for (const fieldName of Object.keys(curFields)) {
-                                if (item.data[fieldName] !== curData[i][fieldName]) {
-                                    isEdited = true;
-                                    break;
+        <>
+            <section id='api_gui_section'>
+                <h1>
+                    API DATABASE GUI v4.0.0
+                </h1>
+                <div id='api_gui_buttons'>
+                    <button onClick={(e) => {
+                        refreshData();
+                    }}>
+                        Refresh
+                    </button>
+                    <button onClick={(e) => {
+                        const newItem = {
+                            isNew: true,
+                            flaggedForDelete: false,
+                            data: {},
+                        };
+                        for (const [fieldName, field] of Object.entries(curFields)) {
+                            if (field.serverProvided === false) {
+                                let initialValue;
+                                if (field.type === 'number') {
+                                    initialValue = 0;
+                                } else if (field.type === 'string') {
+                                    initialValue = '';
                                 }
+                                newItem.data[fieldName] = initialValue;
+                            } else {
+                                newItem.data[fieldName] = 'Server provided';
                             }
                         }
+                        setEditedData([
+                            ...editedData,
+                            newItem,
+                        ]);
+                    }}>
+                        Insert
+                    </button>
+                    <button onClick={(e) => {
+                        setSavingItems(true);
+                        const itemsToSave = [];
+                        const newItemSaveStatus = {};
+                        for (let i = 0; i < editedData.length; i++) {
+                            const item = editedData[i];
+                            let saveStatus;
 
-                        if (isEdited) {
-                            saveStatus = 'pending';
-                            itemsToSave.push(item);
-                        } else {
-                            saveStatus = 'no_changes';
-                        }
-                        newItemSaveStatus[item.data.id] = saveStatus;
-                    }
-                    setItemSaveStatus(newItemSaveStatus);
-
-                    const changeItemSaveStatus = (id, newStatus) => {
-                        setItemSaveStatus((prev) => {
-                            const newItemSaveStatus = {};
-                            for (const [curId, status] of Object.entries(prev)) {
-                                let newCurStatus;
-
-                                if (curId === id) {
-                                    newCurStatus = newStatus;
-                                } else {
-                                    newCurStatus = status;
-                                }
-                                newItemSaveStatus[curId] = newCurStatus;
-                            }
-                            return newItemSaveStatus;
-                        });
-                    }
-                    const loop = (i) => {
-                        return new Promise((resolve, reject) => {
-                            if (i === itemsToSave.length) {
-                                resolve();
-                                return;
-                            }
-                            const continueLoop = () => {
-                                loop(i + 1).then(() => {
-                                    resolve();
-                                });
-                            }
-                            const item = itemsToSave[i];
-                            changeItemSaveStatus(item.data.id, 'saving');
-                            let dataToSave;
-                            if (item.flaggedForDelete === false) {
-                                dataToSave = {};
-                                for (const [fieldName, field] of Object.entries(curFields)) {
-                                    if (field.serverProvided === false && field.editable === true) {
-                                        dataToSave[fieldName] = item.data[fieldName];
+                            let isEdited = false;
+                            if (item.isNew) {
+                                isEdited = true;
+                            } else if (item.flaggedForDelete === true) {
+                                isEdited = true;
+                            } else {
+                                for (const fieldName of Object.keys(curFields)) {
+                                    if (item.data[fieldName] !== curData[i][fieldName]) {
+                                        isEdited = true;
+                                        break;
                                     }
                                 }
                             }
-                            const body = {
-                                id: item.data.id,
+
+                            if (isEdited) {
+                                saveStatus = 'pending';
+                                itemsToSave.push(item);
+                            } else {
+                                saveStatus = 'no_changes';
                             }
-                            if (item.flaggedForDelete === false) {
-                                body.data = dataToSave;
-                            }
-                            fetch(`/api/${item.flaggedForDelete ? 'deleteitem' : item.isNew ? 'createitem' : 'updateitem'}`, {
-                                method: item.flaggedForDelete ? 'DELETE' : item.isNew ? 'POST' : 'PUT',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify(body),
-                            }).then((res) => {
-                                if (res.status === 200) {
-                                    changeItemSaveStatus(item.data.id, 'saved');
-                                    continueLoop();
-                                } else {
-                                    changeItemSaveStatus(item.data.id, 'failed');
-                                    continueLoop();
+                            newItemSaveStatus[item.data.id] = saveStatus;
+                        }
+                        setItemSaveStatus(newItemSaveStatus);
+
+                        const changeItemSaveStatus = (id, newStatus) => {
+                            setItemSaveStatus((prev) => {
+                                const newItemSaveStatus = {};
+                                for (const [curId, status] of Object.entries(prev)) {
+                                    let newCurStatus;
+
+                                    if (curId === id) {
+                                        newCurStatus = newStatus;
+                                    } else {
+                                        newCurStatus = status;
+                                    }
+                                    newItemSaveStatus[curId] = newCurStatus;
                                 }
+                                return newItemSaveStatus;
                             });
+                        }
+                        const loop = (i) => {
+                            return new Promise((resolve, reject) => {
+                                if (i === itemsToSave.length) {
+                                    resolve();
+                                    return;
+                                }
+                                const continueLoop = () => {
+                                    loop(i + 1).then(() => {
+                                        resolve();
+                                    });
+                                }
+                                const item = itemsToSave[i];
+                                changeItemSaveStatus(item.data.id, 'saving');
+                                let dataToSave;
+                                if (item.flaggedForDelete === false) {
+                                    dataToSave = {};
+                                    for (const [fieldName, field] of Object.entries(curFields)) {
+                                        if (field.serverProvided === false && field.editable === true) {
+                                            dataToSave[fieldName] = item.data[fieldName];
+                                        }
+                                    }
+                                }
+                                const body = {
+                                    id: item.data.id,
+                                }
+                                if (item.flaggedForDelete === false) {
+                                    body.data = dataToSave;
+                                }
+                                fetch(`/api/${item.flaggedForDelete ? 'deleteitem' : item.isNew ? 'createitem' : 'updateitem'}`, {
+                                    method: item.flaggedForDelete ? 'DELETE' : item.isNew ? 'POST' : 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify(body),
+                                }).then((res) => {
+                                    if (res.status === 200) {
+                                        changeItemSaveStatus(item.data.id, 'saved');
+                                        continueLoop();
+                                    } else {
+                                        changeItemSaveStatus(item.data.id, 'failed');
+                                        continueLoop();
+                                    }
+                                });
+                            });
+                        }
+                        loop(0).then(() => {
+                            setSavingItems(false);
+                            setItemSaveStatus();
+                            refreshData();
                         });
-                    }
-                    loop(0).then(() => {
-                        setSavingItems(false);
-                        setItemSaveStatus();
-                        refreshData();
-                    });
-                }}>
-                    Save
-                </button>
-            </div>
-            <table id='api_gui'>
-                <thead id='api_gui_header'>
-                    <tr className='api_gui_row'>
-                        <th>
-                            Actions
-                        </th>
-                        {curFields ? (() => {
-                            const fields = [];
-                            for (const key in curFields) {
-                                fields.push((
-                                    <th key={key}>
-                                        {key}
-                                    </th>
-                                ));
-                            }
-                            return fields;
-                        })() : (
-                            <td key='loading'>
-                                Loading...
-                            </td>
-                        )}
-                        {itemSaveStatus && (
+                    }}>
+                        Save
+                    </button>
+                </div>
+                <table id='api_gui'>
+                    <thead id='api_gui_header'>
+                        <tr className='api_gui_row'>
                             <th>
-                                Save status
+                                Actions
                             </th>
+                            {curFields ? (() => {
+                                const fields = [];
+                                for (const key in curFields) {
+                                    fields.push((
+                                        <th key={key}>
+                                            {key}
+                                        </th>
+                                    ));
+                                }
+                                return fields;
+                            })() : (
+                                <td key='loading'>
+                                    Loading...
+                                </td>
+                            )}
+                            {itemSaveStatus && (
+                                <th>
+                                    Save status
+                                </th>
+                            )}
+                        </tr>
+                    </thead>
+                    <tbody id='api_gui_rows'>
+                        {editedData ? editedData.map((item, index) => {
+                            return (
+                                <ApiGuiRow key={index} refreshData={refreshData} editedData={editedData} setEditedData={setEditedData} fields={curFields} item={item} saveStatus={itemSaveStatus?.[item.data.id]} />
+                            );
+                        }) : (
+                            <tr className='api_gui_row'>
+                                <td>
+                                    Loading...
+                                </td>
+                            </tr>
                         )}
-                    </tr>
-                </thead>
-                <tbody id='api_gui_rows'>
-                    {editedData ? editedData.map((item, index) => {
-                        return (
-                            <ApiGuiRow key={index} refreshData={refreshData} editedData={editedData} setEditedData={setEditedData} fields={curFields} item={item} saveStatus={itemSaveStatus?.[item.data.id]} />
-                        );
-                    }) : (
+                    </tbody>
+                    <tfoot id='api_gui_footer'>
                         <tr className='api_gui_row'>
                             <td>
-                                Loading...
+                                Entries: {editedData ? editedData.length : 'Loading...'}
                             </td>
-                        </tr>
-                    )}
-                </tbody>
-                <tfoot id='api_gui_footer'>
-                    <tr className='api_gui_row'>
-                        <td>
-                            Entries: {editedData ? editedData.length : 'Loading...'}
-                        </td>
-                        {(() => {
-                            const placeholders = [];
-                            if (curFields) {
-                                for (let i = 0; i < Object.keys(curFields).length; i++) {
+                            {(() => {
+                                const placeholders = [];
+                                if (curFields) {
+                                    for (let i = 0; i < Object.keys(curFields).length; i++) {
+                                        placeholders.push((
+                                            <td key={i}>
+
+                                            </td>
+                                        ));
+                                    }
+                                }
+                                if (savingItems) {
                                     placeholders.push((
-                                        <td key={i}>
+                                        <td key='saving'>
 
                                         </td>
                                     ));
                                 }
-                            }
-                            if (savingItems) {
-                                placeholders.push((
-                                    <td key='saving'>
-
-                                    </td>
-                                ));
-                            }
-                            return placeholders;
-                        })()}
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+                                return placeholders;
+                            })()}
+                        </tr>
+                    </tfoot>
+                </table>
+            </section>
+        </>
     );
 }

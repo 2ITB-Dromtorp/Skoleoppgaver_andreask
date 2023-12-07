@@ -1,13 +1,25 @@
 const mongoose = require('mongoose');
 
 const listSchema = new mongoose.Schema({
-    name: {
+    first_name: {
         type: String,
-        required: true,
+        default: 'Navn',
     },
-    content: {
+    last_name: {
         type: String,
-        default: '',
+        default: 'Navnesen',
+    },
+    class: {
+        type: String,
+    },
+    hobby: {
+        type: String,
+    },
+    gender: {
+        type: String,
+    },
+    computer_id: {
+        type: Number,//mongoose.SchemaTypes.ObjectId
     },
 });
 

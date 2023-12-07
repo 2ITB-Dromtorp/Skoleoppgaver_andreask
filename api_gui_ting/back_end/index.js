@@ -117,13 +117,33 @@ const listFields = {
         editable: false,
         serverProvided: true,
     },
-    name: {
+    first_name: {
         type: 'string',
         editable: true,
         serverProvided: false,
     },
-    content: {
+    last_name: {
         type: 'string',
+        editable: true,
+        serverProvided: false,
+    },
+    class: {
+        type: 'string',
+        editable: true,
+        serverProvided: false,
+    },
+    hobby: {
+        type: 'string',
+        editable: true,
+        serverProvided: false,
+    },
+    gender: {
+        type: 'string',
+        editable: true,
+        serverProvided: false,
+    },
+    computer_id: {
+        type: 'number',
         editable: true,
         serverProvided: false,
     },
@@ -193,6 +213,8 @@ app.put(getAPIURL('/updateitem'), (req, res) => {
 
     const data = body.data;
     if (checkRequestValueFull(res, data, 'data', 'object') === false) return;
+
+    console.log(data, listFields)
 
     const actualData = {};
     for (const key in data) {
