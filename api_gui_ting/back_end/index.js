@@ -181,9 +181,6 @@ app.get(getAPIURL('/getdata'), (req, res) => {
 app.post(getAPIURL('/createitem'), (req, res) => {
     const body = req.body;
 
-    const dataId = body.id;
-    if (checkRequestValueFull(res, dataId, 'id', 'string') === false) return;
-
     const data = body.data;
     if (checkRequestValueFull(res, data, 'data', 'object') === false) return;
 

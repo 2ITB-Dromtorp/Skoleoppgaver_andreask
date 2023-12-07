@@ -122,10 +122,13 @@ export default function Index() {
     const [savingItems, setSavingItems] = useState(false);
     const [itemSaveStatus, setItemSaveStatus] = useState();
 
+    const [lastId, setLastId] = useState(0);
+
     const refreshData = () => {
         setCurFields();
         setCurData();
         setEditedData();
+        setLastId(0);
         fetch(`/api/getdata`, {
             method: 'GET',
             headers: {
@@ -138,12 +141,16 @@ export default function Index() {
                     setCurData(data.data);
                     const newEditedData = [];
                     for (let i = 0; i < data.data.length; i++) {
-                        const newItem = {
-                            isNew: false,
-                            flaggedForDelete: false,
-                            data: JSON.parse(JSON.stringify(data.data[i])),
-                        };
-                        newEditedData[i] = newItem;
+                        setLastId(prev => {
+                            const newItem = {
+                                isNew: false,
+                                flaggedForDelete: false,
+                                data: JSON.parse(JSON.stringify(data.data[i])),
+                                id: prev.toString(),
+                            };
+                            newEditedData[i] = newItem;
+                            return prev += 1;
+                        });
                     }
                     setEditedData(newEditedData);
                 });
@@ -172,7 +179,9 @@ export default function Index() {
                             isNew: true,
                             flaggedForDelete: false,
                             data: {},
+                            id: lastId.toString(),
                         };
+                        setLastId(prev => prev + 1);
                         for (const [fieldName, field] of Object.entries(curFields)) {
                             if (field.serverProvided === false) {
                                 let initialValue;
@@ -209,7 +218,7 @@ export default function Index() {
                             } else {
                                 saveStatus = 'no_changes';
                             }
-                            newItemSaveStatus[item.data.id] = saveStatus;
+                            newItemSaveStatus[item.id] = saveStatus;
                         }
                         setItemSaveStatus(newItemSaveStatus);
 
@@ -241,7 +250,7 @@ export default function Index() {
                                     });
                                 }
                                 const item = itemsToSave[i];
-                                changeItemSaveStatus(item.data.id, 'saving');
+                                changeItemSaveStatus(item.id, 'saving');
                                 let dataToSave;
                                 if (item.flaggedForDelete === false) {
                                     dataToSave = {};
@@ -251,8 +260,9 @@ export default function Index() {
                                         }
                                     }
                                 }
-                                const body = {
-                                    id: item.data.id,
+                                const body = {};
+                                if (item.isNew === false) {
+                                    body.id = item.data.id;
                                 }
                                 if (item.flaggedForDelete === false) {
                                     body.data = dataToSave;
@@ -265,10 +275,10 @@ export default function Index() {
                                     body: JSON.stringify(body),
                                 }).then((res) => {
                                     if (res.status === 200) {
-                                        changeItemSaveStatus(item.data.id, 'saved');
+                                        changeItemSaveStatus(item.id, 'saved');
                                         continueLoop();
                                     } else {
-                                        changeItemSaveStatus(item.data.id, 'failed');
+                                        changeItemSaveStatus(item.id, 'failed');
                                         continueLoop();
                                     }
                                 });
@@ -327,7 +337,7 @@ export default function Index() {
                         <tbody id='api_gui_rows'>
                             {editedData ? editedData.map((item, index) => {
                                 return (
-                                    <ApiGuiRow key={index} refreshData={refreshData} curData={curData} editedData={editedData} setEditedData={setEditedData} fields={curFields} item={item} saveStatus={itemSaveStatus?.[item.data.id]} />
+                                    <ApiGuiRow key={index} refreshData={refreshData} curData={curData} editedData={editedData} setEditedData={setEditedData} fields={curFields} item={item} saveStatus={itemSaveStatus?.[item.id]} />
                                 );
                             }) : (
                                 <tr className='api_gui_row'>
