@@ -9,12 +9,11 @@ function ApiGuiRow({ refreshData, editedData, setEditedData, fields, item, saveS
         content.push((
             <td key={fieldName}>
                 {field.editable ? (
-                    <input type='text' value={item[fieldName]} onChange={(e) => {
+                    <input type='text' value={item.data[fieldName]} onChange={(e) => {
                         const newData = [...editedData];
-                        newData[editedData.indexOf(item)] = {
-                            ...item,
-                            [fieldName]: e.target.value,
-                        };
+                        const newItem = JSON.parse(JSON.stringify(item));
+                        newItem.data[fieldName] = e.target.value;
+                        newData[editedData.indexOf(item)] = newItem;
                         setEditedData(newData);
                     }}
                     />
@@ -51,22 +50,24 @@ function ApiGuiRow({ refreshData, editedData, setEditedData, fields, item, saveS
     return (
         <tr className='api_gui_row'>
             <td key='actions'>
-                <button onClick={(e) => {
-                    fetch(`/api/deleteitem`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            id: item.id,
-                        }),
-                    }).then((res) => {
-                        if (res.status === 200) {
-                            refreshData();
-                        }
-                    });
+                <button className={`api_gui_row_delete_button ${item.flaggedForDelete ? 'delete' : 'cancel'}`} onClick={(e) => {
+                    if (item.isNew) {
+                        setEditedData(editedData.filter((checkItem) => {
+                            return checkItem !== item;
+                        }));
+                    } else {
+                        const newItem = JSON.parse(JSON.stringify(item));
+                        newItem.flaggedForDelete = newItem.flaggedForDelete !== undefined ? newItem.flaggedForDelete === false : true;
+                        setEditedData(editedData.map((checkItem) => {
+                            if (checkItem === item) {
+                                return newItem;
+                            } else {
+                                return checkItem;
+                            }
+                        }));
+                    }
                 }}>
-                    Delete
+                    {item.flaggedForDelete ? 'Cancel' : 'Delete'}
                 </button>
             </td>
             {content}
@@ -97,9 +98,14 @@ export default function Index() {
                 res.json().then((data) => {
                     setCurFields(data.fields);
                     setCurData(data.data);
-                    const newEditedData = JSON.parse(JSON.stringify(data.data));
-                    for (let i = 0; i < newEditedData.length; i++) {
-                        newEditedData[i].isNew = false;
+                    const newEditedData = [];
+                    for (let i = 0; i < data.data.length; i++) {
+                        const newItem = {
+                            isNew: false,
+                            flaggedForDelete: false,
+                            data: JSON.parse(JSON.stringify(data.data[i])),
+                        };
+                        newEditedData[i] = newItem;
                     }
                     setEditedData(newEditedData);
                 });
@@ -123,8 +129,11 @@ export default function Index() {
                     Refresh
                 </button>
                 <button onClick={(e) => {
-                    const newItem = {};
-                    newItem.isNew = true;
+                    const newItem = {
+                        isNew: true,
+                        flaggedForDelete: false,
+                        data: {},
+                    };
                     for (const [fieldName, field] of Object.entries(curFields)) {
                         if (field.serverProvided === false) {
                             let initialValue;
@@ -133,9 +142,9 @@ export default function Index() {
                             } else if (field.type === 'string') {
                                 initialValue = '';
                             }
-                            newItem[fieldName] = initialValue;
+                            newItem.data[fieldName] = initialValue;
                         } else {
-                            newItem[fieldName] = 'Server provided';
+                            newItem.data[fieldName] = 'Server provided';
                         }
                     }
                     setEditedData([
@@ -156,9 +165,11 @@ export default function Index() {
                         let isEdited = false;
                         if (item.isNew) {
                             isEdited = true;
+                        } else if (item.flaggedForDelete === true) {
+                            isEdited = true;
                         } else {
                             for (const fieldName of Object.keys(curFields)) {
-                                if (item[fieldName] !== curData[i][fieldName]) {
+                                if (item.data[fieldName] !== curData[i][fieldName]) {
                                     isEdited = true;
                                     break;
                                 }
@@ -171,7 +182,7 @@ export default function Index() {
                         } else {
                             saveStatus = 'no_changes';
                         }
-                        newItemSaveStatus[item.id] = saveStatus;
+                        newItemSaveStatus[item.data.id] = saveStatus;
                     }
                     setItemSaveStatus(newItemSaveStatus);
 
@@ -203,32 +214,34 @@ export default function Index() {
                                 });
                             }
                             const item = itemsToSave[i];
-                            if (JSON.stringify(item) === JSON.stringify(curData[i])) {
-                                continueLoop();
-                                return;
-                            }
-                            changeItemSaveStatus(item.id, 'saving');
-                            const dataToSave = {};
-                            for (const [fieldName, field] of Object.entries(curFields)) {
-                                if (field.serverProvided === false && field.editable === true) {
-                                    dataToSave[fieldName] = item[fieldName];
+                            changeItemSaveStatus(item.data.id, 'saving');
+                            let dataToSave;
+                            if (item.flaggedForDelete === false) {
+                                dataToSave = {};
+                                for (const [fieldName, field] of Object.entries(curFields)) {
+                                    if (field.serverProvided === false && field.editable === true) {
+                                        dataToSave[fieldName] = item.data[fieldName];
+                                    }
                                 }
                             }
-                            fetch(`/api/${item.isNew ? 'createitem' : 'updateitem'}`, {
-                                method: item.isNew ? 'POST' : 'PUT',
+                            const body = {
+                                id: item.data.id,
+                            }
+                            if (item.flaggedForDelete === false) {
+                                body.data = dataToSave;
+                            }
+                            fetch(`/api/${item.flaggedForDelete ? 'deleteitem' : item.isNew ? 'createitem' : 'updateitem'}`, {
+                                method: item.flaggedForDelete ? 'DELETE' : item.isNew ? 'POST' : 'PUT',
                                 headers: {
                                     'Content-Type': 'application/json',
                                 },
-                                body: JSON.stringify({
-                                    id: item.id,
-                                    data: dataToSave,
-                                }),
+                                body: JSON.stringify(body),
                             }).then((res) => {
                                 if (res.status === 200) {
-                                    changeItemSaveStatus(item.id, 'saved');
+                                    changeItemSaveStatus(item.data.id, 'saved');
                                     continueLoop();
                                 } else {
-                                    changeItemSaveStatus(item.id, 'failed');
+                                    changeItemSaveStatus(item.data.id, 'failed');
                                     continueLoop();
                                 }
                             });
@@ -274,7 +287,7 @@ export default function Index() {
                 <tbody id='api_gui_rows'>
                     {editedData ? editedData.map((item, index) => {
                         return (
-                            <ApiGuiRow key={index} refreshData={refreshData} editedData={editedData} setEditedData={setEditedData} fields={curFields} item={item} saveStatus={itemSaveStatus?.[item.id]} />
+                            <ApiGuiRow key={index} refreshData={refreshData} editedData={editedData} setEditedData={setEditedData} fields={curFields} item={item} saveStatus={itemSaveStatus?.[item.data.id]} />
                         );
                     }) : (
                         <tr className='api_gui_row'>

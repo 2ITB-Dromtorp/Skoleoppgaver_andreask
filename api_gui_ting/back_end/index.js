@@ -175,7 +175,7 @@ app.post(getAPIURL('/createitem'), (req, res) => {
     }
 
     List.create(actualData).then((list) => {
-        res.status(200).send('Item created.');
+        res.status(200).send();
     }).catch((err) => {
         console.error(err);
         res.status(500).json({

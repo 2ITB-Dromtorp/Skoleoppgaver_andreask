@@ -1,6 +1,11 @@
 #api_gui_buttons {
     display: flex;
+    width: fit-content;
     gap: 8px;
+    background-color: rgb(220, 220, 220);
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 8px;
 }
 
 
@@ -36,4 +41,20 @@
 
 #api_gui_rows> :nth-child(even) {
     background-color: rgb(220, 220, 220);
+}
+
+
+.api_gui_row_delete_button {
+    color: var(--col);
+    border: 1px solid var(--border-col);
+}
+
+.api_gui_row_delete_button.delete {
+    --col: rgb(255, 0, 0);
+    --border-col: rgb(255, 0, 0);
+}
+
+.api_gui_row_delete_button.cancel {
+    --col: rgb(0, 0, 0);
+    --border-col: rgb(150, 150, 150);
 }
