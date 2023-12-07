@@ -1,13 +1,24 @@
+#api_gui_buttons {
+    display: flex;
+    gap: 8px;
+}
+
+
+
+
 #api_gui {
     border-collapse: collapse;
 }
+
+
+
 
 .api_gui_row {
     
 }
 
 .api_gui_row>:is(th, td) {
-    padding: 4px 10px;
+    padding: 4px 12px;
     text-align: left;
     vertical-align: middle;
 }

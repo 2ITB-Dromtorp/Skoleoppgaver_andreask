@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
+import './css/global.css';
 
 import IndexLayout from './pages/index/layout/index';
 

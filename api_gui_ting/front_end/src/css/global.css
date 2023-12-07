@@ -1,3 +1,30 @@
+:root {
+    --default-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+}
+
+* {
+    font-family: var(--default-font);
+}
+
 body {
     margin: 0;
+}
+
+button {
+    appearance: none;
+    padding: 2px 8px;
+    border: 1px solid rgb(150, 150, 150);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:active {
+    outline: auto;
+}
+
+input[type=text] {
+    appearance: none;
+    padding: 4px;
+    border: 1px solid rgb(150, 150, 150);
+    border-radius: 4px;
 }

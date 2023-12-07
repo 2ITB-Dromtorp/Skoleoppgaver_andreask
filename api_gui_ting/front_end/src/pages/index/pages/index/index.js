@@ -110,13 +110,105 @@ export default function Index() {
     return (
         <div>
             <h1>
-                API SQL GUI Ting 2023 v1.0.0
+                API DATABASE GUI Thing v1.0.0
             </h1>
-            <button onClick={(e) => {
-                refreshData();
-            }}>
-                Refresh
-            </button>
+            <div id='api_gui_buttons'>
+                <button onClick={(e) => {
+                    refreshData();
+                }}>
+                    Refresh
+                </button>
+                <button onClick={(e) => {
+                    const newItem = {};
+                    for (const [fieldName, field] of Object.entries(curFields)) {
+                        if (field.serverProvided === false) {
+                            let initialValue;
+                            if (field.type === 'number') {
+                                initialValue = 0;
+                            } else if (field.type === 'string') {
+                                initialValue = '';
+                            }
+                            newItem[fieldName] = initialValue;
+                        }
+                    }
+                    setEditedData([
+                        ...editedData,
+                        newItem,
+                    ]);
+                }}>
+                    Insert
+                </button>
+                <button onClick={(e) => {
+                    setSavingItems(true);
+                    const newItemSaveStatus = [];
+                    for (let i = 0; i < editedData.length; i++) {
+                        const item = editedData[i];
+                        let saveStatus;
+                        if (JSON.stringify(item) === JSON.stringify(curData[i])) {
+                            saveStatus = 'no_changes';
+                        } else {
+                            saveStatus = 'pending';
+                        }
+                        newItemSaveStatus.push(saveStatus);
+                    }
+                    setItemSaveStatus(newItemSaveStatus);
+
+                    const changeItemSaveStatus = (i, newStatus) => {
+                        setItemSaveStatus((prev) => {
+                            return prev.map((status, index) => {
+                                if (index === i) {
+                                    return newStatus;
+                                }
+                                return status;
+                            });
+                        });
+                    }
+                    const loop = (i) => {
+                        return new Promise((resolve, reject) => {
+                            if (i === editedData.length) {
+                                resolve();
+                                return;
+                            }
+                            const continueLoop = () => {
+                                loop(i + 1).then(() => {
+                                    resolve();
+                                });
+                            }
+                            const item = editedData[i];
+                            if (JSON.stringify(item) === JSON.stringify(curData[i])) {
+                                continueLoop();
+                                return;
+                            }
+                            changeItemSaveStatus(i, 'saving');
+                            fetch(`/api/updateitem`, {
+                                method: 'PUT',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    id: item.id,
+                                    data: item,
+                                }),
+                            }).then((res) => {
+                                if (res.status === 200) {
+                                    changeItemSaveStatus(i, 'saved');
+                                    continueLoop();
+                                } else {
+                                    changeItemSaveStatus(i, 'failed');
+                                    continueLoop();
+                                }
+                            });
+                        });
+                    }
+                    loop(0).then(() => {
+                        setSavingItems(false);
+                        setItemSaveStatus();
+                        refreshData();
+                    });
+                }}>
+                    Save
+                </button>
+            </div>
             <table id='api_gui'>
                 <thead id='api_gui_header'>
                     <tr className='api_gui_row'>
@@ -186,76 +278,6 @@ export default function Index() {
                     </tr>
                 </tfoot>
             </table>
-            <button onClick={(e) => {
-                setSavingItems(true);
-                const newItemSaveStatus = [];
-                for (let i = 0; i < editedData.length; i++) {
-                    const item = editedData[i];
-                    let saveStatus;
-                    if (JSON.stringify(item) === JSON.stringify(curData[i])) {
-                        saveStatus = 'no_changes';
-                    } else {
-                        saveStatus = 'pending';
-                    }
-                    newItemSaveStatus.push(saveStatus);
-                }
-                setItemSaveStatus(newItemSaveStatus);
-
-                const changeItemSaveStatus = (i, newStatus) => {
-                    setItemSaveStatus((prev) => {
-                        return prev.map((status, index) => {
-                            if (index === i) {
-                                return newStatus;
-                            }
-                            return status;
-                        });
-                    });
-                }
-                const loop = (i) => {
-                    return new Promise((resolve, reject) => {
-                        if (i === editedData.length) {
-                            resolve();
-                            return;
-                        }
-                        const continueLoop = () => {
-                            loop(i + 1).then(() => {
-                                resolve();
-                            });
-                        }
-                        const item = editedData[i];
-                        if (JSON.stringify(item) === JSON.stringify(curData[i])) {
-                            continueLoop();
-                            return;
-                        }
-                        changeItemSaveStatus(i, 'saving');
-                        fetch(`/api/updateitem`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                id: item.id,
-                                data: item,
-                            }),
-                        }).then((res) => {
-                            if (res.status === 200) {
-                                changeItemSaveStatus(i, 'saved');
-                                continueLoop();
-                            } else {
-                                changeItemSaveStatus(i, 'failed');
-                                continueLoop();
-                            }
-                        });
-                    });
-                }
-                loop(0).then(() => {
-                    setSavingItems(false);
-                    setItemSaveStatus();
-                    refreshData();
-                });
-            }}>
-                Save
-            </button>
         </div>
     );
 }

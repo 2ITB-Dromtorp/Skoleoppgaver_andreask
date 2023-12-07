@@ -115,14 +115,17 @@ const listFields = {
     id: {
         type: 'string',
         editable: false,
+        serverProvided: true,
     },
     name: {
         type: 'string',
         editable: true,
+        serverProvided: false,
     },
     content: {
         type: 'string',
         editable: true,
+        serverProvided: false,
     },
 };
 
