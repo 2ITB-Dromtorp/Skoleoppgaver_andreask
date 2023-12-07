@@ -166,7 +166,7 @@ export default function Index() {
         <>
             <section id='api_gui_section'>
                 <h1>
-                    API DATABASE GUI v4.0.0
+                    API DATABASE GUI v5.0.0
                 </h1>
                 <div id='api_gui_buttons'>
                     <FancyButton onClick={(e) => {
