@@ -2,8 +2,6 @@ import './index.css';
 
 import { useEffect, useState } from 'react';
 
-//user id *wink* *wink* JNIJCSeziCBeIW7J
-
 function getAdditionalClassName(className) {
     return className ? ` ${className}` : '';
 }
