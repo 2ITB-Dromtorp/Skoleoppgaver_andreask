@@ -3,8 +3,32 @@ import './index.css';
 import { useContext } from 'react';
 import { CasesContext } from '../../../context';
 
+function formatDateSegment(seg) {
+    if (seg.toString().length === 1) {
+        return '0' + seg;
+    }
+    return seg;
+}
+
+function formatDate(date) {
+    return formatDateSegment(formatDateSegment(date.getHours()) + ':' + formatDateSegment(date.getMinutes()) + ':' + formatDateSegment(date.getSeconds()) + ' ' + date.getDate()) + '.' + formatDateSegment(date.getMonth() + 1) + '.' + date.getFullYear();
+}
+
+function deepCopyObject(obj) {
+    const result = {};
+    for (const key in obj) {
+        if (typeof obj[key] === 'object') {
+            result[key] = deepCopyObject(obj[key]);
+            continue;
+        } else {
+            result[key] = obj[key];
+        }
+    }
+    return result;
+}
+
 function Case({ curCase }) {
-    const [cases, setCases] = useContext(CasesContext);
+    const { 1: setCases } = useContext(CasesContext);
 
     return (
         <div className='case'>
@@ -38,7 +62,7 @@ function Case({ curCase }) {
                         Dato
                     </div>
                     <div className='case_value_value'>
-                        {curCase.date.toString()}
+                        {formatDate(curCase.date)}
                     </div>
                 </div>
             </div>
@@ -68,7 +92,11 @@ function Case({ curCase }) {
             </div>
             <button className='case_solve_button' onClick={(e) => {
                 setCases(prev => {
-                    const newCases = JSON.parse(JSON.stringify(prev));
+                    const newCases = prev.map((checkCase) => {
+                        const obj = deepCopyObject(checkCase);
+                        obj.date = checkCase.date;
+                        return obj;
+                    });
                     newCases.find(c => c.id === curCase.id).solved = curCase.solved === false;
                     return newCases;
                 });
@@ -80,7 +108,7 @@ function Case({ curCase }) {
 }
 
 export default function Cases() {
-    const [cases, setCases] = useContext(CasesContext);
+    const { 0: cases } = useContext(CasesContext);
 
     const unsolvedCases = cases.filter(c => c.solved === false);
     const solvedCases = cases.filter(c => c.solved === true);
@@ -92,7 +120,7 @@ export default function Cases() {
             </h1>
             <section id='cases_section'>
                 <div className='case_section'>
-                    <h2>
+                    <h2 className='case_section_header'>
                         Uløste saker
                     </h2>
                     <div className='cases_list'>
@@ -101,23 +129,23 @@ export default function Cases() {
                                 <Case key={curCase.id} curCase={curCase} />
                             );
                         }) : (
-                            <div>
+                            <div className='no_cases_text'>
                                 Ingen uløste saker
                             </div>
                         )}
                     </div>
                 </div>
                 <div className='case_section'>
-                    <h2>
+                    <h2 className='case_section_header'>
                         Løste saker
                     </h2>
                     <div className='cases_list'>
-                        {solvedCases.length > 0 ? unsolvedCases.map((curCase) => {
+                        {solvedCases.length > 0 ? solvedCases.map((curCase) => {
                             return (
                                 <Case key={curCase.id} curCase={curCase} />
                             );
                         }) : (
-                            <div>
+                            <div className='no_cases_text'>
                                 Ingen løste saker
                             </div>
                         )}

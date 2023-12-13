@@ -4,7 +4,7 @@ import { useContext, useState } from 'react';
 import { CasesContext } from '../../../context';
 
 export default function SubmitCase() {
-    const [cases, setCases] = useContext(CasesContext);
+    const { 1: setCases } = useContext(CasesContext);
 
     const [nameInput, setNameInput] = useState('');
     const [emailInput, setEmailInput] = useState('');
@@ -18,8 +18,15 @@ export default function SubmitCase() {
                 VTH - Vi Trenger Hjelp
             </h1>
             <section id='form_section'>
-                <form onSubmit={(e) => {
+                <form id='form' onSubmit={(e) => {
                     e.preventDefault();
+
+                    setNameInput('');
+                    setEmailInput('');
+                    setPhoneNumberInput(0);
+                    setTitleInput('');
+                    setDescriptionInput('');
+
                     setCases(prev => {
                         const newCase = {
                             id: prev.length > 0 ? prev[prev.length - 1].id + 1 : 0,
@@ -62,9 +69,11 @@ export default function SubmitCase() {
                         <label htmlFor='description'>
                             Beskrivelse
                         </label>
-                        <input type='text' name='description' required onChange={(e) => setDescriptionInput(e.target.value)} value={descriptionInput} />
+                        <textarea id='description_input' type='text' name='description' required onChange={(e) => setDescriptionInput(e.target.value)} value={descriptionInput}>
+
+                        </textarea>
                     </div>
-                    <button type='submit'>
+                    <button id='form_submit' type='submit'>
                         Send beskjed
                     </button>
                 </form>

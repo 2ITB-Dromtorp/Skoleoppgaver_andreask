@@ -1,0 +1,14 @@
+#form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+}
+
+#form_submit {
+    margin: 16px auto 0 auto;
+}
+
+#description_input {
+    height: 100px;
+    resize: none;
+}

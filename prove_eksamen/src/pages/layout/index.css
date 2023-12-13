@@ -1,0 +1,26 @@
+#top_nav {
+    display: flex;
+    justify-content: center;
+    height: 50px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.top_nav_link {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    height: 100%;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.top_nav_link:hover {
+    background-color: rgb(240, 240, 240);
+}
+
+.top_nav_link:active {
+    background-color: rgb(230, 230, 230);
+}

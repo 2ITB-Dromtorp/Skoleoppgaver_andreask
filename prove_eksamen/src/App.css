@@ -1,3 +1,31 @@
+button {
+    appearance: none;
+    color: rgb(255, 255, 255);
+    background-color: rgb(62, 84, 194);
+    border: none;
+    border-radius: 3px;
+    padding: 4px 8px;
+    transition: background-color 0.15s ease-out;
+}
+
+button:hover {
+    background-color: rgb(89, 109, 208);
+}
+
+button:active {
+    background-color: rgb(38, 59, 162);
+}
+
+input[type=text], input[type=email], input[type=number] {
+    appearance: none;
+    border: 1px solid rgb(200, 200, 200);
+    padding: 4px;
+    border-radius: 3px;
+}
+
+
+
+
 #main {
     
 }
