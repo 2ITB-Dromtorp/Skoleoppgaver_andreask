@@ -1,0 +1,66 @@
+.case {
+    width: 300px;
+    padding: 8px;
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.case_stats {
+    display: flex;
+    flex-direction: column;
+}
+
+.case_value {
+    display: flex;
+}
+
+.case_value_key {
+    font-weight: 800;
+}
+
+.case_value_value {
+    margin-left: auto;
+    text-align: right;
+}
+
+
+
+
+.divider {
+    display: flex;
+    align-items: center;
+    height: 22px;
+}
+
+.divider_line {
+    flex-grow: 1;
+    height: 1px;
+    background-color: rgb(230, 230, 230);
+}
+
+.divider_text {
+    margin: 0 4px;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+
+
+
+.case_content {
+    display: flex;
+    flex-direction: column;
+}
+
+.case_title {
+    font-weight: 800;
+}
+
+.case_description {
+    margin-top: 8px;
+}
+
+
+.case_solve_button {
+    margin: 0 auto;
+}
