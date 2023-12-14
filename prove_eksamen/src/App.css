@@ -16,7 +16,7 @@ button:active {
     background-color: rgb(38, 59, 162);
 }
 
-input[type=text], input[type=email], input[type=number] {
+input[type=text], input[type=email], input[type=number], textarea {
     appearance: none;
     border: 1px solid rgb(200, 200, 200);
     padding: 4px;

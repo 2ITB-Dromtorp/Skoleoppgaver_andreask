@@ -36,6 +36,7 @@ export default function SubmitCase() {
                             title: titleInput,
                             description: descriptionInput,
                             date: new Date(),
+                            solveMessage: '',
                             solved: false,
                         };
                         return [...prev, newCase];

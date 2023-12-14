@@ -1,6 +1,6 @@
 import './index.css';
 
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { CasesContext } from '../../../context';
 
 function formatDateSegment(seg) {
@@ -29,6 +29,8 @@ function deepCopyObject(obj) {
 
 function Case({ curCase }) {
     const { 1: setCases } = useContext(CasesContext);
+
+    const [solveMessage, setSolveMessage] = useState(curCase.solveMessage);
 
     return (
         <div className='case'>
@@ -85,6 +87,35 @@ function Case({ curCase }) {
                     {curCase.description}
                 </div>
             </div>
+            <div className='divider'>
+                <div className='divider_line'>
+
+                </div>
+                <div className='divider_text'>
+                    Svar fra brukerstøtte
+                </div>
+                <div className='divider_line'>
+
+                </div>
+            </div>
+            <textarea className='case_solve_message' onChange={(e) => {
+                setSolveMessage(e.target.value);
+            }}>
+                {solveMessage}
+            </textarea>
+            <button className='case_solve_message_save_button' onClick={() => {
+                setCases(prev => {
+                    const newCases = prev.map((checkCase) => {
+                        const obj = deepCopyObject(checkCase);
+                        obj.date = checkCase.date;
+                        return obj;
+                    });
+                    newCases.find(c => c.id === curCase.id).solveMessage = solveMessage;
+                    return newCases;
+                });
+            }}>
+                Lagre svar
+            </button>
             <div className='divider'>
                 <div className='divider_line'>
 
