@@ -98,12 +98,8 @@ function Case({ curCase }) {
 
                 </div>
             </div>
-            <textarea className='case_solve_message' onChange={(e) => {
-                setSolveMessage(e.target.value);
-            }}>
-                {solveMessage}
-            </textarea>
-            <button className='case_solve_message_save_button' onClick={() => {
+            <form className='case_solve_message_form' onSubmit={(e) => {
+                e.preventDefault();
                 setCases(prev => {
                     const newCases = prev.map((checkCase) => {
                         const obj = deepCopyObject(checkCase);
@@ -114,8 +110,15 @@ function Case({ curCase }) {
                     return newCases;
                 });
             }}>
-                Lagre svar
-            </button>
+                <textarea className='case_solve_message' name='message' onChange={(e) => {
+                    setSolveMessage(e.target.value);
+                }}>
+                    {solveMessage}
+                </textarea>
+                <button type='submit' className='case_solve_message_save_button'>
+                    Lagre svar
+                </button>
+            </form>
             <div className='divider'>
                 <div className='divider_line'>
 

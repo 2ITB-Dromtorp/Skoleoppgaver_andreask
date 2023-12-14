@@ -46,36 +46,36 @@ export default function SubmitCase() {
                         <label htmlFor='name'>
                             Navn
                         </label>
-                        <input type='text' name='name' required onChange={(e) => setNameInput(e.target.value)} value={nameInput} />
+                        <input type='text' id='name' name='name' autoComplete='off' required onChange={(e) => setNameInput(e.target.value)} value={nameInput} />
                     </div>
                     <div className='form_section'>
                         <label htmlFor='email'>
                             E-post
                         </label>
-                        <input type='email' name='email' required onChange={(e) => setEmailInput(e.target.value)} value={emailInput} />
+                        <input type='email' id='email' name='email' autoComplete='off' required onChange={(e) => setEmailInput(e.target.value)} value={emailInput} />
                     </div>
                     <div className='form_section'>
                         <label htmlFor='phone_number'>
                             Tlf
                         </label>
-                        <input type='number' name='phone_number' required onChange={(e) => setPhoneNumberInput(e.target.value)} value={phoneNumberInput} />
+                        <input type='number' id='phone_number' name='phone_number' autoComplete='off' required onChange={(e) => setPhoneNumberInput(e.target.value)} value={phoneNumberInput} />
                     </div>
                     <div className='form_section'>
                         <label htmlFor='title'>
                             Tittel
                         </label>
-                        <input type='text' name='title' required onChange={(e) => setTitleInput(e.target.value)} value={titleInput} />
+                        <input type='text' id='title' name='title' autoComplete='off' required onChange={(e) => setTitleInput(e.target.value)} value={titleInput} />
                     </div>
                     <div className='form_section'>
-                        <label htmlFor='description'>
+                        <label htmlFor='description_input'>
                             Beskrivelse
                         </label>
-                        <textarea id='description_input' type='text' name='description' required onChange={(e) => setDescriptionInput(e.target.value)} value={descriptionInput}>
+                        <textarea id='description_input' type='text' name='description' autoComplete='off' required onChange={(e) => setDescriptionInput(e.target.value)} value={descriptionInput}>
 
                         </textarea>
                     </div>
                     <button id='form_submit' type='submit'>
-                        Send beskjed
+                        Send inn sak
                     </button>
                 </form>
             </section>

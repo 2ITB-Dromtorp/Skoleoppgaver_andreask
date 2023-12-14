@@ -88,10 +88,20 @@
 
 
 
+
+
+.case_solve_message_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
 .case_solve_message {
     width: 100%;
-    height: 50px;
+    height: 75px;
     resize: none;
+    box-sizing: border-box;
 }
 
 .case_solve_message_save_button {
