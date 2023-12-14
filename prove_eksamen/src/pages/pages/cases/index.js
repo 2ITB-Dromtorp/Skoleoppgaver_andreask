@@ -35,7 +35,7 @@ function Case({ curCase }) {
     return (
         <div className='case'>
             <div className='case_stats'>
-            <div className='case_value'>
+                <div className='case_value'>
                     <div className='case_value_key'>
                         ID
                     </div>
@@ -130,19 +130,29 @@ function Case({ curCase }) {
 
                 </div>
             </div>
-            <button className='case_solve_button' onClick={(e) => {
-                setCases(prev => {
-                    const newCases = prev.map((checkCase) => {
-                        const obj = deepCopyObject(checkCase);
-                        obj.date = checkCase.date;
-                        return obj;
+            <div className='case_solve_buttons'>
+                <button className='case_solve_button' onClick={(e) => {
+                    setCases(prev => {
+                        const newCases = prev.map((checkCase) => {
+                            const obj = deepCopyObject(checkCase);
+                            obj.date = checkCase.date;
+                            return obj;
+                        });
+                        newCases.find(c => c.id === curCase.id).solved = curCase.solved === false;
+                        return newCases;
                     });
-                    newCases.find(c => c.id === curCase.id).solved = curCase.solved === false;
-                    return newCases;
-                });
-            }}>
-                Marker som {curCase.solved === false ? 'løst' : 'uløst'}
-            </button>
+                }}>
+                    Marker som {curCase.solved === false ? 'løst' : 'uløst'}
+                </button>
+                <button onClick={(e) => {
+                    setCases(prev => {
+                        const newCases = prev.filter(c => c.id !== curCase.id);
+                        return newCases;
+                    });
+                }}>
+                    Slett sak
+                </button>
+            </div>
         </div>
     );
 }

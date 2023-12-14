@@ -110,6 +110,11 @@
 
 
 
+.case_solve_buttons {
+    display: flex;
+    gap: 8px;
+}
+
 .case_solve_button {
     margin: 0 auto;
 }
