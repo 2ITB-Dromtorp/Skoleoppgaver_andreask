@@ -35,6 +35,14 @@ function Case({ curCase }) {
     return (
         <div className='case'>
             <div className='case_stats'>
+            <div className='case_value'>
+                    <div className='case_value_key'>
+                        ID
+                    </div>
+                    <div className='case_value_value'>
+                        {curCase.id}
+                    </div>
+                </div>
                 <div className='case_value'>
                     <div className='case_value_key'>
                         Avsender
@@ -110,11 +118,9 @@ function Case({ curCase }) {
                     return newCases;
                 });
             }}>
-                <textarea className='case_solve_message' name='message' onChange={(e) => {
+                <textarea className='case_solve_message' name='message' value={solveMessage} onChange={(e) => {
                     setSolveMessage(e.target.value);
-                }}>
-                    {solveMessage}
-                </textarea>
+                }}></textarea>
                 <button type='submit' className='case_solve_message_save_button'>
                     Lagre svar
                 </button>
