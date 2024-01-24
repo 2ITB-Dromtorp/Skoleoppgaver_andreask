@@ -80,6 +80,11 @@ function ApiGuiRow({ refreshData, curData, editedData, setEditedData, fields, it
     const isDelete = item.flaggedForDelete;
     const isEdited = getIsEdited(item, curData[editedData.indexOf(item)], fields);
 
+    /*
+    TODO:
+    ikke refresh hvis lagring feilet på en av API requestene
+    */
+
     return (
         <tr className={`api_gui_row${isDelete ? ' delete' : isEdited ? ' edited' : ''}`}>
             <td className='api_gui_row_modification' key='modifications'>
