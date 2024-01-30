@@ -22,8 +22,8 @@ app.get('*', (req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-const minDepth = 2;
-const maxDepth = 4;
+const minDepth = 0;
+const maxDepth = 2;
 
 const getRandomDepth = () => Math.floor((Math.random() * (maxDepth - minDepth + 1)) + minDepth);
 
