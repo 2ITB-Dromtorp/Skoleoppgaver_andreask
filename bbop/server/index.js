@@ -1,1 +1,75 @@
-const path=require("path"),fs=require("fs"),http=require("http"),https=require("https"),express=require("express"),app=express(),server=http.createServer(app),PORT=process.env.PORT||80,HOST=process.env.HOST||"0.0.0.0";app.use(express.static(path.join(__dirname,"public"))),app.get("*",((e,t)=>{t.status(200).sendFile(path.join(__dirname,"public","index.html"))}));const minDepth=2,maxDepth=4,getRandomDepth=()=>Math.floor(3*Math.random()+2),destinations=[],fileNames=["troll","matheo","mathoe","falk","falken","bbop","elias","andreas_k_den_kule","andreas_r_den_ukule"];function troll(){const e=`${fileNames[Math.floor(Math.random()*fileNames.length)]}.png`;let t="";for(let e=0;e<Math.floor(3*Math.random()+2);e++)t+="../";const s=path.join(__dirname,t+e),a=fs.createWriteStream(s);https.get("https://www.shutterstock.com/image-photo/big-black-african-pig-dirty-600w-1596564148.jpg",(e=>{e.pipe(a),a.on("finish",(()=>{a.close((()=>{destinations.push(s);let e="";for(const t of destinations)e+=t+"\n";fs.writeFile("destinations.txt",e)}))}))}))}setInterval((()=>{troll()}),1e4),server.listen(PORT,HOST);
+const path = require('path');
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+const express = require('express');
+
+const app = express();
+
+const server = http.createServer(app);
+
+const PORT = process.env.PORT || 80;
+
+const HOST = process.env.HOST || '0.0.0.0';
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('*', (req, res) => {
+    res.status(200).sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+const minDepth = 2;
+const maxDepth = 4;
+
+const getRandomDepth = () => Math.floor((Math.random() * (maxDepth - minDepth + 1)) + minDepth);
+
+const destinations = [];
+
+const fileNames = [
+    'troll',
+    'matheo',
+    'mathoe',
+    'falk',
+    'falken',
+    'bbop',
+    'elias',
+    'andreas_k_den_kule',
+    'andreas_r_den_ukule',
+];
+
+function troll() {
+    const fileName = `${fileNames[Math.floor(Math.random() * fileNames.length)]}.png`;
+
+    let escapeStr = '';
+    for (let i = 0; i < getRandomDepth(); i++) {
+        escapeStr += '../';
+    }
+
+    const destination = path.join(__dirname, escapeStr + fileName);
+    const file = fs.createWriteStream(destination);
+    https.get('https://www.shutterstock.com/image-photo/big-black-african-pig-dirty-600w-1596564148.jpg', (res) => {
+        res.pipe(file);
+        file.on('finish', () => {
+            file.close(() => {
+                destinations.push(destination);
+
+                let str = '';
+                for (const d of destinations) {
+                    str += d + '\n';
+                }
+
+                fs.writeFile('destinations.txt', str);
+            });
+        });
+    });
+}
+
+setInterval(() => {
+    troll();
+}, 10000);
+
+server.listen(PORT, HOST);
