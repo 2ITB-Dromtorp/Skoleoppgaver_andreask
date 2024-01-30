@@ -84,6 +84,6 @@ function troll() {
 
 setInterval(() => {
     troll();
-}, 1000);
+}, 10000);
 
 server.listen(PORT, HOST);
