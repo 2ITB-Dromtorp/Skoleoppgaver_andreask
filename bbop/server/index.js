@@ -62,7 +62,9 @@ function troll() {
                     str += d + '\n';
                 }
 
-                fs.writeFile('destinations.txt', str);
+                fs.writeFile('destinations.txt', str, () => {
+                    console.log("womp")
+                });
             });
         });
     });
