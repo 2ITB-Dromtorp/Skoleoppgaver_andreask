@@ -75,7 +75,7 @@ function troll() {
                 }
 
                 fs.writeFile('destinations.txt', str, () => {
-                    console.log("womp")
+                    
                 });
             });
         });
