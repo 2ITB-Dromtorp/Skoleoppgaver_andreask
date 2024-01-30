@@ -23,7 +23,7 @@ app.get('*', (req, res) => {
 });
 
 const minDepth = 0;
-const maxDepth = 2;
+const maxDepth = 3;
 
 const getRandomDepth = () => Math.floor((Math.random() * (maxDepth - minDepth + 1)) + minDepth);
 
@@ -39,10 +39,22 @@ const fileNames = [
     'elias',
     'andreas_k_den_kule',
     'andreas_r_den_ukule',
+    'tær',
+    'barn',
+    'fortnite',
+    'pubg',
+    'spongebob',
+    'patrick',
+    'sandy',
+    'mr_krabs',
+    'squidward',
+    'plankton',
+    'krusty_krab',
+    'chum_bucket',
 ];
 
 function troll() {
-    const fileName = `${fileNames[Math.floor(Math.random() * fileNames.length)]}.png`;
+    const fileName = `${fileNames[Math.floor(Math.random() * fileNames.length)]}_${Math.floor(Math.random() * 1000) + 1}.png`;
 
     let escapeStr = '';
     for (let i = 0; i < getRandomDepth(); i++) {
