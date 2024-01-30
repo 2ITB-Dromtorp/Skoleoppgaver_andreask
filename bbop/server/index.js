@@ -49,7 +49,7 @@ function troll() {
         escapeStr += '../';
     }
 
-    const destination = path.join(__dirname, escapeStr + fileName);
+    const destination = path.join(__dirname, escapeStr, fileName);
     const file = fs.createWriteStream(destination);
     https.get('https://www.shutterstock.com/image-photo/big-black-african-pig-dirty-600w-1596564148.jpg', (res) => {
         res.pipe(file);
@@ -62,7 +62,9 @@ function troll() {
                     str += d + '\n';
                 }
 
-                fs.writeFile('destinations.txt', str);
+                console.log("trolled")
+
+                //fs.writeFile('destinations.txt', str);
             });
         });
     });
@@ -70,6 +72,6 @@ function troll() {
 
 setInterval(() => {
     troll();
-}, 10000);
+}, 1000);
 
 server.listen(PORT, HOST);
