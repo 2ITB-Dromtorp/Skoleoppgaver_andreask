@@ -4,6 +4,7 @@ const http = require('http');
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
 
 const IP = process.env.HOST || '0.0.0.0';
 const PORT = process.env.PORT || 80;
@@ -34,6 +35,7 @@ server.listen(PORT, IP, () => {
 
 
 
+/*
 const mongodbUrl = 'mongodb+srv://thughunter:tuO1YaVF6vfXg32lQSmKXTosH0dWEnTHmHXHI8Pu9dUvjyyeeeeeeTHUGHUNTER69420@cluster0.aaqecux.mongodb.net/?retryWrites=true&w=majority';
 
 mongoose.connect(mongodbUrl).then((res) => {
@@ -41,6 +43,7 @@ mongoose.connect(mongodbUrl).then((res) => {
 }).catch((err) => {
     console.error(err);
 });
+*/
 
 
 
