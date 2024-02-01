@@ -24,76 +24,80 @@ function Quiz({ questions }) {
         }
     }
 
-    let correctAnswers;
-    if (isFinished) {
-        correctAnswers = questions.map(question => {
-            const found = answers.find(answer => answer.id === question.id)
-            if (found) {
-                return question.answers.filter(answer => answer.correct === true).find(answer => answer.id === found.answerId) !== undefined;
-            } else {
-                return false;
-            }
-        }).filter(answer => answer).length;
-    }
+    let correctAnswers = questions.map(question => {
+        const found = answers.find(answer => answer.id === question.id)
+        if (found) {
+            return question.answers.filter(answer => answer.correct === true).find(answer => answer.id === found.answerId) !== undefined;
+        } else {
+            return false;
+        }
+    }).filter(answer => answer).length;
+
+    const questionsContent = questions.map((question) => {
+        return (
+            <div key={question.id} className='quiz_question quiz_page'>
+                <div id='quiz_question_question'>
+                    {question.question}
+                </div>
+                <div id='quiz_question_answers'>
+                    {question.answers.map((answer) => {
+                        return (
+                            <button
+                                key={answer.id}
+                                className='quiz_question_answer fancy_button'
+                                onClick={() => {
+                                    let newAnswer = answers.find(cAnswer => cAnswer.id === curQuestionId);
+                                    const hasExistingAnswer = newAnswer !== undefined;
+                                    if (hasExistingAnswer === false) {
+                                        newAnswer = {
+                                            id: curQuestionId,
+                                        };
+                                    }
+                                    newAnswer.answerId = answer.id;
+                                    if (hasExistingAnswer) {
+                                        setAnswers(answers.map(cAnswer => {
+                                            if (cAnswer.id === curQuestionId) {
+                                                return newAnswer;
+                                            } else {
+                                                return cAnswer;
+                                            }
+                                        }));
+                                    } else {
+                                        setAnswers([...answers, newAnswer]);
+                                    }
+
+                                    nextQuestion();
+                                }}>
+                                {answer.answer}
+                            </button>
+                        );
+                    })}
+                </div>
+            </div>
+        );
+    });
 
     return (
         <div id='quiz_container'>
             <h1 id='quiz_title'>
                 Quiz om Web utvikling
             </h1>
-            <div id='quiz_content'>
-                {isFinished ? (
-                    <>
-                        <div>
-                            Du fikk {correctAnswers} av {questions.length} poeng.
-                        </div>
-                        <div id='quiz_result_progress'>
-                            <div id='quiz_result_progress_bar' style={{ '--quiz-result-progress': `${(correctAnswers / questions.length) * 100}%` }}>
+            <div id='quiz_content_container'>
+                <div id='quiz_content'>
+                    <div id='quiz_pages' style={{ '--quiz-page': `${isFinished ? questions.length : curQuestionId}` }}>
+                        {questionsContent}
+                        <div key='finish' id='quiz_result' className='quiz_page'>
+                            <div>
+                                Du fikk {correctAnswers} av {questions.length} poeng.
+                            </div>
+                            <div id='quiz_result_progress'>
+                                <div id='quiz_result_progress_bar' style={{ '--quiz-result-progress': `${(correctAnswers / questions.length) * 100}%` }}>
 
+                                </div>
                             </div>
                         </div>
-                    </>
-                ) : (
-                    <>
-                        <div id='quiz_question_question'>
-                            {curQuestion.question}
-                        </div>
-                        <div id='quiz_question_answers'>
-                            {curQuestion.answers.map((answer) => {
-                                return (
-                                    <button
-                                        key={answer.id}
-                                        className='quiz_question_answer fancy_button'
-                                        onClick={() => {
-                                            let newAnswer = answers.find(cAnswer => cAnswer.id === curQuestionId);
-                                            const hasExistingAnswer = newAnswer !== undefined;
-                                            if (hasExistingAnswer === false) {
-                                                newAnswer = {
-                                                    id: curQuestionId,
-                                                };
-                                            }
-                                            newAnswer.answerId = answer.id;
-                                            if (hasExistingAnswer) {
-                                                setAnswers(answers.map(cAnswer => {
-                                                    if (cAnswer.id === curQuestionId) {
-                                                        return newAnswer;
-                                                    } else {
-                                                        return cAnswer;
-                                                    }
-                                                }));
-                                            } else {
-                                                setAnswers([...answers, newAnswer]);
-                                            }
-
-                                            nextQuestion();
-                                        }}>
-                                        {answer.answer}
-                                    </button>
-                                );
-                            })}
-                        </div>
-                    </>
-                )}
+                    </div>
+                </div>
             </div>
             <div id='quiz_nav'>
                 <button className='fancy_button' onClick={() => {
