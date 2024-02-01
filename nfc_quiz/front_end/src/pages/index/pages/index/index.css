@@ -130,11 +130,14 @@
 
 #quiz_result_progress_bar {
     --quiz-result-progress-bar-fill: 1;
-    width: calc(var(--quiz-result-progress) * var(--quiz-result-progress-bar-fill));
     height: 100%;
     border-radius: 10px;
     background-color: rgb(46, 230, 99);
-    animation: quiz_result_progress_bar_fill 0.5s ease-out;
+}
+
+#quiz_result_progress_bar.quiz_result_progress_bar_animate {
+    width: calc(var(--quiz-result-progress) * var(--quiz-result-progress-bar-fill));
+    animation: quiz_result_progress_bar_fill 0.5s ease-out 2s;
 }
 
 @property --quiz-result-progress-bar-fill {

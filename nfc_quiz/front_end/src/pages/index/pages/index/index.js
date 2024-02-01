@@ -1,12 +1,22 @@
 import './index.css';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function Quiz({ questions }) {
     const [answers, setAnswers] = useState([]);
     const [curQuestionId, setCurQuestionId] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
+    const [curFinishedPage, setCurFinishedPage] = useState();
     const curQuestion = questions[curQuestionId];
+
+    const getPageId = () => isFinished ? questions.length : curQuestionId;
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setCurFinishedPage(getPageId());
+        }, 2000);
+        return () => clearTimeout(timeout);
+    }, [isFinished, curQuestionId]);
 
     const nextQuestion = () => {
         if (curQuestionId === questions.length - 1) {
@@ -84,14 +94,14 @@ function Quiz({ questions }) {
             </h1>
             <div id='quiz_content_container'>
                 <div id='quiz_content'>
-                    <div id='quiz_pages' style={{ '--quiz-page': `${isFinished ? questions.length : curQuestionId}` }}>
+                    <div id='quiz_pages' style={{ '--quiz-page': `${getPageId()}` }}>
                         {questionsContent}
                         <div key='finish' id='quiz_result' className='quiz_page'>
                             <div>
                                 Du fikk {correctAnswers} av {questions.length} poeng.
                             </div>
                             <div id='quiz_result_progress'>
-                                <div id='quiz_result_progress_bar' style={{ '--quiz-result-progress': `${(correctAnswers / questions.length) * 100}%` }}>
+                                <div id={`quiz_result_progress_bar${curFinishedPage === questions.length ? ' quiz_result_progress_bar_animate' : ''}`} style={{ '--quiz-result-progress': `${(correctAnswers / questions.length) * 100}%` }}>
 
                                 </div>
                             </div>
