@@ -141,7 +141,7 @@ export default function Index() {
                 },
                 {
                     id: 1,
-                    question: 'Hvilket kodespråk brukes for å gi en nettside funksjonalitet',
+                    question: 'Hvilket kodespråk brukes for å gi en nettside funksjonalitet?',
                     answers: [
                         {
                             id: 0,
@@ -167,7 +167,7 @@ export default function Index() {
                 },
                 {
                     id: 2,
-                    question: 'Hvilket kodespråk brukes for å gi en nettside utseende',
+                    question: 'Hvilket kodespråk brukes for å gi en nettside utseende?',
                     answers: [
                         {
                             id: 0,
@@ -188,7 +188,7 @@ export default function Index() {
                 },
                 {
                     id: 3,
-                    question: 'Hva bruker vi for å definere innhold på en nettside',
+                    question: 'Hva bruker vi for å definere innhold på en nettside?',
                     answers: [
                         {
                             id: 0,
@@ -323,7 +323,7 @@ export default function Index() {
                         },
                         {
                             id: 2,
-                            answer: 'En foranderlig verdi med verdier.',
+                            answer: 'En foranderlig verdi som inneholder andre verdier.',
                             correct: true,
                         },
                     ],
