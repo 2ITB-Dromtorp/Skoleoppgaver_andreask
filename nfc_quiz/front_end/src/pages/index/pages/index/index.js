@@ -1,24 +1,60 @@
 import './index.css';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
+function getAdditionalClassName(className) {
+    if (className) {
+        return ` ${className}`;
+    } else {
+        return '';
+    }
+}
+
+function QuizPage({ children, assignRef, className, ...props }) {
+    const pageRef = useRef();
+    if (assignRef) {
+        assignRef(pageRef);
+    }
+    return (
+        <div ref={pageRef} className={`quiz_page${getAdditionalClassName(className)}`} {...props}>
+            <div className='quiz_page_content'>
+                {children}
+            </div>
+        </div>
+    );
+}
 
 function Quiz({ questions }) {
+    const [isFirstRender, setIsFirstRender] = useState(true);
     const [answers, setAnswers] = useState([]);
     const [curQuestionId, setCurQuestionId] = useState(0);
     const [isFinished, setIsFinished] = useState(false);
+    const [prevCurQuestionId, setPrevCurQuestionId] = useState(0);
+    const [prevIsFinished, setPrevIsFinished] = useState(false);
     const [curFinishedPage, setCurFinishedPage] = useState();
+    const pageRefs = useRef([]);
+    const pagesContainerRef = useRef();
+    const finishPageRef = useRef();
     const curQuestion = questions[curQuestionId];
 
     const getPageId = () => isFinished ? questions.length : curQuestionId;
 
+    const getPageRef = () => isFinished ? finishPageRef.current : pageRefs.current[curQuestionId];
+
+    useEffect(() => {
+        setIsFirstRender(false);
+    }, []);
+
     useEffect(() => {
         const timeout = setTimeout(() => {
             setCurFinishedPage(getPageId());
-        }, 2000);
+        }, 400);
         return () => clearTimeout(timeout);
     }, [isFinished, curQuestionId]);
 
     const nextQuestion = () => {
+        setPrevCurQuestionId(curQuestionId);
+        setPrevIsFinished(isFinished);
         if (curQuestionId === questions.length - 1) {
             setIsFinished(true);
         } else {
@@ -45,47 +81,65 @@ function Quiz({ questions }) {
 
     const questionsContent = questions.map((question) => {
         return (
-            <div key={question.id} className='quiz_question quiz_page'>
+            <QuizPage key={question.id} className='quiz_question' assignRef={(ref) => {
+                pageRefs.current[question.id] = ref;
+            }}>
                 <div id='quiz_question_question'>
                     {question.question}
                 </div>
-                <div id='quiz_question_answers'>
-                    {question.answers.map((answer) => {
-                        return (
-                            <button
-                                key={answer.id}
-                                className='quiz_question_answer fancy_button'
-                                onClick={() => {
-                                    let newAnswer = answers.find(cAnswer => cAnswer.id === curQuestionId);
-                                    const hasExistingAnswer = newAnswer !== undefined;
-                                    if (hasExistingAnswer === false) {
-                                        newAnswer = {
-                                            id: curQuestionId,
-                                        };
-                                    }
-                                    newAnswer.answerId = answer.id;
-                                    if (hasExistingAnswer) {
-                                        setAnswers(answers.map(cAnswer => {
-                                            if (cAnswer.id === curQuestionId) {
-                                                return newAnswer;
-                                            } else {
-                                                return cAnswer;
-                                            }
-                                        }));
-                                    } else {
-                                        setAnswers([...answers, newAnswer]);
-                                    }
+                <div id='quiz_question_answers_container'>
+                    <div id='quiz_question_answers'>
+                        {question.answers.map((answer) => {
+                            return (
+                                <button
+                                    key={answer.id}
+                                    className='quiz_question_answer fancy_button'
+                                    onClick={() => {
+                                        let newAnswer = answers.find(cAnswer => cAnswer.id === curQuestionId);
+                                        const hasExistingAnswer = newAnswer !== undefined;
+                                        if (hasExistingAnswer === false) {
+                                            newAnswer = {
+                                                id: curQuestionId,
+                                            };
+                                        }
+                                        newAnswer.answerId = answer.id;
+                                        if (hasExistingAnswer) {
+                                            setAnswers(answers.map(cAnswer => {
+                                                if (cAnswer.id === curQuestionId) {
+                                                    return newAnswer;
+                                                } else {
+                                                    return cAnswer;
+                                                }
+                                            }));
+                                        } else {
+                                            setAnswers([...answers, newAnswer]);
+                                        }
 
-                                    nextQuestion();
-                                }}>
-                                {answer.answer}
-                            </button>
-                        );
-                    })}
+                                        nextQuestion();
+                                    }}>
+                                    {answer.answer}
+                                </button>
+                            );
+                        })}
+                    </div>
                 </div>
-            </div>
+            </QuizPage>
         );
     });
+
+    /*
+    const curNextPage = pageRefs.current[getPageId()]
+    if (curNextPage) {
+        curNextPage.current.style.height = 'auto';
+    }
+    */
+
+    const curPage = getPageRef();
+    let curPageHeight = 0;
+    if (curPage) {
+        curPageHeight = curPage.current.offsetHeight;
+    }
+
 
     return (
         <div id='quiz_container'>
@@ -93,19 +147,28 @@ function Quiz({ questions }) {
                 Quiz om Web utvikling
             </h1>
             <div id='quiz_content_container'>
-                <div id='quiz_content'>
-                    <div id='quiz_pages' style={{ '--quiz-page': `${getPageId()}` }}>
+                <div ref={pagesContainerRef} id='quiz_content' style={{
+                    '--target-height': `${curPageHeight}px`,
+                }}>
+                    <div id='quiz_pages' style={{
+                        '--quiz-page': `${getPageId()}`,
+                    }}>
                         {questionsContent}
-                        <div key='finish' id='quiz_result' className='quiz_page'>
-                            <div>
+                        <QuizPage key='finish' id='quiz_result' className='quiz_page' assignRef={(ref) => {
+                            finishPageRef.current = ref;
+                        }}>
+                            <div id='quiz_result_text'>
                                 Du fikk {correctAnswers} av {questions.length} poeng.
                             </div>
                             <div id='quiz_result_progress'>
-                                <div id={`quiz_result_progress_bar${curFinishedPage === questions.length ? ' quiz_result_progress_bar_animate' : ''}`} style={{ '--quiz-result-progress': `${(correctAnswers / questions.length) * 100}%` }}>
+                                <div id='quiz_result_progress_bar' className={`${curFinishedPage === questions.length ? 'quiz_result_progress_bar_animate' : ''}`} style={{ '--quiz-result-progress': `${(correctAnswers / questions.length) * 100}%` }}>
 
                                 </div>
                             </div>
-                        </div>
+                            <button className='fancy_button'>
+                                Start på nytt
+                            </button>
+                        </QuizPage>
                     </div>
                 </div>
             </div>
@@ -265,7 +328,7 @@ export default function Index() {
                 },
                 {
                     id: 6,
-                    question: 'Hva skal frontsiden på en nettside hete?',
+                    question: 'Hva skal hjemmesiden til en nettside hete?',
                     answers: [
                         {
                             id: 0,
@@ -303,6 +366,21 @@ export default function Index() {
                             answer: '3',
                             correct: true,
                         },
+                        {
+                            id: 3,
+                            answer: '4',
+                            correct: false,
+                        },
+                        {
+                            id: 4,
+                            answer: '5',
+                            correct: false,
+                        },
+                        {
+                            id: 5,
+                            answer: '6',
+                            correct: false,
+                        },
                     ],
                 },
                 {
@@ -339,6 +417,27 @@ export default function Index() {
                             id: 2,
                             answer: 'En foranderlig verdi som inneholder andre verdier.',
                             correct: true,
+                        },
+                    ],
+                },
+                {
+                    id: 10,
+                    question: 'Hva betyr NaN?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'Not A Number',
+                            correct: true,
+                        },
+                        {
+                            id: 1,
+                            answer: 'Non Applicable Number',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'Not Any Number',
+                            correct: false,
                         },
                     ],
                 },
