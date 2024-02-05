@@ -445,6 +445,508 @@ export default function Index() {
                         },
                     ],
                 },
+                {
+                    id: 11,
+                    question: 'Hva er en vanlig måte å lagre brukerdata på nettleseren?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'LocalStorage',
+                            correct: false,
+                        },
+                        {
+                            id: 1,
+                            answer: 'Cookies',
+                            correct: true,
+                        },
+                    ],
+                },
+                {
+                    id: 12,
+                    question: 'Hva er en API (Application Programming Interface) i webutvikling?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'En måte for ulike programmer å kommunisere med hverandre.',
+                            correct: true,
+                        },
+                        {
+                            id: 1,
+                            answer: 'Et verktøy for å lage responsive nettsider.',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'En protokoll for å kryptere data som sendes over Internett.',
+                            correct: false,
+                        },
+                        {
+                            id: 3,
+                            answer: 'En CSS-teknikk for å style tekst.',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 13,
+                    question: 'Hva er et vanlig filformat for bilder på nettet?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'PNG',
+                            correct: true,
+                        },
+                        {
+                            id: 1,
+                            answer: 'GIF',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 14,
+                    question: 'Hva er forskjellen mellom frontend og backend i webutvikling?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'Frontend er ansvarlig for å administrere databaser, mens backend håndterer brukergrensesnittet.',
+                            correct: false,
+                        },
+                        {
+                            id: 1,
+                            answer: 'Frontend og backend er synonyme begreper.',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'Frontend refererer til det som vises for brukeren i nettleseren, mens backend håndterer serverlogikk og databehandling.',
+                            correct: true,
+                        },
+                    ],
+                },
+                {
+                    id: 15,
+                    question: 'Hva er forskjellen mellom HTTP og HTTPS?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'HTTP er raskere enn HTTPS.',
+                            correct: false,
+                        },
+                        {
+                            id: 1,
+                            answer: 'HTTPS bruker kryptering for å sikre dataoverføringen, mens HTTP ikke gjør det.',
+                            correct: true,
+                        },
+                        {
+                            id: 2,
+                            answer: 'HTTPS krever ingen sertifikater for å fungere, mens HTTP gjør det.',
+                            correct: false,
+                        },
+                        {
+                            id: 3,
+                            answer: 'HTTP fungerer bare for statiske nettsider, mens HTTPS fungerer for dynamiske nettsider.',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 16,
+                    question: 'Hva er en "content management system" (CMS) i webutvikling?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'Et bibliotek med forhåndsdefinerte CSS-stiler for å akselerere webdesignprosessen.',
+                            correct: false,
+                        },
+                        {
+                            id: 1,
+                            answer: 'En protokoll for å sikre dataoverføringen mellom server og klient.',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'En programvare som lar brukere opprette, administrere og publisere innhold på nettet, ofte uten behov for avansert teknisk kunnskap.',
+                            correct: true,
+                        },
+                        {
+                            id: 3,
+                            answer: 'Et verktøy for å administrere databaser på serveren.',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 17,
+                    question: 'Hva er en "favicon" i forbindelse med webutvikling?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'Et eget ikon for favorittnettsteder',
+                            correct: false,
+                        },
+                        {
+                            id: 1,
+                            answer: 'En type plugin for å optimalisere bilder på nettsider.',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'En form for JavaScript-bibliotek for å lage animerte ikoner.',
+                            correct: false,
+                        },
+                        {
+                            id: 3,
+                            answer: 'En spesiell type CSS-regel for å style tekst med ikoner.',
+                            correct: false,
+                        },
+                        {
+                            id: 4,
+                            answer: 'Et lite ikon som vises i nettlesertabben og bokmerker for å identifisere en nettside.',
+                            correct: true,
+                        },
+                    ],
+                },
+                {
+                    id: 18,
+                    question: 'Hva er "version control" i webutvikling?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'En type database for å lagre bilder og andre mediefiler på nettet.',
+                            correct: false,
+                        },
+                        {
+                            id: 1,
+                            answer: 'En protokoll for å sikre overføringen av kodedata over Internett.',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'Et system for å spore endringer i koden over tid og muliggjøre samarbeid mellom utviklere.',
+                            correct: true,
+                        },
+                        {
+                            id: 3,
+                            answer: 'En metode for å versjonere HTML-dokumenter for ulike enheter.',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 19,
+                    question: 'Hva er et "frontend framework" i webutvikling?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'En serverkonfigurasjon for å håndtere nettverkstrafikk.',
+                            correct: false,
+                        },
+                        {
+                            id: 1,
+                            answer: 'En samling av forhåndsdefinerte kodeelementer og strukturer for å akselerere utviklingen av brukergrensesnitt.',
+                            correct: true,
+                        },
+                        {
+                            id: 2,
+                            answer: 'Et verktøy for å administrere backend-logikk.',
+                            correct: false,
+                        },
+                        {
+                            id: 3,
+                            answer: 'En type JavaScript-bibliotek for å lage animerte grensesnitt.',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 20,
+                    question: 'Hva er en "cookie" i webutvikling?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'En type server-side kodesnutt for å håndtere brukerinput på nettsider.',
+                            correct: false,
+                        },
+                        {
+                            id: 1,
+                            answer: 'En form for kryptering som brukes til å sikre dataoverføringen mellom klient og server.',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'En liten tekstfil som lagres på brukerens datamaskin og brukes til å lagre informasjon om brukerens handlinger og preferanser på en nettside.',
+                            correct: true,
+                        },
+                        {
+                            id: 3,
+                            answer: 'En metode for å validere skjemaer på klientsiden.',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 21,
+                    question: 'Hva er en "RESTful API"?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'En databasearkitektur for å lagre og administrere brukerdata.',
+                            correct: false,
+                        },
+                        {
+                            id: 1,
+                            answer: 'En metode for å implementere dynamiske effekter på nettsider ved hjelp av JavaScript.',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'En type protokoll for å kryptere dataoverføringen mellom klient og server.',
+                            correct: false,
+                        },
+                        {
+                            id: 3,
+                            answer: 'Et grensesnitt for å kommunisere med serveren ved hjelp av HTTP-protokollen, og som følger REST-prinsippene for arkitektur.',
+                            correct: true,
+                        },
+                    ],
+                },
+                {
+                    id: 22,
+                    question: '',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: '',
+                            correct: false,
+                        },
+                        {
+                            id: 1,
+                            answer: '',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: '',
+                            correct: false,
+                        },
+                        {
+                            id: 3,
+                            answer: '',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 23,
+                    question: 'Hva står HTML for?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'Hyper Text Markup Language',
+                            correct: true,
+                        },
+                        {
+                            id: 1,
+                            answer: 'Hyperlinks and Text Markup Language',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'Home Tool Markup Language',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 24,
+                    question: 'Hva er CSS?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'Cascading Style Sheets',
+                            correct: true,
+                        },
+                        {
+                            id: 1,
+                            answer: 'Creative Style Sheets',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'Computer Style Sheets',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 25,
+                    question: 'Hva brukes JavaScript primært til i webutvikling?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'Å style nettsider',
+                            correct: false,
+                        },
+                        {
+                            id: 1,
+                            answer: 'Å legge til interaktivitet',
+                            correct: true,
+                        },
+                        {
+                            id: 2,
+                            answer: 'Å definere strukturen til nettsider',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 26,
+                    question: 'Hva er en vanlig form for databasespråk brukt i webutvikling?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'SQL',
+                            correct: true,
+                        },
+                        {
+                            id: 1,
+                            answer: 'NoSQL',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'Python',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 27,
+                    question: 'Hva står HTTP for?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'HyperText Transfer Protocol',
+                            correct: true,
+                        },
+                        {
+                            id: 1,
+                            answer: 'HyperText Transmission Protocol',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'HyperText Transfer Process',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 28,
+                    question: 'Hva er en vanlig måte å definere stil på nettstedet ditt?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'HTML',
+                            correct: false,
+                        },
+                        {
+                            id: 1,
+                            answer: 'CSS',
+                            correct: true,
+                        },
+                        {
+                            id: 2,
+                            answer: 'JavaScript',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 29,
+                    question: 'Hva er en vanlig frontend-rammeverk?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'React',
+                            correct: true,
+                        },
+                        {
+                            id: 1,
+                            answer: 'Django',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'Flask',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 30,
+                    question: 'Hva er en vanlig backend-rammeverk?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'Express.js',
+                            correct: true,
+                        },
+                        {
+                            id: 1,
+                            answer: 'Angular.js',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'Vue.js',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 31,
+                    question: 'Hva er en vanlig form for asynkron kommunikasjon i webutvikling?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'Promises',
+                            correct: true,
+                        },
+                        {
+                            id: 1,
+                            answer: 'Callbacks',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'Threads',
+                            correct: false,
+                        },
+                    ],
+                },
+                {
+                    id: 32,
+                    question: 'Hva er en vanlig måte å lagre data på klientens side i webutvikling?',
+                    answers: [
+                        {
+                            id: 0,
+                            answer: 'LocalStorage',
+                            correct: true,
+                        },
+                        {
+                            id: 1,
+                            answer: 'SessionStorage',
+                            correct: false,
+                        },
+                        {
+                            id: 2,
+                            answer: 'Cookies',
+                            correct: false,
+                        },
+                    ],
+                },
             ]} />
         </div>
     );
