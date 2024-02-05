@@ -16,8 +16,8 @@ function QuizPage({ children, assignRef, className, ...props }) {
         assignRef(pageRef);
     }
     return (
-        <div ref={pageRef} className={`quiz_page${getAdditionalClassName(className)}`} {...props}>
-            <div className='quiz_page_content'>
+        <div className={`quiz_page${getAdditionalClassName(className)}`} {...props}>
+            <div ref={pageRef} className='quiz_page_content'>
                 {children}
             </div>
         </div>
@@ -137,7 +137,11 @@ function Quiz({ questions }) {
     const curPage = getPageRef();
     let curPageHeight = 0;
     if (curPage) {
+        curPage.current.style['max-height'] = 'none';
+        curPage.current.style['height'] = 'auto';
         curPageHeight = curPage.current.offsetHeight;
+        curPage.current.style['max-height'] = '';
+        curPage.current.style['height'] = '';
     }
 
 
