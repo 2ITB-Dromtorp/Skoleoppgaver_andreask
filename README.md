@@ -1,3 +1,3 @@
 # Skoleoppgaver_andreask
 
-meg når
+kai cent
