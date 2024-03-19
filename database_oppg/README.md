@@ -4,10 +4,14 @@ Dette dokumentet beskriver modelleringen av en database for Drømtorp videregåe
 
 ## Tabeller
 
-Vi bruker *Relational Database Management System (RDBMS)* til å lagre referanser til andre verdier mellom tabeller.
+Vi bruker **Relational Database Management System (RDBMS)** til å lagre referanser til andre verdier mellom tabeller.
 
 ### students
-
+|----------|----------|
+|bing chillind| test12345|
+|----------|----------|
+|bing chillind| test12345|
+|----------|----------|
 - id            `(INT) (PRIMARY_KEY) (AUTO_INCREMENT)`
 - username      `(VARCHAR(32))`
 - password      `(VARCHAR(128)) (ENCRYPTED)`
