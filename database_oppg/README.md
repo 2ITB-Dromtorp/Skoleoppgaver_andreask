@@ -11,15 +11,15 @@ Vi bruker **Relational Database Management System (RDBMS)** til å lagre referan
 ### students
 | field       | value                                  |
 | :---------- | :------------------------------------- |
-| id          | `(INT) (PRIMARY_KEY) (AUTO_INCREMENT)` |
-| username    | `(VARCHAR(32))`                        |
-| password    | `(VARCHAR(128)) (ENCRYPTED)`           |
-| name        | `(VARCHAR(32))`                        |
-| middle_name | `(VARCHAR(32))`                        |
-| last_name   | `(VARCHAR(32))`                        |
-| class       | `(FOREIGN_KEY)`                        |
-| phone       | `(INT(8))`                             |
-| guardian    | `(FOREIGN KEY)`                        |
+| id          | (INT) (PRIMARY_KEY) (AUTO_INCREMENT) |
+| username    | (VARCHAR(32))                        |
+| password    | (VARCHAR(128)) (ENCRYPTED)           |
+| name        | (VARCHAR(32))                        |
+| middle_name | (VARCHAR(32))                        |
+| last_name   | (VARCHAR(32))                        |
+| class       | (FOREIGN_KEY)                        |
+| phone       | (INT(8))                             |
+| guardian    | (FOREIGN KEY)                        |
 
 
 
@@ -27,12 +27,12 @@ Vi bruker **Relational Database Management System (RDBMS)** til å lagre referan
 
 | field       | value                                  |
 | :---------- | :------------------------------------- |
-| id          | `(INT) (PRIMARY_KEY) (AUTO_INCREMENT)` |
-| password    | `(VARCHAR(128)) (ENCRYPTED)`           |
-| name        | `(VARCHAR(32))`                        |
-| middle_name | `(VARCHAR(32))`                        |
-| last_name   | `(VARCHAR(32))`                        |
-| phone       | `(INT(8))`                             |
+| id          | (INT) (PRIMARY_KEY) (AUTO_INCREMENT) |
+| password    | (VARCHAR(128)) (ENCRYPTED)           |
+| name        | (VARCHAR(32))                        |
+| middle_name | (VARCHAR(32))                        |
+| last_name   | (VARCHAR(32))                        |
+| phone       | (INT(8))                             |
 
 
 
@@ -40,9 +40,9 @@ Vi bruker **Relational Database Management System (RDBMS)** til å lagre referan
 
 | field | value                                  |
 | :---- | :------------------------------------- |
-| id    | `(INT) (PRIMARY_KEY) (AUTO_INCREMENT)` |
-| name  | `(VARCHAR(64))`                        |
-| type  | `(VARCHAR(64))`                        |
+| id    | (INT) (PRIMARY_KEY) (AUTO_INCREMENT) |
+| name  | (VARCHAR(64))                        |
+| type  | (VARCHAR(64))                        |
 
 
 
@@ -50,9 +50,9 @@ Vi bruker **Relational Database Management System (RDBMS)** til å lagre referan
 
 | field        | value                                  |
 | :----------- | :------------------------------------- |
-| id           | `(INT) (PRIMARY_KEY) (AUTO_INCREMENT)` |
-| student      | `(FOREIGN_KEY)`                        |
-| request_date | `(INT)`                                |
+| id           | (INT) (PRIMARY_KEY) (AUTO_INCREMENT) |
+| student      | (FOREIGN_KEY)                        |
+| request_date | (INT)                                |
 
 
 
@@ -60,12 +60,12 @@ Vi bruker **Relational Database Management System (RDBMS)** til å lagre referan
 
 | field       | value                                  |
 | :---------- | :------------------------------------- |
-| id          | `(INT) (PRIMARY_KEY) (AUTO_INCREMENT)` |
-| student     | `(FOREIGN_KEY - students)`             |
-| equipment   | `(FOREIGN_KEY - equipment)`            |
-| loan_date   | `(INT)`                                |
-| return_date | `(INT)`                                |
-| approver    | `(FOREIGN_KEY)`                        |
+| id          | (INT) (PRIMARY_KEY) (AUTO_INCREMENT) |
+| student     | (FOREIGN_KEY - students)             |
+| equipment   | (FOREIGN_KEY - equipment)            |
+| loan_date   | (INT)                                |
+| return_date | (INT)                                |
+| approver    | (FOREIGN_KEY)                        |
 
 
 
@@ -73,9 +73,9 @@ Vi bruker **Relational Database Management System (RDBMS)** til å lagre referan
 
 | field       | value                                  |
 | :---------- | :------------------------------------- |
-| id          | `(INT) (PRIMARY_KEY) (AUTO_INCREMENT)` |
-| student     | `(FOREIGN_KEY - students)`             |
-| equipment   | `(FOREIGN_KEY - equipment)`            |
-| loan_date   | `(INT)`                                |
-| return_date | `(INT)`                                |
-| approver    | `(FOREIGN_KEY - teachers)`             |
+| id          | (INT) (PRIMARY_KEY) (AUTO_INCREMENT) |
+| student     | (FOREIGN_KEY - students)             |
+| equipment   | (FOREIGN_KEY - equipment)            |
+| loan_date   | (INT)                                |
+| return_date | (INT)                                |
+| approver    | (FOREIGN_KEY - teachers)             |
