@@ -12,7 +12,7 @@ We're using **Relational Database Management System (RDBMS)** to store reference
 
 The students.
 
-| field       | value                          |
+| field       | type                           |
 | :---------- | :----------------------------- |
 | id          | INT PRIMARY_KEY AUTO_INCREMENT |
 | username    | VARCHAR(32)                    |
@@ -20,9 +20,9 @@ The students.
 | name        | VARCHAR(32)                    |
 | middle_name | VARCHAR(32)                    |
 | last_name   | VARCHAR(32)                    |
-| class       | FOREIGN_KEY - classes          |
+| class       | FOREIGN_KEY - `classes`        |
 | phone       | INT(8)                         |
-| guardian    | FOREIGN KEY - guardians        |
+| guardian    | FOREIGN KEY - `guardians`      |
 
 
 
@@ -30,7 +30,7 @@ The students.
 
 The teachers.
 
-| field       | value                          |
+| field       | type                          |
 | :---------- | :----------------------------- |
 | id          | INT PRIMARY_KEY AUTO_INCREMENT |
 | password    | VARCHAR(128) ENCRYPTED         |
@@ -45,7 +45,7 @@ The teachers.
 
 The equipment.
 
-| field | value                          |
+| field | type                          |
 | :---- | :----------------------------- |
 | id    | INT PRIMARY_KEY AUTO_INCREMENT |
 | name  | VARCHAR(64)                    |
@@ -57,10 +57,10 @@ The equipment.
 
 Loan requests.
 
-| field        | value                          |
+| field        | type                           |
 | :----------- | :----------------------------- |
 | id           | INT PRIMARY_KEY AUTO_INCREMENT |
-| student      | FOREIGN_KEY - student          |
+| student      | FOREIGN_KEY - `student`        |
 | request_date | INT                            |
 
 
@@ -69,14 +69,14 @@ Loan requests.
 
 Active loans.
 
-| field       | value                          |
+| field       | type                           |
 | :---------- | :----------------------------- |
 | id          | INT PRIMARY_KEY AUTO_INCREMENT |
-| student     | FOREIGN_KEY - students         |
-| equipment   | FOREIGN_KEY - equipment        |
+| student     | FOREIGN_KEY - `students`       |
+| equipment   | FOREIGN_KEY - `equipment`      |
 | loan_date   | INT                            |
 | return_date | INT                            |
-| approver    | FOREIGN_KEY - teachers         |
+| approver    | FOREIGN_KEY - `teachers`       |
 
 
 
@@ -84,14 +84,14 @@ Active loans.
 
 Loan history.
 
-| field       | value                          |
+| field       | type                           |
 | :---------- | :----------------------------- |
 | id          | INT PRIMARY_KEY AUTO_INCREMENT |
-| student     | FOREIGN_KEY - students         |
-| equipment   | FOREIGN_KEY - equipment        |
+| student     | FOREIGN_KEY - `students`       |
+| equipment   | FOREIGN_KEY - `equipment`      |
 | loan_date   | INT                            |
 | return_date | INT                            |
-| approver    | FOREIGN_KEY - teachers         |
+| approver    | FOREIGN_KEY - `teachers`       |
 
 
 
@@ -99,14 +99,14 @@ Loan history.
 
 Guardians of the students.
 
-| field       | value                          |
+| field       | type                           |
 | :---------- | :----------------------------- |
 | id          | INT PRIMARY_KEY AUTO_INCREMENT |
-| student     | FOREIGN_KEY - students         |
-| equipment   | FOREIGN_KEY - equipment        |
+| student     | FOREIGN_KEY - `students`       |
+| equipment   | FOREIGN_KEY - `equipment`      |
 | loan_date   | INT                            |
 | return_date | INT                            |
-| approver    | FOREIGN_KEY - teachers         |
+| approver    | FOREIGN_KEY - `teachers`       |
 
 
 
@@ -114,11 +114,10 @@ Guardians of the students.
 
 Guardians of the students.
 
-| field       | value                          |
+| field       | type                           |
 | :---------- | :----------------------------- |
 | id          | INT PRIMARY_KEY AUTO_INCREMENT |
-| student     | FOREIGN_KEY - students         |
-| equipment   | FOREIGN_KEY - equipment        |
-| loan_date   | INT                            |
-| return_date | INT                            |
-| approver    | FOREIGN_KEY - teachers         |
+| first_name  | VARCHAR(32)                    |
+| middle_name | VARCHAR(32)                    |
+| last_name   | VARCHAR(32)                    |
+| phone       | INT(8)                         |
